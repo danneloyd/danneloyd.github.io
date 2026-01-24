@@ -3,43 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daniils Rimars | Links</title>
+    <title>Nighty Gang | Links</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --bg-color: #0b0b0b;
+            --card-bg: #161616;
+            --accent-color: #ffffff;
+            --text-color: #eeeeee;
+            --secondary-text: #888888;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #121212;
-            color: white;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
-            margin: 0;
+            padding: 20px;
         }
-        h1 { margin-bottom: 30px; font-size: 24px; }
-        .links-container { width: 100%; max-width: 400px; }
-        .link-card {
-            background: #1e1e1e;
-            display: block;
-            padding: 16px;
-            margin-bottom: 12px;
-            text-align: center;
-            text-decoration: none;
-            color: #00aaff;
+
+        /* Переключатель языка */
+        .lang-switch {
+            align-self: flex-end;
+            margin-bottom: 20px;
+        }
+        .lang-btn {
+            background: var(--card-bg);
             border: 1px solid #333;
-            border-radius: 12px;
+            color: var(--text-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
             transition: 0.3s;
-            font-weight: bold;
         }
-        .link-card:hover { background: #252525; transform: scale(1.02); }
+        .lang-btn:hover { border-color: var(--accent-color); }
+
+        .container { width: 100%; max-width: 450px; text-align: center; }
+        
+        h1 { font-size: 28px; margin-bottom: 5px; letter-spacing: -1px; }
+        .subtitle { color: var(--secondary-text); margin-bottom: 30px; font-size: 14px; }
+
+        .category-title {
+            text-align: left;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--secondary-text);
+            margin: 25px 0 10px 10px;
+        }
+
+        .link-card {
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: var(--text-color);
+            border-radius: 16px;
+            border: 1px solid #222;
+            transition: all 0.3s ease;
+        }
+
+        .link-card:hover {
+            transform: translateY(-2px);
+            border-color: #444;
+            background: #1c1c1c;
+        }
+
+        .link-card i { font-size: 20px; width: 30px; margin-right: 15px; color: var(--accent-color); }
+        .link-text { flex-grow: 1; text-align: left; font-weight: 500; }
+        .arrow { font-size: 12px; color: #444; }
+
+        [lang="en"] { display: none; }
     </style>
 </head>
 <body>
-    <h1>Daniils Rimars</h1>
-    <div class="links-container">
-        <a href="https://t.me/твой_ник" class="link-card">Telegram</a>
-        <a href="https://instagram.com/твой_ник" class="link-card">Instagram</a>
-        <a href="https://github.com/danneloyd" class="link-card">GitHub Project</a>
-        </div>
-</body>
-</html>
 
+    <div class="lang-switch">
+        <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
+    </div>
+
+    <div class="container">
+        <h1 id="main-title">Nighty Gang</h1>
+        <p class="subtitle">Music Producer & Artist</p>
+
+        <div class="category-title" data-ru="Биты, лупы, покупка" data-en="Beats, Loops, Store">Биты, лупы, покупка</div>
+        
+        <a href="https://t.me/nightygangbuy" class="link-card" target="_blank">
+            <i class="fab fa-telegram"></i>
+            <span class="link-text">Telegram Store</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://youtube.com/@nightygangmusic" class="link-card" target="_blank">
+            <i class="fab fa-youtube"></i>
+            <span class="link-text">YouTube (Main)</span>
+            <span class="arrow">➔</span>
+        </a>
+
+        <div class="category-title" data-ru="Музыкальные площадки" data-en="Streaming Platforms">Музыкальные площадки</div>
+        
+        <a href="https://open.spotify.com/artist/17278322" class="link-card" target="_blank">
+            <i class="fab fa-spotify" style="color: #1DB954;"></i>
+            <span class="link-text">Spotify</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://music.apple.com/artist/1641045233" class="link-card" target="_blank">
+            <i class="fab fa-apple"></i>
+            <span class="link-text">Apple Music</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://soundcloud.com/nighty-gang" class="link-card" target="_blank">
+            <i class="fab fa-soundcloud" style="color: #ff5500;"></i>
+            <span class="link-text">SoundCloud</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://music.youtube.com/channel/UC2b0FjHKQG-I-QzrWmUouow" class="link-card" target="_blank">
+            <i class="fas fa-play-circle" style="color: #ff0000;"></i>
+            <span class="
+                
