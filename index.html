@@ -5,25 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NIGHTY GANG MUSIC</title>
     
-    <meta property="og:title" content="NIGHTY GANG MUSIC">
-    <meta property="og:image" content="707.jpg">
-    <meta property="og:description" content="Beats, Store & Streaming">
-
     <link rel="icon" type="image/jpg" href="707.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root {
-            --bg-color: #000000; /* Чисто черный */
-            --card-bg: #111111;
-            --text-color: #eeeeee;
-            --secondary-text: #777777;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #000000;
+            color: #eeeeee;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -34,9 +23,9 @@
         .lang-switch { align-self: flex-end; margin-bottom: 10px; }
         .lang-btn {
             background: #111;
-            border: 1px solid #222;
-            color: var(--secondary-text);
-            padding: 6px 12px;
+            border: 1px solid #333;
+            color: #888;
+            padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 10px;
@@ -45,57 +34,123 @@
 
         .container { width: 100%; max-width: 450px; text-align: center; }
 
+        /* Фикс логотипа: теперь он не будет на весь экран */
         .main-logo {
-            width: 100%;
-            max-width: 320px;
+            width: 90%;
+            max-width: 300px;
             height: auto;
             margin: 10px 0;
-            filter: contrast(1.1); 
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .subtitle { 
-            color: var(--secondary-text); 
+            color: #888; 
             margin-bottom: 30px; 
-            font-size: 12px; 
-            letter-spacing: 2px;
+            font-size: 13px; 
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .category-title {
             text-align: left;
-            font-size: 10px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: var(--secondary-text);
+            color: #666;
             margin: 25px 0 10px 10px;
         }
 
         .link-card {
-            background: var(--card-bg);
+            background: #111111;
             display: flex;
             align-items: center;
-            padding: 14px 20px;
+            padding: 15px 20px;
             margin-bottom: 10px;
             text-decoration: none;
-            color: var(--text-color);
+            color: #fff;
             border-radius: 12px;
-            border: 1px solid #1a1a1a;
-            transition: 0.2s;
+            border: 1px solid #222;
+            transition: 0.3s;
         }
 
-        .link-card:hover {
-            border-color: #333;
-            background: #161616;
-            transform: translateY(-1px);
-        }
-
-        .link-card i { font-size: 18px; width: 25px; margin-right: 15px; text-align: center; }
-        .link-text { flex-grow: 1; text-align: left; font-weight: 500; font-size: 15px; }
+        .link-card:hover { border-color: #555; background: #1a1a1a; }
+        .link-card i { font-size: 18px; width: 30px; margin-right: 10px; }
+        .link-text { flex-grow: 1; text-align: left; font-weight: 500; }
         
         /* Цвета иконок */
         .fa-spotify { color: #1DB954; }
         .fa-soundcloud { color: #ff5500; }
         .fa-youtube { color: #ff0000; }
         .fa-telegram { color: #0088cc; }
-        .fa-apple { color: #ffffff
-                   
+    </style>
+</head>
+<body>
+
+    <div class="lang-switch">
+        <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
+    </div>
+
+    <div class="container">
+        <img src="707.jpg" alt="NIGHTY GANG MUSIC" class="main-logo">
+        <p class="subtitle" data-ru="Музыкальный продюсер и артист" data-en="Music Producer & Artist">Музыкальный продюсер и артист</p>
+
+        <div class="category-title" data-ru="Биты, лупы, покупка" data-en="Beats, Loops, Store">Биты, лупы, покупка</div>
+        <a href="https://t.me/nightygangbuy" class="link-card" target="_blank">
+            <i class="fab fa-telegram"></i><span class="link-text">Telegram Store</span>
+        </a>
+        <a href="https://youtube.com/@nightygangmusic" class="link-card" target="_blank">
+            <i class="fab fa-youtube"></i><span class="link-text">YouTube (Beats)</span>
+        </a>
+
+        <div class="category-title" data-ru="Музыкальные площадки" data-en="Streaming Platforms">Музыкальные площадки</div>
+        <a href="https://open.spotify.com/artist/your_id" class="link-card" target="_blank">
+            <i class="fab fa-spotify"></i><span class="link-text">Spotify</span>
+        </a>
+        <a href="https://music.apple.com/artist/1641045233" class="link-card" target="_blank">
+            <i class="fab fa-apple"></i><span class="link-text">Apple Music</span>
+        </a>
+        <a href="https://music.youtube.com/channel/UC2b0FjHKQG-I-QzrWmUouow" class="link-card" target="_blank">
+            <i class="fas fa-play-circle" style="color:#ff0000"></i><span class="link-text">YouTube Music</span>
+        </a>
+        <a href="https://music.yandex.by/artist/17278322" class="link-card" target="_blank">
+            <i class="fas fa-compact-disc" style="color:#ffcc00"></i><span class="link-text">Yandex Music</span>
+        </a>
+        <a href="https://soundcloud.com/nighty-gang" class="link-card" target="_blank">
+            <i class="fab fa-soundcloud"></i><span class="link-text">SoundCloud</span>
+        </a>
+        <a href="https://zvuk.com/artist/212067593" class="link-card" target="_blank">
+            <i class="fas fa-wave-square"></i><span class="link-text" data-ru="Звук" data-en="Zvuk">Звук</span>
+        </a>
+        <a href="https://music.amazon.com/artists/B0BBB4S5S2" class="link-card" target="_blank">
+            <i class="fab fa-amazon"></i><span class="link-text">Amazon Music</span>
+        </a>
+        <a href="https://www.deezer.com/artist/180638617" class="link-card" target="_blank">
+            <i class="fab fa-deezer"></i><span class="link-text">Deezer</span>
+        </a>
+
+        <div class="category-title" data-ru="Соц. сети" data-en="Social Media">Соц. сети</div>
+        <a href="https://www.instagram.com/nightygang/" class="link-card" target="_blank">
+            <i class="fab fa-instagram"></i><span class="link-text">Instagram</span>
+        </a>
+        <a href="https://www.tiktok.com/@nightygangmusic" class="link-card" target="_blank">
+            <i class="fab fa-tiktok"></i><span class="link-text">TikTok</span>
+        </a>
+        <a href="https://youtu.be/pK7EAqTRk2w" class="link-card" target="_blank">
+            <i class="fab fa-youtube"></i><span class="link-text" data-ru="YouTube (Личный)" data-en="YouTube (Personal)">YouTube (Личный)</span>
+        </a>
+    </div>
+
+    <script>
+        function toggleLang() {
+            const isRu = document.documentElement.lang === 'ru';
+            document.documentElement.lang = isRu ? 'en' : 'ru';
+            document.querySelectorAll('[data-ru]').forEach(el => {
+                el.innerText = el.getAttribute('data-' + (isRu ? 'en' : 'ru'));
+            });
+        }
+        document.documentElement.lang = 'ru';
+    </script>
+</body>
+</html>
