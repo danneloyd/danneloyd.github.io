@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nighty Gang | Links</title>
+    <title>NIGHTY GANG MUSIC | Links</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -23,13 +23,10 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            min-height: 100vh;
         }
 
-        /* Переключатель языка */
-        .lang-switch {
-            align-self: flex-end;
-            margin-bottom: 20px;
-        }
+        .lang-switch { align-self: flex-end; margin-bottom: 20px; }
         .lang-btn {
             background: var(--card-bg);
             border: 1px solid #333;
@@ -37,19 +34,16 @@
             padding: 8px 15px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
-            transition: 0.3s;
+            font-weight: bold;
         }
-        .lang-btn:hover { border-color: var(--accent-color); }
 
         .container { width: 100%; max-width: 450px; text-align: center; }
-        
-        h1 { font-size: 28px; margin-bottom: 5px; letter-spacing: -1px; }
+        h1 { font-size: 26px; margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; }
         .subtitle { color: var(--secondary-text); margin-bottom: 30px; font-size: 14px; }
 
         .category-title {
             text-align: left;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--secondary-text);
@@ -60,26 +54,19 @@
             background: var(--card-bg);
             display: flex;
             align-items: center;
-            padding: 16px 20px;
+            padding: 14px 20px;
             margin-bottom: 10px;
             text-decoration: none;
             color: var(--text-color);
-            border-radius: 16px;
+            border-radius: 14px;
             border: 1px solid #222;
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
-        .link-card:hover {
-            transform: translateY(-2px);
-            border-color: #444;
-            background: #1c1c1c;
-        }
-
+        .link-card:hover { transform: translateY(-2px); border-color: #444; background: #1c1c1c; }
         .link-card i { font-size: 20px; width: 30px; margin-right: 15px; color: var(--accent-color); }
-        .link-text { flex-grow: 1; text-align: left; font-weight: 500; }
-        .arrow { font-size: 12px; color: #444; }
-
-        [lang="en"] { display: none; }
+        .link-text { flex-grow: 1; text-align: left; font-weight: 500; font-size: 15px; }
+        .arrow { font-size: 12px; color: #333; }
     </style>
 </head>
 <body>
@@ -89,8 +76,8 @@
     </div>
 
     <div class="container">
-        <h1 id="main-title">Nighty Gang</h1>
-        <p class="subtitle">Music Producer & Artist</p>
+        <h1>NIGHTY GANG MUSIC</h1>
+        <p class="subtitle" data-ru="Музыкальный продюсер и артист" data-en="Music Producer & Artist">Музыкальный продюсер и артист</p>
 
         <div class="category-title" data-ru="Биты, лупы, покупка" data-en="Beats, Loops, Store">Биты, лупы, покупка</div>
         
@@ -101,13 +88,13 @@
         </a>
         <a href="https://youtube.com/@nightygangmusic" class="link-card" target="_blank">
             <i class="fab fa-youtube"></i>
-            <span class="link-text">YouTube (Main)</span>
+            <span class="link-text">YouTube (Beats)</span>
             <span class="arrow">➔</span>
         </a>
 
         <div class="category-title" data-ru="Музыкальные площадки" data-en="Streaming Platforms">Музыкальные площадки</div>
         
-        <a href="https://open.spotify.com/artist/17278322" class="link-card" target="_blank">
+        <a href="https://open.spotify.com/artist/4e59HOpuAm2YjC4OUpEYqn?si=aB2J0RHFTaam0ZoyRb_Jig" class="link-card" target="_blank">
             <i class="fab fa-spotify" style="color: #1DB954;"></i>
             <span class="link-text">Spotify</span>
             <span class="arrow">➔</span>
@@ -117,12 +104,71 @@
             <span class="link-text">Apple Music</span>
             <span class="arrow">➔</span>
         </a>
+        <a href="https://music.youtube.com/channel/UC2b0FjHKQG-I-QzrWmUouow" class="link-card" target="_blank">
+            <i class="fas fa-play-circle" style="color: #ff0000;"></i>
+            <span class="link-text">YouTube Music</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://music.yandex.by/artist/17278322" class="link-card" target="_blank">
+            <i class="fas fa-compact-disc" style="color: #ffcc00;"></i>
+            <span class="link-text">Yandex Music</span>
+            <span class="arrow">➔</span>
+        </a>
         <a href="https://soundcloud.com/nighty-gang" class="link-card" target="_blank">
             <i class="fab fa-soundcloud" style="color: #ff5500;"></i>
             <span class="link-text">SoundCloud</span>
             <span class="arrow">➔</span>
         </a>
-        <a href="https://music.youtube.com/channel/UC2b0FjHKQG-I-QzrWmUouow" class="link-card" target="_blank">
-            <i class="fas fa-play-circle" style="color: #ff0000;"></i>
-            <span class="
-                
+        <a href="https://zvuk.com/artist/212067593" class="link-card" target="_blank">
+            <i class="fas fa-wave-square"></i>
+            <span class="link-text" data-ru="Звук" data-en="Zvuk (Sber)">Звук</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://music.mts.ru/artist/17278322" class="link-card" target="_blank">
+            <i class="fas fa-mobile-alt"></i>
+            <span class="link-text">KION / MTS Music</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://music.amazon.com/artists/B0BBB4S5S2" class="link-card" target="_blank">
+            <i class="fab fa-amazon"></i>
+            <span class="link-text">Amazon Music</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://www.deezer.com/artist/180638617" class="link-card" target="_blank">
+            <i class="fab fa-deezer"></i>
+            <span class="link-text">Deezer</span>
+            <span class="arrow">➔</span>
+        </a>
+
+        <div class="category-title" data-ru="Соц. сети" data-en="Social Media">Соц. сети</div>
+        
+        <a href="https://www.instagram.com/nightygang/" class="link-card" target="_blank">
+            <i class="fab fa-instagram"></i>
+            <span class="link-text">Instagram</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://www.tiktok.com/@nightygangmusic" class="link-card" target="_blank">
+            <i class="fab fa-tiktok"></i>
+            <span class="link-text">TikTok</span>
+            <span class="arrow">➔</span>
+        </a>
+        <a href="https://youtu.be/pK7EAqTRk2w" class="link-card" target="_blank">
+            <i class="fab fa-youtube"></i>
+            <span class="link-text" data-ru="YouTube (Второй канал)" data-en="YouTube (Personal)">YouTube (Второй канал)</span>
+            <span class="arrow">➔</span>
+        </a>
+    </div>
+
+    <script>
+        let currentLang = 'ru';
+        function toggleLang() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            
+            // Перевод категорий и текстов
+            document.querySelectorAll('[data-ru]').forEach(el => {
+                el.innerText = el.getAttribute('data-' + currentLang);
+            });
+        }
+    </script>
+</body>
+</html>
