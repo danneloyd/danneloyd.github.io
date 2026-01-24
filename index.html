@@ -89,4 +89,67 @@
 
     <div class="lang-switch">
         <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
-        
+    </div>
+
+    <div class="container">
+        <img src="707.jpg" alt="NIGHTY GANG MUSIC" class="main-logo">
+        <p class="subtitle" data-ru="Музыкальный продюсер и артист" data-en="Music Producer & Artist">Музыкальный продюсер и артист</p>
+
+        <div class="category-title" data-ru="Биты, лупы, покупка" data-en="Beats, Loops, Store">Биты, лупы, покупка</div>
+        <a href="https://t.me/nightygangbuy" class="link-card" target="_blank">
+            <i class="fab fa-telegram"></i><span class="link-text">Telegram Store</span>
+        </a>
+        <a href="https://youtube.com/@nightygangmusic" class="link-card" target="_blank">
+            <i class="fab fa-youtube"></i>
+            <span class="link-text" data-ru="YouTube (Биты)" data-en="YouTube (Beats)">YouTube (Биты)</span>
+        </a>
+
+        <div class="category-title" data-ru="Музыкальные площадки" data-en="Streaming Platforms">Музыкальные площадки</div>
+        <a href="https://open.spotify.com/artist/33A0u4j70Tf1MofGatC6H6" class="link-card" target="_blank">
+            <i class="fab fa-spotify"></i><span class="link-text">Spotify</span>
+        </a>
+        <a href="https://music.apple.com/us/artist/danneloyd/1640868139" class="link-card" target="_blank">
+            <i class="fab fa-apple"></i><span class="link-text">Apple Music</span>
+        </a>
+        <a href="https://music.youtube.com/channel/UC2b0FjHKQG-I-QzrWmUouow" class="link-card" target="_blank">
+            <i class="fas fa-play-circle" style="color:#ff0000"></i><span class="link-text">YouTube Music</span>
+        </a>
+        <a href="https://music.yandex.by/artist/17278322" class="link-card" target="_blank">
+            <i class="fas fa-compact-disc" style="color:#ffcc00"></i><span class="link-text">Yandex Music</span>
+        </a>
+        <a href="https://soundcloud.com/nighty-gang" class="link-card" target="_blank">
+            <i class="fab fa-soundcloud"></i><span class="link-text">SoundCloud</span>
+        </a>
+        <a href="https://zvuk.com/artist/212067593" class="link-card" target="_blank">
+            <i class="fas fa-wave-square"></i><span class="link-text" data-ru="Звук" data-en="Zvuk">Звук</span>
+        </a>
+        <a href="https://music.amazon.com/artists/B0BBB4S5S2" class="link-card" target="_blank">
+            <i class="fab fa-amazon"></i><span class="link-text">Amazon Music</span>
+        </a>
+        <a href="https://www.deezer.com/artist/180638617" class="link-card" target="_blank">
+            <i class="fab fa-deezer"></i><span class="link-text">Deezer</span>
+        </a>
+
+        <div class="category-title" data-ru="Соц. сети" data-en="Social Media">Соц. сети</div>
+        <a href="https://www.instagram.com/nightygang/" class="link-card" target="_blank">
+            <i class="fab fa-instagram"></i><span class="link-text">Instagram</span>
+        </a>
+        <a href="https://www.tiktok.com/@nightygangmusic" class="link-card" target="_blank">
+            <i class="fab fa-tiktok"></i><span class="link-text">TikTok</span>
+        </a>
+        <a href="https://youtube.com/@danneloyd?si=M1bflojh8G3Ps-D2" class="link-card" target="_blank">
+            <i class="fab fa-youtube"></i><span class="link-text" data-ru="YouTube (Личный)" data-en="YouTube (Personal)">YouTube (Личный)</span>
+        </a>
+    </div>
+
+    <script>
+        let currentLang = 'ru';
+        function toggleLang() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            document.querySelectorAll('[data-ru]').forEach(el => {
+                el.innerText = el.getAttribute('data-' + currentLang);
+            });
+        }
+    </script>
+</body>
+</html>
