@@ -1,19 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Мои ссылки</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniils Rimars | Links</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f4; }
-        .links { display: flex; flex-direction: column; gap: 10px; max-width: 300px; margin: 0 auto; }
-        a { padding: 15px; background: white; text-decoration: none; color: black; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #121212;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+        h1 { margin-bottom: 30px; font-size: 24px; }
+        .links-container { width: 100%; max-width: 400px; }
+        .link-card {
+            background: #1e1e1e;
+            display: block;
+            padding: 16px;
+            margin-bottom: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #00aaff;
+            border: 1px solid #333;
+            border-radius: 12px;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        .link-card:hover { background: #252525; transform: scale(1.02); }
     </style>
 </head>
 <body>
-    <h1>Привет, я [Имя]!</h1>
-    <div class="links">
-        <a href="https://t.me/ваш_ник">Telegram</a>
-        <a href="https://instagram.com/ваш_ник">Instagram</a>
-        <a href="mailto:email@example.com">Написать мне</a>
-    </div>
+    <h1>Daniils Rimars</h1>
+    <div class="links-container">
+        <a href="https://t.me/твой_ник" class="link-card">Telegram</a>
+        <a href="https://instagram.com/твой_ник" class="link-card">Instagram</a>
+        <a href="https://github.com/danneloyd" class="link-card">GitHub Project</a>
+        </div>
 </body>
 </html>
+
