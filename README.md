@@ -1,10 +1,4 @@
-# NIGHTY GANG MUSIC 🎹
-
-Official multi-link landing page (Linktree) for music producer and artist.
+Official web page for Nighty Gang Music (danneloyd)
 
 ## 🔗 Link
 [danneloyd.github.io](https://danneloyd.github.io)
-
----
-*Created by NIGHTY GANG MUSIC*
-
