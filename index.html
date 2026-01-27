@@ -41,7 +41,7 @@
         }
         .lang-btn:hover { color: #fff; border-color: #666; }
 
-        .container { width: 100%; max-width: 450px; text-align: center; padding-bottom: 40px; }
+        .container { width: 100%; max-width: 450px; text-align: center; padding-bottom: 50px; }
 
         .main-logo {
             width: 90%;
@@ -93,6 +93,9 @@
         .fa-youtube { color: #ff0000; }
         .fa-telegram { color: #0088cc; }
         .fa-cube { color: #55FF55; }
+        .fa-apple { color: #ffffff; }
+        .fa-amazon { color: #FF9900; }
+        .fa-deezer { color: #EF3340; }
 
         .mc-info {
             display: block;
@@ -144,6 +147,12 @@
         <a href="https://zvuk.com/artist/212067593" class="link-card" target="_blank">
             <i class="fas fa-wave-square"></i><span class="link-text" data-ru="Звук" data-en="Zvuk">Звук</span>
         </a>
+        <a href="https://music.amazon.com/artists/B0BBB4S5S2" class="link-card" target="_blank">
+            <i class="fab fa-amazon"></i><span class="link-text">Amazon Music</span>
+        </a>
+        <a href="https://www.deezer.com/artist/180638617" class="link-card" target="_blank">
+            <i class="fab fa-deezer"></i><span class="link-text">Deezer</span>
+        </a>
 
         <div class="category-title" data-ru="Соц. сети" data-en="Social Media">Соц. сети</div>
         <a href="https://www.instagram.com/nightygang/" class="link-card" target="_blank">
@@ -180,8 +189,8 @@
         function copyIP() {
             navigator.clipboard.writeText(ipAddress);
             const ipDisplay = document.getElementById('ip-display');
-            
             const msg = currentLang === 'ru' ? 'IP СКОПИРОВАН!' : 'IP COPIED!';
+            
             ipDisplay.innerText = msg;
             ipDisplay.style.color = "#55FF55";
             
