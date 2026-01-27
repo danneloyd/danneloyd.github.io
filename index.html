@@ -37,9 +37,11 @@
             font-size: 10px;
             font-weight: bold;
             text-transform: uppercase;
+            transition: 0.3s;
         }
+        .lang-btn:hover { color: #fff; border-color: #666; }
 
-        .container { width: 100%; max-width: 450px; text-align: center; }
+        .container { width: 100%; max-width: 450px; text-align: center; padding-bottom: 40px; }
 
         .main-logo {
             width: 90%;
@@ -79,6 +81,7 @@
             border-radius: 12px;
             border: 1px solid #1a1a1a;
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .link-card:hover { border-color: #444; background: #161616; transform: translateY(-1px); }
@@ -89,6 +92,16 @@
         .fa-soundcloud { color: #ff5500; }
         .fa-youtube { color: #ff0000; }
         .fa-telegram { color: #0088cc; }
+        .fa-cube { color: #55FF55; }
+
+        .mc-info {
+            display: block;
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -99,7 +112,7 @@
 
     <div class="container">
         <img src="707.jpg" alt="NIGHTY GANG MUSIC" class="main-logo">
-        <p class="subtitle" data-ru="danneloyd" data-en="danneloyd">danneloyd</p>
+        <p class="subtitle">danneloyd</p>
 
         <div class="category-title" data-ru="Биты, лупы, покупка" data-en="Beats, Loops, Store">Биты, лупы, покупка</div>
         <a href="https://t.me/nightygangbuy" class="link-card" target="_blank">
@@ -116,11 +129,9 @@
         </a>
 
         <div class="category-title" data-ru="Музыкальные площадки" data-en="Streaming Platforms">Музыкальные площадки</div>
-        
         <a href="Https://open.spotify.com/artist/4e59HOpuAm2YjC4OUpEYqn?si=jp-lAO5_TBqn4h3nkusRHA&nd=1&dlsi=a3998492b8be469e" class="link-card" target="_blank">
             <i class="fab fa-spotify"></i><span class="link-text">Spotify</span>
         </a>
-        
         <a href="https://music.apple.com/us/artist/danneloyd/1640868139" class="link-card" target="_blank">
             <i class="fab fa-apple"></i><span class="link-text">Apple Music</span>
         </a>
@@ -133,12 +144,6 @@
         <a href="https://zvuk.com/artist/212067593" class="link-card" target="_blank">
             <i class="fas fa-wave-square"></i><span class="link-text" data-ru="Звук" data-en="Zvuk">Звук</span>
         </a>
-        <a href="https://music.amazon.com/artists/B0BBB4S5S2" class="link-card" target="_blank">
-            <i class="fab fa-amazon"></i><span class="link-text">Amazon Music</span>
-        </a>
-        <a href="https://www.deezer.com/artist/180638617" class="link-card" target="_blank">
-            <i class="fab fa-deezer"></i><span class="link-text">Deezer</span>
-        </a>
 
         <div class="category-title" data-ru="Соц. сети" data-en="Social Media">Соц. сети</div>
         <a href="https://www.instagram.com/nightygang/" class="link-card" target="_blank">
@@ -150,15 +155,40 @@
         <a href="https://youtube.com/@danneloyd?si=M1bflojh8G3Ps-D2" class="link-card" target="_blank">
             <i class="fab fa-youtube"></i><span class="link-text" data-ru="YouTube (Личный)" data-en="YouTube (Personal)">YouTube (Личный)</span>
         </a>
+
+        <div class="category-title" data-ru="Minecraft Сервер" data-en="Minecraft Server">Minecraft Сервер</div>
+        <div class="link-card" onclick="copyIP()">
+            <i class="fas fa-cube"></i>
+            <span class="link-text">
+                <span id="ip-display">79.76.47.159:25565</span>
+                <span class="mc-info">Java Edition • 1.8.8+</span>
+            </span>
+        </div>
     </div>
 
     <script>
         let currentLang = 'ru';
+        const ipAddress = "79.76.47.159:25565";
+
         function toggleLang() {
             currentLang = currentLang === 'ru' ? 'en' : 'ru';
             document.querySelectorAll('[data-ru]').forEach(el => {
                 el.innerText = el.getAttribute('data-' + currentLang);
             });
+        }
+
+        function copyIP() {
+            navigator.clipboard.writeText(ipAddress);
+            const ipDisplay = document.getElementById('ip-display');
+            
+            const msg = currentLang === 'ru' ? 'IP СКОПИРОВАН!' : 'IP COPIED!';
+            ipDisplay.innerText = msg;
+            ipDisplay.style.color = "#55FF55";
+            
+            setTimeout(() => {
+                ipDisplay.innerText = ipAddress;
+                ipDisplay.style.color = "#fff";
+            }, 2000);
         }
     </script>
 </body>
