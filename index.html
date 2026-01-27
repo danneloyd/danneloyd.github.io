@@ -169,7 +169,7 @@
             <i class="fas fa-cube"></i>
             <span class="link-text">
                 <span id="ip-display">79.76.47.159:25565</span>
-                <span class="mc-info" id="server-status">Java Edition • 1.8.8+</span>
+                <span class="mc-info" id="server-status">Loading...</span>
             </span>
         </div>
     </div>
@@ -177,6 +177,7 @@
     <script>
         let currentLang = 'ru';
         const ipAddress = "79.76.47.159:25565";
+        const fallbackName = "NIGHTY GANG WORLD"; // Название на случай, если сервер выключен
 
         function toggleLang() {
             currentLang = currentLang === 'ru' ? 'en' : 'ru';
@@ -203,16 +204,23 @@
             try {
                 const response = await fetch(`https://api.mcstatus.io/v2/status/java/${ipAddress}`);
                 const data = await response.json();
+                
                 if (data.online) {
+                    // Берем название из MOTD (чистый текст без параграфов §)
+                    // Если MOTD пустое, используем fallback
+                    const motdName = data.motd.clean.split('\n')[0].trim() || fallbackName;
+                    
                     const players = data.players.online;
                     const max = data.players.max;
-                    statusEl.innerHTML = (currentLang === 'ru' ? 'Онлайн: ' : 'Online: ') + 
-                        `<span style="color:#55FF55">${players}/${max}</span> • 1.8.8+`;
+                    const onlineText = currentLang === 'ru' ? 'Онлайн' : 'Online';
+                    
+                    statusEl.innerHTML = `${motdName} • ${onlineText}: <span style="color:#55FF55">${players}/${max}</span>`;
                 } else {
-                    statusEl.innerHTML = `<span style="color:#ff4444">${currentLang === 'ru' ? 'ОФФЛАЙН' : 'OFFLINE'}</span> • 1.8.8+`;
+                    const offlineText = currentLang === 'ru' ? 'ОФФЛАЙН' : 'OFFLINE';
+                    statusEl.innerHTML = `${fallbackName} • <span style="color:#ff4444">${offlineText}</span>`;
                 }
             } catch (e) {
-                statusEl.innerText = "Java Edition • 1.8.8+";
+                statusEl.innerText = fallbackName;
             }
         }
 
