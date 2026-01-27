@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIGHTY GANG WORLD - О СЕРВЕРЕ</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #000000;
+            color: #eeeeee;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Тот самый переключатель языков */
+        .lang-switch { align-self: flex-end; margin-bottom: 10px; }
+        .lang-btn {
+            background: #111;
+            border: 1px solid #333;
+            color: #888;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { color: #fff; border-color: #666; }
+
+        .container { width: 100%; max-width: 450px; text-align: center; padding-bottom: 40px; }
+
+        .back-link {
+            text-decoration: none;
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: #fff; }
+
+        .category-title {
+            text-align: left;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #555;
+            margin: 25px 0 10px 10px;
+        }
+
+        .link-card {
+            background: #111111;
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            text-decoration: none;
+            color: #fff;
+            border-radius: 12px;
+            border: 1px solid #1a1a1a;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .link-card:hover { border-color: #444; background: #161616; }
+        .link-card i { font-size: 18px; width: 30px; margin-right: 10px; text-align: center; }
+        .link-text { flex-grow: 1; text-align: left; font-weight: 500; font-size: 15px; }
+
+        .info-block {
+            background: #111111;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border: 1px solid #1a1a1a;
+            text-align: left;
+        }
+
+        .info-block img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .info-block p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #ccc;
+            margin: 0;
+        }
+
+        .rules-block {
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            background: rgba(255, 68, 68, 0.05);
+        }
+
+        .mc-info {
+            display: block;
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .fa-cube { color: #55FF55; }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switch">
+        <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-link"><i class="fas fa-chevron-left"></i> <span data-ru="На главную" data-en="Back home">На главную</span></a>
+
+        <div class="category-title" data-ru="Подключение" data-en="Connection">Подключение</div>
+        
+        <div class="link-card" onclick="copyIP()">
+            <i class="fas fa-cube"></i>
+            <span class="link-text">
+                <span id="ip-display">79.76.47.159:25565</span>
+                <span class="mc-info" id="server-status">Loading...</span>
+            </span>
+        </div>
+
+        <div class="info-block">
+            <img src="server_photo.jpg" alt="Server Screenshot"> 
+            <p data-ru="Данный сервер создан мною для фана, чисто ванила. На данный момент любой может зайти на сервер. На сервере необходимо будет зарегистрироваться /register а затем /login" 
+               data-en="This server was created for fun, pure vanilla. Currently, anyone can join. You will need to register using /register and then /login.">
+               Данный сервер создан мною для фана, чисто ванила. На данный момент любой может зайти на сервер. На сервере необходимо будет зарегистрироваться /register а затем /login
+            </p>
+        </div>
+
+        <div class="info-block">
+            <p><strong data-ru="Версия:" data-en="Version:">Версия:</strong> Java Edition 1.8.8 - 1.20.6</p>
+        </div>
+
+        <div class="info-block rules-block">
+            <p data-ru="Читы, массовый гриф, лагмашины =" data-en="Cheats, mass griefing, lag machines =">Читы, массовый гриф, лагмашины =</p>
+            <strong style="color: #ff6666;" data-ru="бан по IP" data-en="IP BAN">бан по IP</strong>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'ru';
+        const ipAddress = "79.76.47.159:25565";
+        const fallbackName = "NIGHTY GANG WORLD";
+
+        function toggleLang() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            document.querySelectorAll('[data-ru]').forEach(el => {
+                el.innerText = el.getAttribute('data-' + currentLang);
+            });
+            updateServerStatus();
+        }
+
+        function copyIP() {
+            navigator.clipboard.writeText(ipAddress);
+            const ipDisplay = document.getElementById('ip-display');
+            const msg = currentLang === 'ru' ? 'IP СКОПИРОВАН!' : 'IP COPIED!';
+            ipDisplay.innerText = msg;
+            ipDisplay.style.color = "#55FF55";
+            setTimeout(() => {
+                ipDisplay.innerText = ipAddress;
+                ipDisplay.style.color = "#fff";
+            }, 2000);
+        }
+
+        async function updateServerStatus() {
+            const statusEl = document.getElementById('server-status');
+            try {
+                const response = await fetch(`https://api.mcstatus.io/v2/status/java/${ipAddress}`);
+                const data = await response.json();
+                
+                if (data.online) {
+                    const motdName = data.motd.clean.split('\n')[0].trim() || fallbackName;
+                    const players = data.players.online;
+                    const max = data.players.max;
+                    const onlineText = currentLang === 'ru' ? 'Онлайн' : 'Online';
+                    statusEl.innerHTML = `${motdName} • ${onlineText}: <span style="color:#55FF55">${players}/${max}</span>`;
+                } else {
+                    const offlineText = currentLang === 'ru' ? 'ОФФЛАЙН' : 'OFFLINE';
+                    statusEl.innerHTML = `${fallbackName} • <span style="color:#ff4444">${offlineText}</span>`;
+                }
+            } catch (e) {
+                statusEl.innerText = fallbackName;
+            }
+        }
+
+        updateServerStatus();
+        setInterval(updateServerStatus, 30000);
+    </script>
+</body>
+</html>
