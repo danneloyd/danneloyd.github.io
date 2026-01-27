@@ -104,6 +104,28 @@
             letter-spacing: 1px;
             margin-top: 4px;
         }
+
+        /* Кнопка подробнее */
+        .btn-details {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #444;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+            padding: 10px;
+            transition: 0.3s;
+        }
+        .btn-details:hover {
+            color: #888;
+        }
+        .btn-details i {
+            font-size: 9px;
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -165,6 +187,7 @@
         </a>
 
         <div class="category-title" data-ru="Minecraft Сервер" data-en="Minecraft Server">Minecraft Сервер</div>
+        
         <div class="link-card" onclick="copyIP()">
             <i class="fas fa-cube"></i>
             <span class="link-text">
@@ -172,12 +195,17 @@
                 <span class="mc-info" id="server-status">Loading...</span>
             </span>
         </div>
+
+        <a href="server.html" class="btn-details" target="_blank">
+            <span data-ru="Подробнее о сервере" data-en="Server Details">Подробнее о сервере</span>
+            <i class="fas fa-chevron-right"></i>
+        </a>
     </div>
 
     <script>
         let currentLang = 'ru';
         const ipAddress = "79.76.47.159:25565";
-        const fallbackName = "NIGHTY GANG WORLD"; // Название на случай, если сервер выключен
+        const fallbackName = "NIGHTY GANG WORLD"; 
 
         function toggleLang() {
             currentLang = currentLang === 'ru' ? 'en' : 'ru';
@@ -206,14 +234,10 @@
                 const data = await response.json();
                 
                 if (data.online) {
-                    // Берем название из MOTD (чистый текст без параграфов §)
-                    // Если MOTD пустое, используем fallback
                     const motdName = data.motd.clean.split('\n')[0].trim() || fallbackName;
-                    
                     const players = data.players.online;
                     const max = data.players.max;
                     const onlineText = currentLang === 'ru' ? 'Онлайн' : 'Online';
-                    
                     statusEl.innerHTML = `${motdName} • ${onlineText}: <span style="color:#55FF55">${players}/${max}</span>`;
                 } else {
                     const offlineText = currentLang === 'ru' ? 'ОФФЛАЙН' : 'OFFLINE';
