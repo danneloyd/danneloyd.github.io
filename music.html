@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUSIC | NIGHTY GANG</title>
+    
+    <link rel="icon" type="image/png" href="fav.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background: radial-gradient(circle at top, #111 0%, #050505 100%);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container { width: 100%; max-width: 440px; text-align: center; }
+
+        .header { margin: 40px 0 35px; }
+        h1 { font-size: 26px; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; margin: 0; }
+        
+        .subtitle { 
+            color: #666; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            color: #444;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { color: #fff; }
+        .back-btn i { margin-right: 8px; font-size: 9px; }
+
+        .category-label {
+            text-align: left;
+            font-size: 10px;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 25px 0 12px 12px;
+            font-weight: 800;
+        }
+
+        .music-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 18px 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .music-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .music-card .left { display: flex; align-items: center; }
+        .music-card i { width: 30px; margin-right: 15px; font-size: 20px; text-align: center; }
+        .music-card span { font-weight: 600; font-size: 16px; }
+
+        /* Цвета */
+        .fa-spotify { color: #1DB954; }
+        .fa-soundcloud { color: #ff5500; }
+        .fa-apple { color: #fff; }
+        .fa-youtube { color: #ff0000; }
+        .fa-deezer { color: #ff0092; }
+        .fa-amazon { color: #00A8E1; }
+
+        .lang-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #444;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
+
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 
+                <span data-ru="Назад" data-en="Back">Назад</span>
+            </a>
+            <h1 data-ru="Музыкальные площадки" data-en="Streaming Platforms">Музыкальные площадки</h1>
+            <div class="subtitle">danneloyd</div>
+        </div>
+
+        <div class="category-label" data-ru="Демо и Эксклюзивы" data-en="Demos & Exclusives">Демо и Эксклюзивы</div>
+        <a href="https://soundcloud.com/nighty-gang" class="music-card" target="_blank">
+            <div class="left"><i class="fab fa-soundcloud"></i><span>SoundCloud</span></div>
+            <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
+        </a>
+
+        <div class="category-label" data-ru="Стриминг" data-en="Streaming">Стриминг</div>
+        
+        <a href="http://googleusercontent.com/spotify.com/..." class="music-card" target="_blank">
+            <div class="left"><i class="fab fa-spotify"></i><span>Spotify</span></div>
+            <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
+        </a>
+
+        <a href="https://music.apple.com/us/artist/danneloyd/1640868139" class="music-card" target="_blank">
+            <div class="left"><i class="fab fa-apple"></i><span>Apple Music</span></div>
+            <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
+        </a>
+
+        <a href="https://music.youtube.com/channel/UC2b0FjHKQG-I-QzrWmUouow" class="music-card" target="_blank">
+            <div class="left"><i class="fab fa-youtube"></i><span>YouTube Music</span></div>
+            <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
+        </a>
+
+        <a href="https://music.yandex.by/artist/17278322" class="music-card" target="_blank">
+            <div class="left"><i class="fas fa-compact-disc" style="color:#ffcc00"></i><span>Yandex Music</span></div>
+            <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
+        </a>
+
+        <a href="https://zvuk.com/artist/212067593" class="music-card" target="_blank">
+            <div class="left"><i class="fas fa-wave-square" style="color:#fff"></i><span>Zvuk</span></div>
+            <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
+        </a>
+
+        <a href="https://www.deezer.com/artist/181676647" class="music-card" target="_blank">
+            <div class="left"><i class="fab fa-deezer"></i><span>Deezer</span></div>
+            <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
+        </a>
+
+        <a href="https://music.amazon.com/artists/B0BBR9LSR8/danneloyd" class="music-card" target="_blank">
+            <div class="left"><i class="fab fa-amazon"></i><span>Amazon Music</span></div>
+            <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
+        </a>
+    </div>
+
+    <script>
+        let currentLang = 'ru';
+        function toggleLang() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            document.querySelectorAll('[data-ru]').forEach(el => {
+                el.innerText = el.getAttribute('data-' + currentLang);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -5,259 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NIGHTY GANG MUSIC</title>
     
-    <link rel="icon" type="image/jpeg" href="fav.jpg?v=3">
-    <link rel="apple-touch-icon" href="fav.jpg?v=3">
-    
-    <meta property="og:title" content="NIGHTY GANG MUSIC">
-    <meta property="og:image" content="707.jpg">
-    <meta property="og:description" content="Official Links & Music">
-
+    <link rel="icon" type="image/png" href="fav.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --mc-color: #55FF55;
+        }
+
         body {
-            background-color: #000000;
-            color: #eeeeee;
+            background: radial-gradient(circle at top, #111 0%, #050505 100%);
+            color: #fff;
             font-family: 'Inter', sans-serif;
             margin: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
             padding: 20px;
+            min-height: 100vh;
+            position: relative;
         }
 
-        .lang-switch { align-self: flex-end; margin-bottom: 10px; }
+        .container { width: 100%; max-width: 440px; text-align: center; }
+        .main-header { margin: 60px 0 40px 0; }
+        h1 { font-size: 34px; font-weight: 800; margin: 0; letter-spacing: -1.5px; text-transform: uppercase; }
+
+        /* Кнопка смены языка */
         .lang-btn {
-            background: #111;
-            border: 1px solid #333;
-            color: #888;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: 0.3s;
+            position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid var(--border);
+            color: #444; padding: 6px 12px; border-radius: 10px; font-size: 10px; font-weight: 800; cursor: pointer; transition: 0.3s;
         }
         .lang-btn:hover { color: #fff; border-color: #666; }
 
-        .container { width: 100%; max-width: 450px; text-align: center; padding-bottom: 40px; }
+        /* TG STORE */
+        .tg-hero {
+            background: linear-gradient(135deg, #0088cc 0%, #005580 100%);
+            padding: 24px; border-radius: 26px; margin-bottom: 15px;
+            display: flex; align-items: center; text-decoration: none; color: white;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 15px 35px rgba(0, 136, 204, 0.2); border: 1px solid rgba(255,255,255,0.1);
+        }
+        .tg-hero:hover { transform: translateY(-5px); box-shadow: 0 20px 45px rgba(0, 136, 204, 0.4); }
+        .tg-hero i { font-size: 38px; margin-right: 20px; }
+        .tg-hero div { text-align: left; }
+        .tg-hero .title { font-size: 13px; opacity: 0.8; text-transform: uppercase; font-weight: 400; display: block; }
+        .tg-hero .main-text { font-size: 20px; font-weight: 800; display: block; }
 
-        .main-logo {
-            width: 90%;
-            max-width: 300px;
-            height: auto;
-            margin: 10px 0;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+        /* MC SERVER BLOCK */
+        .mc-special {
+            background: rgba(85, 255, 85, 0.03); border: 1px solid rgba(85, 255, 85, 0.15);
+            padding: 24px; border-radius: 26px; margin-bottom: 40px;
+            display: flex; align-items: center; text-decoration: none; color: #fff;
+            transition: 0.4s ease; position: relative;
         }
-        
-        .subtitle { 
-            color: #666; 
-            margin-bottom: 30px; 
-            font-size: 11px; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .mc-special:hover {
+            transform: translateY(-3px); border-color: var(--mc-color);
+            background: rgba(85, 255, 85, 0.06); box-shadow: 0 0 30px rgba(85, 255, 85, 0.1);
         }
+        .mc-special i { font-size: 32px; color: var(--mc-color); margin-right: 20px; filter: drop-shadow(0 0 8px rgba(85,255,85,0.4)); }
+        .mc-special div { text-align: left; }
+        .mc-special .server-name { font-size: 20px; font-weight: 800; display: block; margin-bottom: 4px; }
+        .mc-special .status-dot { width: 8px; height: 8px; background: var(--mc-color); border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 10px var(--mc-color); }
+        .mc-special .online-count { font-size: 13px; opacity: 0.7; font-weight: 600; }
 
-        .category-title {
-            text-align: left;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #555;
-            margin: 25px 0 10px 10px;
+        /* NAV MENU */
+        .category-label { text-align: left; font-size: 11px; color: #444; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 12px; font-weight: 800; }
+        .nav-btn {
+            background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 22px;
+            display: flex; align-items: center; justify-content: space-between; color: #fff; text-decoration: none; margin-bottom: 14px; transition: 0.3s;
         }
-
-        .link-card {
-            background: #111111;
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            margin-bottom: 10px;
-            text-decoration: none;
-            color: #fff;
-            border-radius: 12px;
-            border: 1px solid #1a1a1a;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
-        .link-card:hover { border-color: #444; background: #161616; transform: translateY(-1px); }
-        .link-card i { font-size: 18px; width: 30px; margin-right: 10px; text-align: center; }
-        .link-text { flex-grow: 1; text-align: left; font-weight: 500; font-size: 15px; }
-        
-        .fa-spotify { color: #1DB954; }
-        .fa-soundcloud { color: #ff5500; }
-        .fa-youtube { color: #ff0000; }
-        .fa-telegram { color: #0088cc; }
-        .fa-cube { color: #55FF55; }
-        .fa-deezer { color: #ff0092; }
-        .fa-amazon { color: #00A8E1; }
-        .fa-github { color: #ffffff; }
-        .fa-pinterest { color: #E60023; }
-
-        .mc-info {
-            display: block;
-            color: #666;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-
-        /* Кнопка подробнее */
-        .btn-details {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: #444;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-            padding: 10px;
-            transition: 0.3s;
-        }
-        .btn-details:hover {
-            color: #888;
-        }
-        .btn-details i {
-            font-size: 9px;
-            margin-left: 5px;
-        }
+        .nav-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); transform: translateX(5px); }
+        .nav-btn .left { display: flex; align-items: center; }
+        .nav-btn .left i { width: 28px; margin-right: 15px; color: #fff; opacity: 0.9; font-size: 18px; }
+        .nav-btn span { font-weight: 600; font-size: 16px; }
+        .nav-btn .chevron { color: #333; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div class="lang-switch">
-        <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
-    </div>
+    <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
 
     <div class="container">
-        <img src="707.jpg" alt="NIGHTY GANG MUSIC" class="main-logo">
-        <p class="subtitle">danneloyd</p>
-
-        <div class="category-title" data-ru="Биты, лупы, покупка" data-en="Beats, Loops, Store">Биты, лупы, покупка</div>
-        <a href="https://t.me/nightygangbuy" class="link-card" target="_blank">
-            <i class="fab fa-telegram"></i><span class="link-text">Telegram Store</span>
-        </a>
-        <a href="https://youtube.com/@nightygangmusic" class="link-card" target="_blank">
-            <i class="fab fa-youtube"></i>
-            <span class="link-text" data-ru="YouTube (Биты)" data-en="YouTube (Beats)">YouTube (Биты)</span>
-        </a>
-
-        <div class="category-title" data-ru="Демо / Эксклюзив" data-en="Demo / Exclusive">Демо / Эксклюзив</div>
-        <a href="https://soundcloud.com/nighty-gang" class="link-card" target="_blank">
-            <i class="fab fa-soundcloud"></i><span class="link-text">SoundCloud</span>
-        </a>
-
-        <div class="category-title" data-ru="Музыкальные площадки" data-en="Streaming Platforms">Музыкальные площадки</div>
-        <a href="Https://open.spotify.com/artist/4e59HOpuAm2YjC4OUpEYqn?si=jp-lAO5_TBqn4h3nkusRHA&nd=1&dlsi=a3998492b8be469e" class="link-card" target="_blank">
-            <i class="fab fa-spotify"></i><span class="link-text">Spotify</span>
-        </a>
-        <a href="https://music.apple.com/us/artist/danneloyd/1640868139" class="link-card" target="_blank">
-            <i class="fab fa-apple"></i><span class="link-text">Apple Music</span>
-        </a>
-        <a href="https://music.youtube.com/channel/UC2b0FjHKQG-I-QzrWmUouow" class="link-card" target="_blank">
-            <i class="fas fa-play-circle" style="color:#ff0000"></i><span class="link-text">YouTube Music</span>
-        </a>
-        <a href="https://music.yandex.by/artist/17278322" class="link-card" target="_blank">
-            <i class="fas fa-compact-disc" style="color:#ffcc00"></i><span class="link-text">Yandex Music</span>
-        </a>
-        <a href="https://zvuk.com/artist/212067593" class="link-card" target="_blank">
-            <i class="fas fa-wave-square"></i><span class="link-text" data-ru="Звук" data-en="Zvuk">Звук</span>
-        </a>
-        <a href="https://www.deezer.com/artist/181676647" class="link-card" target="_blank">
-            <i class="fab fa-deezer"></i><span class="link-text">Deezer</span>
-        </a>
-        <a href="https://music.amazon.com/artists/B0BBR9LSR8/danneloyd" class="link-card" target="_blank">
-            <i class="fab fa-amazon"></i><span class="link-text">Amazon Music</span>
-        </a>
-
-        <div class="category-title" data-ru="Соц. сети" data-en="Social Media">Соц. сети</div>
-        <a href="https://www.instagram.com/nightygang/" class="link-card" target="_blank">
-            <i class="fab fa-instagram"></i><span class="link-text">Instagram</span>
-        </a>
-        <a href="https://www.tiktok.com/@nightygangmusic" class="link-card" target="_blank">
-            <i class="fab fa-tiktok"></i><span class="link-text">TikTok</span>
-        </a>
-        <a href="https://youtube.com/@danneloyd?si=M1bflojh8G3Ps-D2" class="link-card" target="_blank">
-            <i class="fab fa-youtube"></i><span class="link-text" data-ru="YouTube (Личный)" data-en="YouTube (Personal)">YouTube (Личный)</span>
-        </a>
-        <a href="https://www.pinterest.com/nightygang/_created" class="link-card" target="_blank">
-            <i class="fab fa-pinterest"></i><span class="link-text">Pinterest</span>
-        </a>
-        <a href="https://github.com/danneloyd" class="link-card" target="_blank">
-            <i class="fab fa-github"></i><span class="link-text">GitHub</span>
-        </a>
-
-        <div class="category-title" data-ru="Minecraft Сервер" data-en="Minecraft Server">Minecraft Сервер</div>
-        
-        <div class="link-card" onclick="copyIP()">
-            <i class="fas fa-cube"></i>
-            <span class="link-text">
-                <span id="ip-display">79.76.47.159</span>
-                <span class="mc-info" id="server-status">Loading...</span>
-            </span>
+        <div class="main-header">
+            <h1 data-ru="NIGHTY GANG MUSIC" data-en="NIGHTY GANG MUSIC">NIGHTY GANG MUSIC</h1>
         </div>
 
-        <a href="server.html" class="btn-details" target="_blank">
-            <span data-ru="Подробнее о сервере" data-en="Server Details">Подробнее о сервере</span>
-            <i class="fas fa-chevron-right"></i>
+        <a href="https://t.me/nightygangbuy" class="tg-hero">
+            <i class="fab fa-telegram"></i>
+            <div>
+                <span class="title">NIGHTY GANG MUSIC</span>
+                <span class="main-text">TELEGRAM BEATS STORE</span>
+            </div>
+        </a>
+
+        <a href="server.html" class="mc-special">
+            <i class="fas fa-cube"></i>
+            <div>
+                <span class="server-name" data-ru="MINECRAFT СЕРВЕР" data-en="MINECRAFT SERVER">MINECRAFT СЕРВЕР</span>
+                <span class="online-count">
+                    <span class="status-dot"></span> 
+                    IP: 79.76.47.159 • <span id="main-online-count">Loading...</span>
+                </span>
+            </div>
+            <i class="fas fa-chevron-right chevron" style="margin-left: auto; color: #333;"></i>
+        </a>
+
+        <div class="category-label" data-ru="Навигация" data-en="Navigation">Навигация</div>
+
+        <a href="music.html" class="nav-btn">
+            <div class="left">
+                <i class="fas fa-music"></i>
+                <span data-ru="Музыкальные площадки" data-en="Music Platforms">Музыкальные площадки</span>
+            </div>
+            <i class="fas fa-chevron-right chevron"></i>
+        </a>
+
+        <a href="social.html" class="nav-btn">
+            <div class="left">
+                <i class="fas fa-share-nodes"></i>
+                <span data-ru="Социальные сети" data-en="Social Media">Социальные сети</span>
+            </div>
+            <i class="fas fa-chevron-right chevron"></i>
+        </a>
+
+        <a href="github.html" class="nav-btn">
+            <div class="left">
+                <i class="fab fa-github"></i>
+                <span data-ru="GitHub & Проекты" data-en="GitHub & Projects">GitHub & Проекты</span>
+            </div>
+            <i class="fas fa-chevron-right chevron"></i>
         </a>
     </div>
 
     <script>
         let currentLang = 'ru';
         const ipAddress = "79.76.47.159";
-        const fallbackName = "NIGHTY GANG WORLD"; 
 
         function toggleLang() {
             currentLang = currentLang === 'ru' ? 'en' : 'ru';
             document.querySelectorAll('[data-ru]').forEach(el => {
                 el.innerText = el.getAttribute('data-' + currentLang);
             });
-            updateServerStatus();
+            updateMainStatus();
         }
 
-        function copyIP() {
-            navigator.clipboard.writeText(ipAddress);
-            const ipDisplay = document.getElementById('ip-display');
-            const msg = currentLang === 'ru' ? 'IP СКОПИРОВАН!' : 'IP COPIED!';
-            ipDisplay.innerText = msg;
-            ipDisplay.style.color = "#55FF55";
-            setTimeout(() => {
-                ipDisplay.innerText = ipAddress;
-                ipDisplay.style.color = "#fff";
-            }, 2000);
-        }
-
-        async function updateServerStatus() {
-            const statusEl = document.getElementById('server-status');
+        async function updateMainStatus() {
+            const onlineEl = document.getElementById('main-online-count');
             try {
                 const response = await fetch(`https://api.mcstatus.io/v2/status/java/${ipAddress}`);
                 const data = await response.json();
                 
                 if (data.online) {
-                    const motdName = data.motd.clean.split('\n')[0].trim() || fallbackName;
-                    const players = data.players.online;
-                    const max = data.players.max;
-                    const onlineText = currentLang === 'ru' ? 'Онлайн' : 'Online';
-                    statusEl.innerHTML = `${motdName} • ${onlineText}: <span style="color:#55FF55">${players}/${max}</span>`;
+                    onlineEl.innerText = `${data.players.online}/${data.players.max}`;
+                    onlineEl.style.color = "rgba(255,255,255,0.7)";
                 } else {
-                    const offlineText = currentLang === 'ru' ? 'ОФФЛАЙН' : 'OFFLINE';
-                    statusEl.innerHTML = `${fallbackName} • <span style="color:#ff4444">${offlineText}</span>`;
+                    onlineEl.innerText = currentLang === 'ru' ? "ОФФЛАЙН" : "OFFLINE";
+                    onlineEl.style.color = "#ff4444";
                 }
             } catch (e) {
-                statusEl.innerText = fallbackName;
+                onlineEl.innerText = "Error";
             }
         }
 
-        updateServerStatus();
-        setInterval(updateServerStatus, 30000);
+        updateMainStatus();
+        setInterval(updateMainStatus, 30000);
     </script>
 </body>
 </html>

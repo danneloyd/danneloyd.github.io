@@ -3,154 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>О СЕРВЕРЕ</title>
+    <title>MINECRAFT SERVER | NIGHTY GANG</title>
     
+    <link rel="icon" type="image/png" href="fav.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --mc-accent: #55FF55;
+        }
+
         body {
-            background-color: #000000;
-            color: #eeeeee;
+            background: radial-gradient(circle at top, #111 0%, #050505 100%);
+            color: #fff;
             font-family: 'Inter', sans-serif;
             margin: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
             padding: 20px;
+            min-height: 100vh;
         }
 
-        .lang-switch { align-self: flex-end; margin-bottom: 10px; }
-        .lang-btn {
-            background: #111;
-            border: 1px solid #333;
-            color: #888;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
-        .lang-btn:hover { color: #fff; border-color: #666; }
+        .container { width: 100%; max-width: 440px; text-align: center; }
 
-        .container { width: 100%; max-width: 450px; text-align: center; padding-bottom: 40px; }
+        .header { margin: 40px 0 30px; }
+        h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; margin: 0; }
 
-        .back-link {
-            text-decoration: none;
-            color: #666;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 30px;
-            display: inline-block;
-            transition: 0.3s;
-        }
-        .back-link:hover { color: #fff; }
-
-        .category-title {
-            text-align: left;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
             color: #555;
-            margin: 25px 0 10px 10px;
-        }
-
-        .link-card {
-            background: #111111;
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            margin-bottom: 25px;
             text-decoration: none;
-            color: #fff;
-            border-radius: 12px;
-            border: 1px solid #1a1a1a;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .link-card:hover { border-color: #444; background: #161616; }
-        .link-card i { font-size: 18px; width: 30px; margin-right: 10px; text-align: center; }
-        .link-text { flex-grow: 1; text-align: left; font-weight: 500; font-size: 15px; }
-
-        .info-block {
-            background: #111111;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            border: 1px solid #1a1a1a;
-            text-align: left;
-        }
-
-        .info-block img {
-            width: 100%;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .info-block p {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #ccc;
-            margin: 0;
-        }
-
-        .rules-block {
-            border: 1px solid rgba(255, 68, 68, 0.3);
-            background: rgba(255, 68, 68, 0.05);
-        }
-
-        .mc-info {
-            display: block;
-            color: #666;
             font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 4px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { color: #fff; }
+        .back-btn i { margin-right: 8px; font-size: 10px; }
+
+        /* КОМПАКТНЫЙ БЛОК IP */
+        .ip-card {
+            background: rgba(85, 255, 85, 0.02);
+            border: 1px solid rgba(85, 255, 85, 0.15);
+            padding: 20px;
+            border-radius: 22px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            position: relative;
+        }
+        .ip-card:hover {
+            border-color: var(--mc-accent);
+            background: rgba(85, 255, 85, 0.06);
+            transform: translateY(-2px);
+        }
+        
+        .ip-row { font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
+        .ip-label { color: var(--mc-accent); opacity: 0.8; margin-right: 5px; }
+        
+        .copy-hint { 
+            font-size: 10px; 
+            color: var(--mc-accent); 
+            text-transform: uppercase; 
+            font-weight: 800; 
+            letter-spacing: 1px; 
+            opacity: 0.5;
+            margin-top: 8px;
+            display: block;
         }
 
-        .fa-cube { color: #55FF55; }
+        .status-bar {
+            font-size: 12px;
+            color: #666;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Инфо блоки */
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 20px;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        .info-card img { width: 100%; border-radius: 16px; margin-bottom: 15px; opacity: 0.8; }
+        .info-card p { font-size: 14px; line-height: 1.6; color: #aaa; margin: 0; }
+        
+        .version-badge {
+            background: #111;
+            border: 1px solid var(--border);
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rules {
+            border: 1px solid rgba(255, 68, 68, 0.2);
+            background: rgba(255, 68, 68, 0.02);
+            color: #ff6666;
+        }
+
+        .lang-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #444;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <div class="lang-switch">
-        <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
-    </div>
+    <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
 
     <div class="container">
-        <a href="index.html" class="back-link">
-            <i class="fas fa-chevron-left"></i> 
-            <span data-ru="На главную" data-en="Back home">На главную</span>
-        </a>
-
-        <div class="category-title" data-ru="Подключение" data-en="Connection">Подключение</div>
-        
-        <div class="link-card" onclick="copyIP()">
-            <i class="fas fa-cube"></i>
-            <span class="link-text">
-                <span id="ip-display">79.76.47.159</span>
-                <span class="mc-info" id="server-status">Loading...</span>
-            </span>
+        <div class="header">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> 
+                <span data-ru="Назад" data-en="Back">Назад</span>
+            </a>
+            <h1 data-ru="О СЕРВЕРЕ" data-en="ABOUT SERVER">О СЕРВЕРЕ</h1>
         </div>
 
-        <div class="info-block">
+        <div class="ip-card" onclick="copyIP()">
+            <div class="ip-row">
+                <span class="ip-label">IP:</span>
+                <span id="ip-display">79.76.47.159</span>
+            </div>
+            <span class="copy-hint" id="copy-text" data-ru="Кликни, чтобы скопировать" data-en="Click to copy">
+                Кликни, чтобы скопировать
+            </span>
+            
+            <div class="status-bar" id="server-status">
+                Loading status...
+            </div>
+        </div>
+
+        <div class="info-card">
             <img src="server_photo.jpg" alt="Server Screenshot"> 
-            <p data-ru="Данный сервер создан мною для фана, чисто ванила. На данный момент любой может зайти на сервер. На сервере необходимо будет зарегистрироваться /register а затем /login" 
-               data-en="This server was created for fun, pure vanilla. Currently, anyone can join. You will need to register using /register and then /login.">
-               Данный сервер создан мною для фана, чисто ванила. На данный момент любой может зайти на сервер. На сервере необходимо будет зарегистрироваться /register а затем /login
+            <p data-ru="Данный сервер создан мною для фана, чисто ванила. Любой может зайти. Нужна регистрация через /register [пароль], затем /login [пароль]." 
+               data-en="This server is for fun, pure vanilla. Anyone can join. Registration required via /register [password], then /login [password].">
+               Данный сервер создан мною для фана, чисто ванила. Любой может зайти. Нужна регистрация через /register [пароль], затем /login [пароль].
             </p>
         </div>
 
-        <div class="info-block">
-            <p><strong data-ru="Версия:" data-en="Version:">Версия:</strong> Java Edition 1.8.8 - 1.20.6</p>
+        <div class="version-badge">
+            <span style="color: #666; font-weight: 800; font-size: 11px; text-transform: uppercase;">Version</span>
+            <span style="font-weight: 800; color: #fff;">Java 1.8.8 - 1.20.6</span>
         </div>
 
-        <div class="info-block rules-block">
-            <p data-ru="Читы, массовый гриф, лагмашины =" data-en="Cheats, mass griefing, lag machines =">Читы, массовый гриф, лагмашины =</p>
-            <strong style="color: #ff6666;" data-ru="бан по IP" data-en="IP BAN">бан по IP</strong>
+        <div class="info-card rules" style="margin-top: 15px;">
+            <p style="font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">
+                <i class="fas fa-exclamation-triangle"></i> 
+                <span data-ru="Читы / Гриф = БАН ПО IP" data-en="Cheats / Grief = IP BAN">Читы / Гриф = БАН ПО IP</span>
+            </p>
         </div>
     </div>
 
@@ -169,13 +194,15 @@
 
         function copyIP() {
             navigator.clipboard.writeText(ipAddress);
-            const ipDisplay = document.getElementById('ip-display');
-            const msg = currentLang === 'ru' ? 'IP СКОПИРОВАН!' : 'IP COPIED!';
-            ipDisplay.innerText = msg;
-            ipDisplay.style.color = "#55FF55";
+            const copyText = document.getElementById('copy-text');
+            const originalText = copyText.innerText;
+            
+            copyText.innerText = currentLang === 'ru' ? 'СКОПИРОВАНО!' : 'COPIED!';
+            copyText.style.color = "#fff";
+            
             setTimeout(() => {
-                ipDisplay.innerText = ipAddress;
-                ipDisplay.style.color = "#fff";
+                copyText.innerText = originalText;
+                copyText.style.color = "var(--mc-accent)";
             }, 2000);
         }
 
@@ -186,14 +213,13 @@
                 const data = await response.json();
                 
                 if (data.online) {
-                    const motdName = data.motd.clean.split('\n')[0].trim() || fallbackName;
                     const players = data.players.online;
                     const max = data.players.max;
                     const onlineText = currentLang === 'ru' ? 'Онлайн' : 'Online';
-                    statusEl.innerHTML = `${motdName} • ${onlineText}: <span style="color:#55FF55">${players}/${max}</span>`;
+                    statusEl.innerHTML = `<span style="color:var(--mc-accent)">●</span> ${onlineText}: ${players}/${max}`;
                 } else {
                     const offlineText = currentLang === 'ru' ? 'ОФФЛАЙН' : 'OFFLINE';
-                    statusEl.innerHTML = `${fallbackName} • <span style="color:#ff4444">${offlineText}</span>`;
+                    statusEl.innerHTML = `<span style="color:#ff4444">●</span> ${offlineText}`;
                 }
             } catch (e) {
                 statusEl.innerText = fallbackName;
