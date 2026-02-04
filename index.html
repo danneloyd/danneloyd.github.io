@@ -43,13 +43,23 @@
         }
         .lang-btn:hover { color: #fff; border-color: #666; }
 
+        /* Кнопка ТГ с анимацией перелива */
         .tg-hero {
-            background: linear-gradient(135deg, #0088cc 0%, #005580 100%);
+            background: linear-gradient(135deg, #0088cc, #00aaff, #005580, #0088cc);
+            background-size: 300% 300%;
+            animation: gradientFlow 6s ease infinite;
             padding: 24px; border-radius: 26px; margin-bottom: 40px;
             display: flex; align-items: center; text-decoration: none; color: white;
             transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 15px 35px rgba(0, 136, 204, 0.2); border: 1px solid rgba(255,255,255,0.1);
         }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .tg-hero:hover { transform: translateY(-5px); box-shadow: 0 20px 45px rgba(0, 136, 204, 0.4); }
         .tg-hero i { font-size: 38px; margin-right: 20px; }
         .tg-hero div { text-align: left; }
@@ -68,7 +78,6 @@
         .nav-btn span { font-weight: 600; font-size: 16px; }
         .nav-btn .chevron { color: #333; font-size: 14px; }
 
-        /* Цвета для конкретных иконок */
         .fa-cube { color: var(--color-mc); filter: drop-shadow(0 0 8px rgba(85, 255, 85, 0.3)); }
         .fa-music { color: var(--color-music); filter: drop-shadow(0 0 8px rgba(255, 45, 85, 0.3)); }
         .fa-share-nodes { color: var(--color-social); filter: drop-shadow(0 0 8px rgba(0, 122, 255, 0.3)); }
