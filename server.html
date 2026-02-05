@@ -42,7 +42,6 @@
         }
         .ip-card:hover { border-color: var(--mc-accent); background: rgba(85, 255, 85, 0.06); transform: translateY(-2px); animation-play-state: paused; }
         .ip-row { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; word-break: break-all; }
-        .ip-label { color: var(--mc-accent); opacity: 0.8; margin-right: 5px; }
         .copy-hint { font-size: 10px; color: var(--mc-accent); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; opacity: 0.5; margin-top: 8px; display: block; }
         .status-bar { font-size: 12px; color: #666; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
         .info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 20px; text-align: left; margin-bottom: 15px; }
@@ -65,8 +64,8 @@
             <h1 data-ru="О СЕРВЕРЕ" data-en="ABOUT SERVER">О СЕРВЕРЕ</h1>
         </div>
         <div class="ip-card" onclick="copyIP()">
-            <div class="ip-row"><span class="ip-label">IP:</span><span id="ip-display">nightygang.duckdns.org:33333</span></div>
-            <span class="copy-hint" id="copy-text" data-ru="Кликни, чтобы скопировать" data-en="Click to copy">Кликни, чтобы скопировать</span>
+            <div class="ip-row"><span id="ip-display">nightygang.duckdns.org:33333</span></div>
+            <span class="copy-hint" id="copy-text" data-ru="Нажми, чтобы скопировать IP" data-en="Click to copy IP">Нажми, чтобы скопировать IP</span>
             <div class="status-bar" id="server-status">Loading status...</div>
         </div>
         <div class="info-card">
