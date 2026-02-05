@@ -4,118 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOCIAL | NIGHTY GANG</title>
-    
     <link rel="icon" type="image/png" href="fav.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    
     <style>
         :root {
             --bg: #050505;
             --card-bg: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
         }
-
         body {
             background: radial-gradient(circle at top, #111 0%, #050505 100%);
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            min-height: 100vh;
+            color: #fff; font-family: 'Inter', sans-serif; margin: 0;
+            display: flex; justify-content: center; padding: 20px; min-height: 100vh;
         }
-
         .container { width: 100%; max-width: 440px; text-align: center; }
-
         .header { margin: 40px 0 35px; }
         h1 { font-size: 26px; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; margin: 0; }
-        
-        .subtitle { 
-            color: #666; 
-            font-size: 11px; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            margin-top: 5px;
-            font-weight: 600;
-        }
-
+        .subtitle { color: #666; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; font-weight: 600; }
         .back-btn {
-            display: inline-flex;
-            align-items: center;
-            color: #444;
-            text-decoration: none;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 25px;
-            transition: 0.3s;
+            display: inline-flex; align-items: center; color: #444; text-decoration: none;
+            font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 25px; transition: 0.3s;
         }
         .back-btn:hover { color: #fff; }
         .back-btn i { margin-right: 8px; font-size: 9px; }
-
         .category-label {
-            text-align: left;
-            font-size: 10px;
-            color: #444;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 25px 0 12px 12px;
-            font-weight: 800;
+            text-align: left; font-size: 10px; color: #444; text-transform: uppercase;
+            letter-spacing: 2px; margin: 25px 0 12px 12px; font-weight: 800;
         }
-
         .social-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 18px 20px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #fff;
-            text-decoration: none;
-            margin-bottom: 12px;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: var(--card-bg); border: 1px solid var(--border); padding: 18px 20px;
+            border-radius: 20px; display: flex; align-items: center; justify-content: space-between;
+            color: #fff; text-decoration: none; margin-bottom: 12px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        
-        .social-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
+        .social-card:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
         .social-card .left { display: flex; align-items: center; text-align: left; }
         .social-card i { width: 30px; margin-right: 15px; font-size: 20px; text-align: center; }
         .social-card .name { font-weight: 600; font-size: 16px; display: block; }
         .social-card .desc { font-size: 11px; opacity: 0.4; display: block; margin-top: 2px; }
-
         .fa-youtube { color: #FF0000; }
         .fa-instagram { color: #E1306C; }
         .fa-tiktok { color: #fff; }
         .fa-pinterest { color: #E60023; }
         .fa-reddit { color: #FF4500; }
-
         .lang-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: transparent;
-            border: 1px solid var(--border);
-            color: #444;
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-size: 10px;
-            font-weight: 800;
-            cursor: pointer;
+            position: absolute; top: 20px; right: 20px; background: transparent;
+            border: 1px solid var(--border); color: #444; padding: 6px 12px;
+            border-radius: 10px; font-size: 10px; font-weight: 800; cursor: pointer;
         }
     </style>
 </head>
 <body>
-
     <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
-
     <div class="container">
         <div class="header">
             <a href="index.html" class="back-btn">
@@ -125,78 +66,33 @@
             <h1 data-ru="Социальные сети" data-en="Social Media">Социальные сети</h1>
             <div class="subtitle">NIGHTY GANG</div>
         </div>
-
         <div class="category-label" data-ru="Видео" data-en="Videos">Видео</div>
-
         <a href="https://youtube.com/@nightygangmusic" class="social-card" target="_blank">
-            <div class="left">
-                <i class="fab fa-youtube"></i>
-                <div>
-                    <span class="name">YouTube (Nighty Gang Music)</span>
-                    <span class="desc" data-ru="Основной канал" data-en="Main channel">Основной канал</span>
-                </div>
-            </div>
+            <div class="left"><i class="fab fa-youtube"></i><div><span class="name">YouTube (Nighty Gang Music)</span><span class="desc" data-ru="Основной канал" data-en="Main channel">Основной канал</span></div></div>
             <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
         </a>
-
         <a href="https://www.youtube.com/@danneloyd" class="social-card" target="_blank">
-            <div class="left">
-                <i class="fab fa-youtube"></i>
-                <div>
-                    <span class="name">YouTube (danneloyd)</span>
-                    <span class="desc" data-ru="Личный канал" data-en="Personal channel">Личный канал</span>
-                </div>
-            </div>
+            <div class="left"><i class="fab fa-youtube"></i><div><span class="name">YouTube (danneloyd)</span><span class="desc" data-ru="Личный канал" data-en="Personal channel">Личный канал</span></div></div>
             <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
         </a>
-
         <div class="category-label" data-ru="Контент" data-en="Content">Контент</div>
-        
         <a href="https://www.instagram.com/nightygang/" class="social-card" target="_blank">
-            <div class="left">
-                <i class="fab fa-instagram"></i>
-                <div>
-                    <span class="name">Instagram</span>
-                    <span class="desc">@nightygang</span>
-                </div>
-            </div>
+            <div class="left"><i class="fab fa-instagram"></i><div><span class="name">Instagram</span><span class="desc">@nightygang</span></div></div>
             <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
         </a>
-
         <a href="https://www.tiktok.com/@nightygangmusic" class="social-card" target="_blank">
-            <div class="left">
-                <i class="fab fa-tiktok"></i>
-                <div>
-                    <span class="name">TikTok</span>
-                    <span class="desc">@nightygangmusic</span>
-                </div>
-            </div>
+            <div class="left"><i class="fab fa-tiktok"></i><div><span class="name">TikTok</span><span class="desc">@nightygangmusic</span></div></div>
             <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
         </a>
-
         <a href="https://www.pinterest.com/nightygang/" class="social-card" target="_blank">
-            <div class="left">
-                <i class="fab fa-pinterest"></i>
-                <div>
-                    <span class="name">Pinterest</span>
-                    <span class="desc">@nightygang</span>
-                </div>
-            </div>
+            <div class="left"><i class="fab fa-pinterest"></i><div><span class="name">Pinterest</span><span class="desc">@nightygang</span></div></div>
             <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
         </a>
-
         <a href="https://www.reddit.com/user/Emotional-Help-9359/" class="social-card" target="_blank">
-            <div class="left">
-                <i class="fab fa-reddit"></i>
-                <div>
-                    <span class="name">Reddit</span>
-                    <span class="desc">@Emotional-Help-9359</span>
-                </div>
-            </div>
+            <div class="left"><i class="fab fa-reddit"></i><div><span class="name">Reddit</span><span class="desc">@Emotional-Help-9359</span></div></div>
             <i class="fas fa-chevron-right" style="font-size: 12px; opacity: 0.2;"></i>
         </a>
     </div>
-
     <script>
         let currentLang = 'ru';
         function toggleLang() {

@@ -14,7 +14,6 @@
             --bg: #050505;
             --card-bg: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
-            /* Цвета иконок */
             --color-mc: #55FF55;
             --color-music: #ff2d55;
             --color-social: #007aff;
@@ -43,7 +42,6 @@
         }
         .lang-btn:hover { color: #fff; border-color: #666; }
 
-        /* Кнопка ТГ с анимацией перелива */
         .tg-hero {
             background: linear-gradient(135deg, #0088cc, #00aaff, #005580, #0088cc);
             background-size: 300% 300%;
@@ -140,7 +138,6 @@
 
     <script>
         let currentLang = 'ru';
-
         function toggleLang() {
             currentLang = currentLang === 'ru' ? 'en' : 'ru';
             document.querySelectorAll('[data-ru]').forEach(el => {
