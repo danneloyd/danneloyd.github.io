@@ -48,7 +48,6 @@
         .back-btn:hover { color: #fff; }
         .back-btn i { margin-right: 8px; font-size: 10px; }
 
-        /* КОМПАКТНЫЙ БЛОК IP */
         .ip-card {
             background: rgba(85, 255, 85, 0.02);
             border: 1px solid rgba(85, 255, 85, 0.15);
@@ -65,7 +64,7 @@
             transform: translateY(-2px);
         }
         
-        .ip-row { font-size: 20px; font-weight: 800; letter-spacing: 0.5px; }
+        .ip-row { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; word-break: break-all; }
         .ip-label { color: var(--mc-accent); opacity: 0.8; margin-right: 5px; }
         
         .copy-hint { 
@@ -87,7 +86,6 @@
             border-top: 1px solid var(--border);
         }
 
-        /* Инфо блоки */
         .info-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -147,7 +145,7 @@
         <div class="ip-card" onclick="copyIP()">
             <div class="ip-row">
                 <span class="ip-label">IP:</span>
-                <span id="ip-display">79.76.47.159:33333</span>
+                <span id="ip-display">nightygang.duckdns.org:33333</span>
             </div>
             <span class="copy-hint" id="copy-text" data-ru="Кликни, чтобы скопировать" data-en="Click to copy">
                 Кликни, чтобы скопировать
@@ -181,7 +179,7 @@
 
     <script>
         let currentLang = 'ru';
-        const ipAddress = "79.76.47.159:33333"; // Обновленный IP с портом
+        const ipAddress = "nightygang.duckdns.org:33333"; 
         const fallbackName = "NIGHTY GANG WORLD";
 
         function toggleLang() {
@@ -193,9 +191,9 @@
         }
 
         function copyIP() {
-            navigator.clipboard.writeText(ipAddress); // Теперь копирует с портом
+            navigator.clipboard.writeText(ipAddress);
             const copyText = document.getElementById('copy-text');
-            const originalText = copyText.innerText;
+            const originalText = copyText.getAttribute('data-' + currentLang);
             
             copyText.innerText = currentLang === 'ru' ? 'СКОПИРОВАНО!' : 'COPIED!';
             copyText.style.color = "#fff";
@@ -209,7 +207,6 @@
         async function updateServerStatus() {
             const statusEl = document.getElementById('server-status');
             try {
-                // Используем новый адрес для API статуса
                 const response = await fetch(`https://api.mcstatus.io/v2/status/java/${ipAddress}`);
                 const data = await response.json();
                 
