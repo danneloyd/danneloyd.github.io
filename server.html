@@ -44,9 +44,10 @@
         .ip-row { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; word-break: break-all; }
         .copy-hint { font-size: 10px; color: var(--mc-accent); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; opacity: 0.5; margin-top: 8px; display: block; }
         .status-bar { font-size: 12px; color: #666; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-        .info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 20px; text-align: left; margin-bottom: 15px; }
+        .info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 20px; text-align: center; margin-bottom: 15px; }
         .info-card img { width: 100%; border-radius: 16px; margin-bottom: 15px; opacity: 0.8; }
-        .info-card p { font-size: 14px; line-height: 1.6; color: #aaa; margin: 0; }
+        .info-card p { font-size: 16px; font-weight: 600; line-height: 1.6; margin: 0; }
+        .info-card a:hover { opacity: 0.8; }
         .version-badge { background: #111; border: 1px solid var(--border); padding: 15px 20px; border-radius: 20px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
         .rules-mini { margin-top: 15px; padding: 8px 14px; border-radius: 12px; background: rgba(255, 68, 68, 0.02); border: 1px solid rgba(255, 68, 68, 0.12); display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; color: var(--warning-red); text-transform: uppercase; letter-spacing: 0.3px; opacity: 0.9; }
         .rules-mini i { font-size: 9px; }
@@ -64,20 +65,24 @@
             <h1 data-ru="О СЕРВЕРЕ" data-en="ABOUT SERVER">О СЕРВЕРЕ</h1>
         </div>
         <div class="ip-card" onclick="copyIP()">
-            <div class="ip-row"><span id="ip-display">nightygang.duckdns.org:33333</span></div>
+            <div class="ip-row"><span id="ip-display">nightygang.duckdns.org</span></div>
             <span class="copy-hint" id="copy-text" data-ru="Нажми, чтобы скопировать IP" data-en="Click to copy IP">Нажми, чтобы скопировать IP</span>
             <div class="status-bar" id="server-status">Loading status...</div>
         </div>
         <div class="info-card">
-            <img src="server_photo.jpg" alt="Server Screenshot"> 
-            <p data-ru="Данный сервер создан мною для фана, чисто ванила. Любой может зайти. Нужна регистрация через /register [пароль], затем /login [пароль]." 
-               data-en="This server is for fun, pure vanilla. Anyone can join. Registration required via /register [password], then /login [password].">
-               Данный сервер создан мною для фана, чисто ванила. Любой может зайти. Нужна регистрация через /register [пароль], затем /login [пароль].
+            <img src="bta.png" alt="Server Screenshot"> 
+            <p>
+                <a href="https://www.betterthanadventure.net/" target="_blank" 
+                   style="color: var(--mc-accent); text-decoration: none; border-bottom: 1px dashed var(--mc-accent);"
+                   data-ru="Сервер переносится на Better Than Adventure!" 
+                   data-en="The server is moving to Better Than Adventure! Plz Wait.">
+                   Сервер переносится на Better Than Adventure! Просьба подождать.
+                </a>
             </p>
         </div>
         <div class="version-badge">
             <span style="color: #666; font-weight: 800; font-size: 11px; text-transform: uppercase;">Version</span>
-            <span style="font-weight: 800; color: #fff;">Java 1.8.8 - 1.20.6</span>
+            <span style="font-weight: 800; color: #fff;">BTA v7.3_04</span>
         </div>
         <div class="rules-mini">
             <i class="fas fa-ban"></i>
@@ -86,7 +91,7 @@
     </div>
     <script>
         let currentLang = 'ru';
-        const ipAddress = "nightygang.duckdns.org:33333"; 
+        const ipAddress = "nightygang.duckdns.org"; 
         const fallbackName = "NIGHTY GANG WORLD";
         function toggleLang() {
             currentLang = currentLang === 'ru' ? 'en' : 'ru';
