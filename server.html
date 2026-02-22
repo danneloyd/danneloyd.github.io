@@ -14,6 +14,7 @@
             --border: rgba(255, 255, 255, 0.08);
             --mc-accent: #55FF55;
             --warning-red: #ff4444;
+            --license-gold: #ffcc00;
         }
         body {
             background: radial-gradient(circle at top, #111 0%, #050505 100%);
@@ -23,6 +24,7 @@
         .container { width: 100%; max-width: 440px; text-align: center; }
         .header { margin: 40px 0 30px; }
         h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; margin: 0; }
+        
         .back-btn {
             display: inline-flex; align-items: center; color: #555; text-decoration: none;
             font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
@@ -30,27 +32,46 @@
         }
         .back-btn:hover { color: #fff; }
         .back-btn i { margin-right: 8px; font-size: 10px; }
+
         @keyframes ip-glow {
             0% { border-color: rgba(85, 255, 85, 0.15); box-shadow: 0 0 10px rgba(85, 255, 85, 0.05); }
             50% { border-color: rgba(85, 255, 85, 0.4); box-shadow: 0 0 20px rgba(85, 255, 85, 0.1); }
             100% { border-color: rgba(85, 255, 85, 0.15); box-shadow: 0 0 10px rgba(85, 255, 85, 0.05); }
         }
+
         .ip-card {
             background: rgba(85, 255, 85, 0.02); border: 1px solid rgba(85, 255, 85, 0.15);
-            padding: 20px; border-radius: 22px; margin-bottom: 25px; cursor: pointer;
+            padding: 25px 20px; border-radius: 22px; margin-bottom: 15px; cursor: pointer;
             transition: 0.3s ease; position: relative; animation: ip-glow 3s infinite ease-in-out;
         }
-        .ip-card:hover { border-color: var(--mc-accent); background: rgba(85, 255, 85, 0.06); transform: translateY(-2px); animation-play-state: paused; }
+        .ip-card:hover { border-color: var(--mc-accent); background: rgba(85, 255, 85, 0.06); transform: translateY(-2px); }
         .ip-row { font-size: 18px; font-weight: 800; letter-spacing: 0.5px; word-break: break-all; }
         .copy-hint { font-size: 10px; color: var(--mc-accent); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; opacity: 0.5; margin-top: 8px; display: block; }
-        .status-bar { font-size: 12px; color: #666; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
-        .info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 20px; text-align: center; margin-bottom: 15px; }
-        .info-card img { width: 100%; border-radius: 16px; margin-bottom: 15px; opacity: 0.8; }
-        .info-card p { font-size: 16px; font-weight: 600; line-height: 1.6; margin: 0; }
-        .info-card a:hover { opacity: 0.8; }
-        .version-badge { background: #111; border: 1px solid var(--border); padding: 15px 20px; border-radius: 20px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
-        .rules-mini { margin-top: 15px; padding: 8px 14px; border-radius: 12px; background: rgba(255, 68, 68, 0.02); border: 1px solid rgba(255, 68, 68, 0.12); display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; color: var(--warning-red); text-transform: uppercase; letter-spacing: 0.3px; opacity: 0.9; }
-        .rules-mini i { font-size: 9px; }
+        
+        .license-block {
+            background: rgba(255, 204, 0, 0.03); border: 1px solid rgba(255, 204, 0, 0.15);
+            padding: 15px; border-radius: 18px; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            color: var(--license-gold); font-size: 11px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .info-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 25px; text-align: center; margin-bottom: 15px; }
+        .info-card img { width: 100%; border-radius: 16px; margin-bottom: 15px; opacity: 0.9; }
+        .info-card p { font-size: 14px; font-weight: 500; line-height: 1.6; color: #aaa; margin: 0 0 20px 0; }
+        
+        .download-btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background: #fff; color: #000; text-decoration: none; padding: 14px;
+            border-radius: 16px; font-weight: 800; font-size: 13px; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .download-btn:hover { transform: scale(1.02); background: var(--mc-accent); }
+
+        .version-badge { background: #111; border: 1px solid var(--border); padding: 15px 20px; border-radius: 20px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        
+        .rules-mini { margin-top: 5px; padding: 8px 14px; border-radius: 12px; background: rgba(255, 68, 68, 0.02); border: 1px solid rgba(255, 68, 68, 0.12); display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; color: var(--warning-red); text-transform: uppercase; letter-spacing: 0.3px; opacity: 0.9; }
+
         .lang-btn { position: absolute; top: 20px; right: 20px; background: transparent; border: 1px solid var(--border); color: #444; padding: 6px 12px; border-radius: 10px; font-size: 10px; font-weight: 800; cursor: pointer; }
     </style>
 </head>
@@ -64,42 +85,51 @@
             </a>
             <h1 data-ru="О СЕРВЕРЕ" data-en="ABOUT SERVER">О СЕРВЕРЕ</h1>
         </div>
+
         <div class="ip-card" onclick="copyIP()">
             <div class="ip-row"><span id="ip-display">nightygang.duckdns.org</span></div>
             <span class="copy-hint" id="copy-text" data-ru="Нажми, чтобы скопировать IP" data-en="Click to copy IP">Нажми, чтобы скопировать IP</span>
-            <div class="status-bar" id="server-status">Loading status...</div>
         </div>
+
+        <div class="license-block">
+            <i class="fas fa-shield-alt"></i>
+            <span data-ru="Вход только с лицензией (Временно)" data-en="Premium accounts only (Temporary)">Вход только с лицензией (Временно)</span>
+        </div>
+
         <div class="info-card">
-            <img src="bta.png" alt="Server Screenshot"> 
-            <p>
-                <a href="https://www.betterthanadventure.net/" target="_blank" 
-                   style="color: var(--mc-accent); text-decoration: none; border-bottom: 1px dashed var(--mc-accent);"
-                   data-ru="Сервер переносится на Better Than Adventure!" 
-                   data-en="The server is moving to Better Than Adventure! Plz Wait.">
-                   Сервер переносится на Better Than Adventure! Просьба подождать.
-                </a>
+            <img src="bta.png" alt="BTA"> 
+            <p data-ru="Мы перешли на Better Than Adventure! Для подключения вам понадобится специальный клиент." 
+               data-en="We have moved to Better Than Adventure! You will need a special client to join.">
+                Мы перешли на Better Than Adventure! Для подключения вам понадобится специальный клиент.
             </p>
+            <a href="https://www.betterthanadventure.net/downloads/" target="_blank" class="download-btn">
+                <i class="fas fa-external-link-alt"></i>
+                <span data-ru="Скачать BTA Клиент" data-en="Download BTA Client">Скачать BTA Клиент</span>
+            </a>
         </div>
+
         <div class="version-badge">
             <span style="color: #666; font-weight: 800; font-size: 11px; text-transform: uppercase;">Version</span>
             <span style="font-weight: 800; color: #fff;">BTA v7.3_04</span>
         </div>
+
         <div class="rules-mini">
             <i class="fas fa-ban"></i>
             <span data-ru="Читы / Гриф / Лагмашины = BAN" data-en="Cheats / Grief / Lag machines = BAN">Читы / Гриф / Лагмашины = BAN</span>
         </div>
     </div>
+
     <script>
         let currentLang = 'ru';
         const ipAddress = "nightygang.duckdns.org"; 
-        const fallbackName = "NIGHTY GANG WORLD";
+        
         function toggleLang() {
             currentLang = currentLang === 'ru' ? 'en' : 'ru';
             document.querySelectorAll('[data-ru]').forEach(el => {
                 el.innerText = el.getAttribute('data-' + currentLang);
             });
-            updateServerStatus();
         }
+
         function copyIP() {
             navigator.clipboard.writeText(ipAddress);
             const copyText = document.getElementById('copy-text');
@@ -111,24 +141,6 @@
                 copyText.style.color = "var(--mc-accent)";
             }, 2000);
         }
-        async function updateServerStatus() {
-            const statusEl = document.getElementById('server-status');
-            try {
-                const response = await fetch(`https://api.mcstatus.io/v2/status/java/${ipAddress}`);
-                const data = await response.json();
-                if (data.online) {
-                    const players = data.players.online;
-                    const max = data.players.max;
-                    const onlineText = currentLang === 'ru' ? 'Онлайн' : 'Online';
-                    statusEl.innerHTML = `<span style="color:var(--mc-accent)">●</span> ${onlineText}: ${players}/${max}`;
-                } else {
-                    const offlineText = currentLang === 'ru' ? 'ОФФЛАЙН' : 'OFFLINE';
-                    statusEl.innerHTML = `<span style="color:#ff4444">●</span> ${offlineText}`;
-                }
-            } catch (e) { statusEl.innerText = fallbackName; }
-        }
-        updateServerStatus();
-        setInterval(updateServerStatus, 30000);
     </script>
 </body>
 </html>
