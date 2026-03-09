@@ -37,8 +37,6 @@
         .lang-dropdown div:hover { background: var(--accent-color); color: black; }
         .show { display: block; }
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        .maintenance-banner { background: var(--warning-color); color: #000; padding: 20px; border-radius: 20px; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(0,0,0,0.1); }
-        .maintenance-banner svg { width: 30px; height: 30px; flex-shrink: 0; }
         .server-card { background: var(--secondary-bg); border-radius: 24px; border: 1px solid #222; overflow: hidden; }
         .server-media { width: 100%; height: 350px; background: #111; position: relative; }
         .server-media img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.6; }
@@ -92,13 +90,6 @@
     </div>
 </header>
 <div class="container">
-    <div class="maintenance-banner">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-        <div>
-            <b id="txt-maint-title" style="display:block; font-size:1.1rem;">Technical Maintenance</b>
-            <span id="txt-maint-desc" style="opacity:0.8;">The server is temporarily unavailable. We're working on improvements!</span>
-        </div>
-    </div>
     <div class="server-card">
         <div class="server-media">
             <img src="images/server-photo.jpg" alt="Server View" onerror="this.style.display='none'">
