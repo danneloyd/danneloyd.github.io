@@ -38,7 +38,7 @@
         .show { display: block; }
         .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         .server-card { background: var(--secondary-bg); border-radius: 24px; border: 1px solid #222; overflow: hidden; }
-        .server-media { width: 100%; height: 350px; background: #111; position: relative; }
+        .server-media { width: 100%; height: 350px; background: #111; position: relative; transition: 0.3s; }
         .server-media img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.6; }
         .status-badge { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); display: flex; align-items: center; gap: 10px; }
         .dot { height: 10px; width: 10px; border-radius: 50%; background: #555; transition: 0.5s; }
@@ -46,16 +46,52 @@
         .dot.offline { background: #e74c3c; box-shadow: 0 0 10px #e74c3c; }
         .server-info { padding: 40px; }
         .motd { font-size: 1.4rem; font-weight: 300; margin-bottom: 20px; color: #eee; }
-        .ip-copy-btn { background: #fff; color: #000; padding: 15px 25px; border-radius: 12px; display: inline-flex; flex-direction: column; cursor: pointer; transition: var(--transition); border: none; text-align: left; }
+        
+        .ip-copy-btn { 
+            background: #fff; 
+            color: #000; 
+            padding: 15px 25px; 
+            border-radius: 12px; 
+            display: inline-flex; 
+            flex-direction: column; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            border: none; 
+            text-align: left;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
         .ip-copy-btn:hover { transform: scale(1.02); background: #eee; }
         .ip-copy-btn small { font-size: 10px; text-transform: uppercase; opacity: 0.6; margin-bottom: 4px; }
         .ip-copy-btn b { font-family: monospace; font-size: 1.1rem; }
+        
         .grid-details { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
         .detail-item { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; }
         .detail-item h4 { margin: 0 0 10px 0; font-size: 0.9rem; opacity: 0.5; text-transform: uppercase; }
         .detail-item p { margin: 0; font-size: 1.1rem; }
         .code { background: #000; padding: 5px 10px; border-radius: 5px; font-family: monospace; font-size: 0.9rem; display: block; margin-top: 8px; color: #ccc; }
-        @media (max-width: 600px) { .brand span { display: none; } .server-info { padding: 25px; } .grid-details { grid-template-columns: 1fr; } }
+
+        @media (max-width: 600px) { 
+            .brand span { display: none; } 
+            .server-info { padding: 25px; } 
+            .grid-details { grid-template-columns: 1fr; } 
+            .server-media { height: 200px; }
+            .ip-copy-btn {
+                display: flex;
+                width: 100%;
+                margin: 0 auto;
+                padding: 18px 15px;
+                text-align: center;
+                align-items: center;
+            }
+            .ip-copy-btn b {
+                font-size: 1.15rem;
+                word-break: break-all;
+            }
+            .ip-copy-btn small {
+                font-size: 11px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -127,7 +163,7 @@
     const translations = {
         'EN': { 'home': 'Home', 'musicprod': 'Music Production', 'visuals': 'Visual Production', 'streaming': 'Streaming Platforms', 'social': 'Social Media', 'server': 'Minecraft Server', 'about': 'About', 'copy-hint': 'Click to copy address', 'copied': 'IP Copied!', 'label-version': 'Version', 'label-online': 'Online Status', 'label-auth': 'How to join', 'players-sub': 'players online', 'auth-steps': 'Use these commands after connecting:', 'status-online': 'Online', 'status-offline': 'Offline', 'server-down': 'Server is currently offline', 'maint-title': 'Technical Maintenance', 'maint-desc': "The server is temporarily unavailable. We're working on improvements!" },
         'RU': { 'home': 'Главная', 'musicprod': 'Муз. продакшн', 'visuals': 'Визуальный продакшн', 'streaming': 'Стриминг', 'social': 'Соц. сети', 'server': 'Сервер Minecraft', 'about': 'О нас', 'copy-hint': 'Нажми, чтобы скопировать', 'copied': 'IP Скопирован!', 'label-version': 'Версия', 'label-online': 'Статус', 'label-auth': 'Как зайти', 'players-sub': 'игроков онлайн', 'auth-steps': 'Пропиши команды в чате:', 'status-online': 'Онлайн', 'status-offline': 'Выключен', 'server-down': 'Сервер в данный момент офлайн', 'maint-title': 'Технические работы', 'maint-desc': 'Сервер временно недоступен. Мы скоро вернемся!' },
-        'LV': { 'home': 'Sākums', 'musicprod': 'Mūzikas producēšana', 'visuals': 'Vizuālā producēšana', 'streaming': 'Straumēšanas platformas', 'social': 'Sociālie tīkli', 'server': 'Minecraft serveris', 'about': 'Par mums', 'copy-hint': 'Noklikšķiniet, lai kopētu adresi', 'copied': 'IP nokopēts!', 'label-version': 'Versija', 'label-online': 'Tiešsaistes statuss', 'label-auth': 'Kā pievienoties', 'players-sub': 'spēlētāji tiešsaistē', 'auth-steps': 'Pēc pievienošanās izmantojiet šīs komandas:', 'status-online': 'Tiešsaistē', 'status-offline': 'Bezsaistē', 'server-down': 'Serveris pašlaik ir bezsaistē', 'maint-title': 'Tehniskā apkope', 'maint-desc': 'Serveris īslaicīgi nav pieejams. Mēs strādājam pie uzlabojumiem!' }
+        'LV': { 'home': 'Sākums', 'musicprod': 'Mūzikas producēšana', 'visuals': 'Vizuālā producēšana', 'streaming': 'Straumēšanas platformas', 'social': 'Sociālie tīkli', 'server': 'Minecraft serveris', 'about': 'Par mums', 'copy-hint': 'Noklikšķiniet, lai kopētu adresi', 'copied': 'IP nokopēts!', 'label-version': 'Versija', 'label-online': 'Tiešsaistes statuss', 'label-auth': 'Kā pievienoties', 'players-sub': 'spēlētāji tiešsaistē', 'auth-steps': 'Pēc pievienošanās izmantojiet šīs коmаndas:', 'status-online': 'Tiešsaistē', 'status-offline': 'Bezsaistē', 'server-down': 'Serveris pašlaik ir bezsaistē', 'maint-title': 'Tehniskā apkope', 'maint-desc': 'Serveris īslaicīgi nav pieejams. Mēs strādājam pie uzlabojumiem!' }
     };
     function toggleMenu() {
         document.getElementById("sidebar").classList.toggle("active");
