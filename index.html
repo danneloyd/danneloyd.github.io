@@ -48,7 +48,6 @@
         .menu-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 10px; transition: 0.3s; }
         .menu-btn:hover { color: var(--accent-color); }
 
-        /* --- НОВОЕ МЕНЮ ИЗ ABOUT --- */
         .sidebar { 
             position: fixed; 
             top: 15px; 
@@ -123,7 +122,6 @@
         .brand { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1rem; }
         .brand img { width: 30px; height: 30px; border-radius: 5px; object-fit: cover; }
 
-        /* --- ВЫБОР ЯЗЫКА ИЗ ABOUT --- */
         .lang-wrapper { position: relative; }
         .lang-current { 
             display: flex; 
@@ -162,7 +160,6 @@
         }
         .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
 
-        /* --- ОСТАЛЬНЫЕ СТИЛИ INDEX --- */
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .block { 
             background: var(--secondary-bg); 
@@ -176,7 +173,13 @@
         }
 
         .stores-title { margin-top: 0; font-size: 1.8rem; letter-spacing: 1px; }
-        .stores-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        
+        .stores-grid { 
+            display: flex; 
+            justify-content: center; 
+            margin-top: 0; /* ИСПРАВЛЕНО: убрали лишний отступ сверху */
+        }
+        
         .nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px; }
 
         .store-card, .nav-card { 
@@ -194,8 +197,8 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
         }
 
-        .nav-card::after, .store-card:not(.disabled):after { content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent); transform: skewX(-25deg); transition: 0.75s; }
-        .nav-card:hover::after, .store-card:not(.disabled):hover::after { left: 150%; }
+        .nav-card::after, .store-card:after { content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent); transform: skewX(-25deg); transition: 0.75s; }
+        .nav-card:hover::after, .store-card:hover:after { left: 150%; }
 
         .nav-card { justify-content: flex-start; gap: 18px; }
         .nav-card svg { width: 28px; height: 28px; fill: #ffffff; opacity: 0.9; transition: var(--transition); filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
@@ -214,12 +217,13 @@
         .store-name { font-weight: bold; font-size: 1.1rem; }
         .store-tag { font-size: 0.8rem; opacity: 0.9; margin-top: 2px; }
 
-        .tg-card { background: linear-gradient(135deg, rgba(0, 136, 204, 0.8), rgba(0, 102, 153, 0.8)); border: none; }
-        .bc-card { background: linear-gradient(135deg, rgba(0, 74, 148, 0.8), rgba(0, 45, 90, 0.8)); border: 1px solid rgba(255, 255, 255, 0.2); }
-        .bs-card { background: linear-gradient(135deg, rgba(139, 0, 0, 0.8), rgba(74, 0, 0, 0.8)); border: none; }
+        .tg-card { 
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.8), rgba(0, 102, 153, 0.8)); 
+            border: none; 
+            min-width: 320px; 
+        }
 
-        .store-card:hover:not(.disabled) { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.5); filter: brightness(1.2); }
-        .store-card.disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(1); }
+        .store-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.5); filter: brightness(1.2); }
 
         @media (max-width: 992px) { .nav-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) {
@@ -227,6 +231,7 @@
             .brand span { display: none; } 
             .block { padding: 30px 15px; border-radius: 0; margin-left: -20px; margin-right: -20px; } 
             .nav-grid { grid-template-columns: 1fr; } 
+            .tg-card { min-width: 100%; }
         }
     </style>
 </head>
@@ -273,7 +278,6 @@
 
 <div class="container">
     <section class="block">
-        <h2 class="stores-title" id="txt-stores-title">Beats Stores</h2>
         <div class="stores-grid">
             <a href="https://t.me/nightygangbuy" target="_blank" class="store-card tg-card">
                 <img src="images/tg.png" class="store-img" alt="TG">
@@ -282,20 +286,6 @@
                     <span class="store-tag" id="txt-tg-tag">Beats/Loops/Trackout/Free-For-Profit🎁</span>
                 </div>
             </a>
-            <a href="https://t.me/beatchainbot/beatchain?startapp=profile1069044592" target="_blank" class="store-card bc-card">
-                <img src="images/bc.jpg" class="store-img" alt="BC">
-                <div class="store-info">
-                    <span class="store-name">BeatChain (BETA)</span>
-                    <span class="store-tag" id="txt-bc-tag">Beats/Trackout</span>
-                </div>
-            </a>
-            <div class="store-card bs-card disabled">
-                <img src="images/bs.png" class="store-img" alt="BS">
-                <div class="store-info">
-                    <span class="store-name">Beat Stars</span>
-                    <span class="store-tag" id="txt-bs-tag">Coming Soon</span>
-                </div>
-            </div>
         </div>
     </section>
     <section class="block">
@@ -341,10 +331,8 @@
             'nav-home': 'Home', 'nav-musicprod': 'Music Production', 'nav-visuals': 'Visual Production',
             'nav-streaming': 'Streaming Platforms', 'nav-social': 'Social Media',
             'nav-server': 'Minecraft Server', 'nav-about': 'About',
-            'stores-title': 'Beats Stores', 
+            'stores-title': 'Beats Store', 
             'tg-tag': 'Beats/Loops/Trackout/Free-For-Profit🎁',
-            'bc-tag': 'Beats/TrackOut', 
-            'bs-tag': 'Coming Soon',
             'explore-title': 'Navigation',
             'btn-musicprod': 'Music Production', 'btn-visuals': 'Visual Production',
             'btn-streaming': 'Streaming', 'btn-social': 'Social Media',
@@ -354,10 +342,8 @@
             'nav-home': 'Главная', 'nav-musicprod': 'Музыкальный продакшн', 'nav-visuals': 'Визуальный продакшн',
             'nav-streaming': 'Стриминг', 'nav-social': 'Соц. сети',
             'nav-server': 'Сервер Minecraft', 'nav-about': 'О нас',
-            'stores-title': 'Beats Stores', 
-            'tg-tag': 'Beats/Loops/Trackout/Free-For-Profit🎁',
-            'bc-tag': 'Beats/TrackOut', 
-            'bs-tag': 'Скоро открытие',
+            'stores-title': 'Магазин битов', 
+            'tg-tag': 'Биты/Лупы/Трекауты/Free-For-Profit🎁',
             'explore-title': 'Навигация',
             'btn-musicprod': 'Музыкальный продакшн', 'btn-visuals': 'Визуальный продакшн',
             'btn-streaming': 'Стриминг', 'btn-social': 'Соц. сети',
@@ -367,11 +353,9 @@
             'nav-home': 'Sākums', 'nav-musicprod': 'Mūzikas producēšana', 'nav-visuals': 'Vizuālā producēšana',
             'nav-streaming': 'Straumēšanas platformas', 'nav-social': 'Sociālie tīkli',
             'nav-server': 'Minecraft serveris', 'nav-about': 'Par mums',
-            'stores-title': 'Beats Stores', 
+            'stores-title': 'Beats Store', 
             'tg-tag': 'Beats/Loops/Trackout/Free-For-Profit🎁',
-            'bc-tag': 'Beats/TrackOut', 
-            'bs-tag': 'Drīzumā',
-            'explore-title': 'Navigācija',
+            'explore-title': 'Navigāция',
             'btn-musicprod': 'Mūzikas producēšana', 'btn-visuals': 'Vizuālā producēšana',
             'btn-streaming': 'Straumēšana', 'btn-social': 'Sociālie tīkli',
             'btn-server': 'Minecraft serveris', 'btn-about': 'Par mums'
