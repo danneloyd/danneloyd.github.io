@@ -9,7 +9,7 @@
             --red: #ff2a2a;
             --neon: #00f2ff;
         }
-        * { box-sizing: border-box; touch-action: manipulation; user-select: none; }
+        * { box-sizing: border-box; touch-action: none; user-select: none; }
         
         body {
             margin: 0;
@@ -46,9 +46,15 @@
             background: rgba(0,0,0,0.85);
             backdrop-filter: blur(10px);
             z-index: 100;
-            transition: opacity 0.4s;
+            transition: opacity 0.4s, visibility 0.4s;
             text-align: center;
             padding: 20px;
+        }
+
+        .ui-layer.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .hud {
@@ -63,6 +69,7 @@
             font-weight: 900;
             font-size: 22px;
             text-shadow: 2px 2px 0 #000;
+            pointer-events: none;
         }
 
         h1 {
@@ -87,7 +94,6 @@
             margin-bottom: 20px;
         }
 
-        /* Стили для слайдера громкости */
         .volume-container {
             margin-bottom: 30px;
             display: flex;
@@ -95,18 +101,12 @@
             align-items: center;
             gap: 10px;
         }
-        
-        .volume-container label {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-        }
 
         input[type=range] {
             width: 200px;
             accent-color: var(--red);
             cursor: pointer;
+            touch-action: auto; /* Позволяет двигать ползунок */
         }
 
         .btn {
@@ -120,14 +120,13 @@
             cursor: pointer;
             box-shadow: 0 6px 0 #5e0000;
             transition: 0.1s;
+            touch-action: auto;
         }
 
         .btn:active { 
             transform: translateY(4px);
             box-shadow: 0 2px 0 #5e0000;
         }
-        
-        .hidden { opacity: 0; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -148,7 +147,7 @@
                 <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
             </div>
 
-            <button class="btn" onclick="game.start()">ИГРАТЬ</button>
+            <button class="btn" id="start-btn">ИГРАТЬ</button>
         </div>
 
         <canvas id="canvas"></canvas>
@@ -163,6 +162,7 @@
     const menuBest = document.getElementById('menu-best');
     const gameOverMsg = document.getElementById('game-over-msg');
     const volumeSlider = document.getElementById('volume-slider');
+    const startBtn = document.getElementById('start-btn');
 
     const vW = 600;
     const vH = 1000;
@@ -172,7 +172,6 @@
     const demonImg = new Image();
     demonImg.src = 'demonkid.jpg';
 
-    // --- АУДИО МЕНЕДЖЕР ---
     const audioManager = {
         bgMusic: new Audio('images.mp3'),
         isInitialized: false,
@@ -183,48 +182,32 @@
             this.bgMusic.volume = volumeSlider.value;
             this.isInitialized = true;
         },
-
         playMusic() {
             this.init();
             this.bgMusic.currentTime = 0;
-            this.bgMusic.play().catch(e => console.log("Музыка заблокирована браузером"));
+            this.bgMusic.play().catch(e => console.log("Звук заблокирован"));
         },
-
-        stopMusic() {
-            this.bgMusic.pause();
-        },
-
-        setVolume(val) {
-            this.bgMusic.volume = val;
-        },
-
+        stopMusic() { this.bgMusic.pause(); },
+        setVolume(val) { this.bgMusic.volume = val; },
         playDeathEffect() {
-            // Создаем программный эффект "взрыва" звука, если нет отдельного файла
-            // Если у вас есть файл death.mp3, замените этот блок на: 
-            // new Audio('death.mp3').play();
-            const ctxA = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctxA.createOscillator();
-            const gain = ctxA.createGain();
-            
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(150, ctxA.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(0.01, ctxA.currentTime + 0.5);
-            
-            gain.gain.setValueAtTime(this.bgMusic.volume, ctxA.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctxA.currentTime + 0.5);
-            
-            osc.connect(gain);
-            gain.connect(ctxA.destination);
-            
-            osc.start();
-            osc.stop(ctxA.currentTime + 0.5);
+            try {
+                const ctxA = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctxA.createOscillator();
+                const gain = ctxA.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, ctxA.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(0.01, ctxA.currentTime + 0.5);
+                gain.gain.setValueAtTime(this.bgMusic.volume, ctxA.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctxA.currentTime + 0.5);
+                osc.connect(gain);
+                gain.connect(ctxA.destination);
+                osc.start();
+                osc.stop(ctxA.currentTime + 0.5);
+            } catch(e) {}
         }
     };
 
-    // Слушатель изменения громкости
-    volumeSlider.addEventListener('input', (e) => {
-        audioManager.setVolume(e.target.value);
-    });
+    volumeSlider.addEventListener('input', (e) => audioManager.setVolume(e.target.value));
 
     class Particle {
         constructor(x, y, color = "#fff") {
@@ -235,11 +218,7 @@
             this.alpha = 1;
             this.color = color;
         }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            this.alpha -= 0.03;
-        }
+        update() { this.x += this.speedX; this.y += this.speedY; this.alpha -= 0.03; }
         draw() {
             ctx.globalAlpha = this.alpha;
             ctx.fillStyle = this.color;
@@ -266,22 +245,19 @@
             this.speed = 10;
             this.obstacles = [];
             this.particles = [];
+            scoreVal.innerText = "0";
             player.reset();
             menu.classList.add('hidden');
             gameOverMsg.style.display = 'none';
-            
-            audioManager.playMusic(); // Запуск музыки
-            
+            audioManager.playMusic();
             this.loop();
         },
 
         gameOver() {
             this.active = false;
             this.shake = 35;
-            
-            audioManager.stopMusic(); // Стоп музыка
-            audioManager.playDeathEffect(); // Эффект смерти
-            
+            audioManager.stopMusic();
+            audioManager.playDeathEffect();
             if (this.score > this.bestScore) {
                 this.bestScore = this.score;
                 localStorage.setItem('dkBest', this.bestScore);
@@ -302,7 +278,6 @@
             g.addColorStop(1, "#1a1a2e");
             ctx.fillStyle = g;
             ctx.fillRect(0, 0, vW, vH);
-
             ctx.fillStyle = "#ff2a2a";
             ctx.fillRect(0, this.groundY, vW, 6);
             ctx.fillStyle = "#0a0a0c";
@@ -311,22 +286,18 @@
 
         loop() {
             if (!this.active) return;
-            
+            ctx.clearRect(0,0,vW,vH);
             ctx.save();
             if (this.shake > 0) {
                 ctx.translate(Math.random()*this.shake - this.shake/2, Math.random()*this.shake - this.shake/2);
                 this.shake *= 0.9;
             }
-
             this.drawBG();
-
             this.demonX += 1.2 * this.demonDir;
             if (this.demonX > 80 || this.demonX < -60) this.demonDir *= -1;
             let dOsc = Math.sin(Date.now() * 0.005) * 20;
-
             ctx.save();
-            ctx.shadowBlur = 40;
-            ctx.shadowColor = "red";
+            ctx.shadowBlur = 40; ctx.shadowColor = "red";
             ctx.drawImage(demonImg, this.demonX, 480 + dOsc, 220, 220);
             ctx.restore();
 
@@ -337,39 +308,33 @@
                 p.update(); p.draw();
                 if (p.alpha <= 0) this.particles.splice(i, 1);
             });
-
             player.update();
             this.handleObstacles();
-
             ctx.restore();
             requestAnimationFrame(() => this.loop());
         },
 
         handleObstacles() {
-            if (Math.random() < 0.02 && (this.obstacles.length === 0 || this.obstacles[this.obstacles.length-1].x < vW - 300)) {
+            if (Math.random() < 0.02 && (this.obstacles.length === 0 || this.obstacles[this.obstacles.length-1].x < vW - 350)) {
                 this.obstacles.push({ x: vW + 100, w: 55, h: 65 + Math.random()*60 });
             }
-
             this.obstacles.forEach((obs, i) => {
                 obs.x -= this.speed;
-                
                 ctx.fillStyle = "#ff2a2a";
                 ctx.beginPath();
                 ctx.moveTo(obs.x, this.groundY);
                 ctx.lineTo(obs.x + obs.w/2, this.groundY - obs.h);
                 ctx.lineTo(obs.x + obs.w, this.groundY);
                 ctx.fill();
-
-                if (player.x + 15 < obs.x + obs.w - 15 && player.x + 40 > obs.x + 15 &&
-                    player.y + 80 > this.groundY - obs.h) {
+                if (player.x + 10 < obs.x + obs.w - 10 && player.x + 45 > obs.x + 10 &&
+                    player.y + 85 > this.groundY - obs.h) {
                     this.gameOver();
                 }
-
                 if (obs.x + obs.w < 0) {
                     this.obstacles.splice(i, 1);
                     this.score++;
                     scoreVal.innerText = this.score;
-                    this.speed += 0.12;
+                    this.speed += 0.15;
                 }
             });
         }
@@ -378,11 +343,9 @@
     const player = {
         x: 230, y: 0, dy: 0,
         w: 55, h: 90,
-        jumpForce: 22, gravity: 1.15,
+        jumpForce: 23, gravity: 1.2,
         grounded: false,
-
         reset() { this.y = game.groundY - this.h; this.dy = 0; },
-
         update() {
             this.dy += this.gravity;
             this.y += this.dy;
@@ -391,38 +354,20 @@
                 this.dy = 0;
                 this.grounded = true;
             } else { this.grounded = false; }
-
             this.draw();
         },
-
         draw() {
             ctx.save();
             ctx.translate(this.x, this.y);
-            
-            // Тело
             ctx.fillStyle = "#fff";
             ctx.fillRect(15, 30, 25, 40);
-            
-            // Голова
-            ctx.beginPath();
-            ctx.arc(27, 15, 14, 0, Math.PI*2);
-            ctx.fill();
-
-            // Кепка
+            ctx.beginPath(); ctx.arc(27, 15, 14, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = "#ff2a2a";
-            // Верх кепки
-            ctx.fillRect(13, 1, 28, 8);
-            // Козырек
-            ctx.fillRect(35, 6, 15, 4);
-            
-            // Ноги (статичные)
+            ctx.fillRect(13, 1, 28, 8); ctx.fillRect(35, 6, 15, 4);
             ctx.fillStyle = "#fff";
-            ctx.fillRect(15, 70, 9, 20);
-            ctx.fillRect(31, 70, 9, 20);
-            
+            ctx.fillRect(15, 70, 9, 20); ctx.fillRect(31, 70, 9, 20);
             ctx.restore();
         },
-
         jump() {
             if (this.grounded && game.active) {
                 this.dy = -this.jumpForce;
@@ -431,10 +376,21 @@
         }
     };
 
-    const action = (e) => { if(e.type === 'touchstart') e.preventDefault(); player.jump(); };
-    window.addEventListener('keydown', (e) => { if(e.code === 'Space' || e.key === 'ArrowUp') action(e); });
-    window.addEventListener('touchstart', action, { passive: false });
-    window.addEventListener('mousedown', action);
+    // Исправленное управление
+    const handleAction = (e) => {
+        // Если нажата кнопка или слайдер, не прыгаем
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+        
+        if (e.type === 'touchstart') e.preventDefault();
+        player.jump();
+    };
+
+    startBtn.addEventListener('click', () => game.start());
+    window.addEventListener('touchstart', handleAction, { passive: false });
+    window.addEventListener('mousedown', handleAction);
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.key === 'ArrowUp') player.jump();
+    });
 
     game.updateScores();
 </script>
