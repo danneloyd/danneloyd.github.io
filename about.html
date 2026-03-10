@@ -131,8 +131,10 @@
             border-bottom: none;
         }
 
+        /* ОБНОВЛЕННЫЙ СТИЛЬ ЛОГОТИПА */
         .logo-banner img {
             max-width: 100%;
+            width: auto;
             height: auto;
             max-height: 150px;
             object-fit: contain;
@@ -142,6 +144,14 @@
             background: rgba(255, 255, 255, 0.02);
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             animation: logo-glow 8s linear infinite;
+            transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .logo-banner img:active {
+            transform: scale(0.95);
         }
 
         .block-info { 
@@ -250,6 +260,7 @@
                 text-align: center; 
                 padding: 30px 20px;
             }
+            .logo-banner img { max-height: 120px; padding: 15px; }
             .team-title { text-align: center; }
             .team-card { 
                 flex-direction: column; 
@@ -398,7 +409,7 @@
         selectLang(savedCode);
     });
 
-    /* --- ЛОГИКА ПАСХАЛКИ --- */
+    /* --- ЛОГИКА ПАСХАЛКИ С ЭФФЕКТАМИ --- */
     let clickCount = 0;
     let clickTimer;
     const logo = document.getElementById('easter-egg-logo');
@@ -407,14 +418,28 @@
         logo.addEventListener('click', () => {
             clickCount++;
             
-            // Сброс счетчика, если клики слишком медленные (дольше 2 секунд)
+            // Визуальный отклик при клике
+            logo.style.filter = 'brightness(1.5) contrast(1.2)';
+            logo.style.boxShadow = '0 0 40px rgba(255,255,255,0.5)';
+            
+            setTimeout(() => {
+                logo.style.filter = '';
+                logo.style.boxShadow = '';
+            }, 100);
+
+            // Сброс счетчика, если клики слишком медленные
             clearTimeout(clickTimer);
             clickTimer = setTimeout(() => {
                 clickCount = 0;
             }, 2000);
 
             if (clickCount === 5) {
-                window.location.href = 'eg.html';
+                // Эффект перехода
+                logo.style.transform = 'scale(1.2) rotate(5deg)';
+                logo.style.opacity = '0.5';
+                setTimeout(() => {
+                    window.location.href = 'eg.html';
+                }, 200);
             }
         });
     }
