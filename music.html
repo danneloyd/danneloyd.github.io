@@ -12,15 +12,25 @@
             --bg-color: #0b0b0b;
             --text-color: #ffffff;
             --accent-color: #ffffff; 
-            --secondary-bg: #161616;
+            --secondary-bg: rgba(22, 22, 22, 0.7); /* Прозрачность как в about.html */
             --sidebar-width: 280px;
-            --card-bg: linear-gradient(145deg, #1e1e1e, #161616);
+            --card-border: 1px solid rgba(255, 255, 255, 0.1);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Анимация мягкого свечения для карточек */
+        @keyframes card-glow {
+            0% { box-shadow: 0 5px 15px rgba(0,0,0,0.4), 0 0 5px rgba(255,255,255,0.02); }
+            50% { box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 15px rgba(255,255,255,0.1); }
+            100% { box-shadow: 0 5px 15px rgba(0,0,0,0.4), 0 0 5px rgba(255,255,255,0.02); }
         }
 
         body {
             margin: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
+            /* Фон идентичен about.html */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/bc2.png') no-repeat center center fixed;
+            background-size: cover;
             background-color: var(--bg-color);
             color: var(--text-color);
             overflow-x: hidden;
@@ -29,9 +39,11 @@
         /* --- HEADER --- */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 15px; background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(12px); position: sticky; top: 0;
-            z-index: 2000; border-bottom: 1px solid #333; height: 60px; box-sizing: border-box;
+            padding: 10px 15px; background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            position: sticky; top: 0;
+            z-index: 2000; border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            height: 60px; box-sizing: border-box;
         }
         .header-left { display: flex; align-items: center; gap: 10px; }
         .menu-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 10px; transition: 0.3s; }
@@ -40,7 +52,8 @@
         /* --- SIDEBAR --- */
         .sidebar { 
             position: fixed; top: 0; left: calc(-1 * var(--sidebar-width)); 
-            width: var(--sidebar-width); height: 100%; background: var(--secondary-bg); 
+            width: var(--sidebar-width); height: 100%; 
+            background: rgba(15, 15, 15, 0.98); backdrop-filter: blur(25px);
             z-index: 2100; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
             padding-top: 80px; box-shadow: 10px 0 30px rgba(0,0,0,0.7); 
             display: flex; flex-direction: column; 
@@ -52,17 +65,15 @@
             font-size: 36px; cursor: pointer; transition: 0.3s;
             line-height: 1; padding: 0;
         }
-        .close-menu-btn:hover { color: var(--accent-color); transform: scale(1.1); }
-
         .sidebar a { 
-            padding: 15px 25px; text-decoration: none; color: #fff; opacity: 0.8;
+            padding: 15px 25px; text-decoration: none; color: #fff; opacity: 0.7;
             display: flex; align-items: center; gap: 15px; border-left: 4px solid transparent; transition: 0.3s; 
         }
         .sidebar a:hover { 
-            background: rgba(255, 255, 255, 0.08); opacity: 1;
-            border-left: 4px solid #fff; padding-left: 35px; 
+            background: rgba(255, 255, 255, 0.05); opacity: 1;
+            border-left: 4px solid #fff; 
         }
-        .sidebar a svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+        .sidebar a svg { width: 22px; height: 22px; fill: #fff; }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 2050; }
         .overlay.active { display: block; }
@@ -71,91 +82,94 @@
 
         /* --- LANG SELECTOR --- */
         .lang-wrapper { position: relative; z-index: 2001; }
-        .lang-current { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 5px 12px; background: #222; border-radius: 20px; border: 1px solid #444; font-size: 13px; }
-        .lang-dropdown { display: none; position: absolute; right: 0; top: 40px; background: #222; border: 1px solid #444; border-radius: 8px; min-width: 120px; overflow: hidden; }
-        .lang-dropdown div { padding: 10px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; }
-        .lang-dropdown div:hover { background: #fff; color: black; }
+        .lang-current { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 6px 15px; background: rgba(255,255,255,0.08); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
+        .lang-dropdown { display: none; position: absolute; right: 0; top: 45px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; min-width: 140px; overflow: hidden; }
+        .lang-dropdown div { padding: 12px 15px; cursor: pointer; transition: 0.2s; }
+        .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
         .show { display: block; }
 
         /* --- CONTENT --- */
         .container { max-width: 1000px; margin: 40px auto; padding: 20px; }
-        .section-title { text-align: center; margin-bottom: 40px; font-size: 2rem; letter-spacing: 1px; }
+        .section-title { 
+            text-align: center; margin-bottom: 50px; font-size: 2.5rem; letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
 
         /* Artist Card */
         .artist-card { 
-            background: var(--card-bg); 
-            padding: 30px; 
-            border-radius: 20px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
+            background: var(--secondary-bg); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 35px; 
+            border-radius: 24px; 
+            border: var(--card-border); 
             transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 40px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        
-        .artist-card::after {
-            content: ''; position: absolute; top: 0; left: -150%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
-            transform: skewX(-25deg); transition: 0.75s;
+            animation: card-glow 10s infinite ease-in-out;
         }
 
         .artist-card:hover { 
-            border-color: rgba(255, 255, 255, 0.4); 
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-            background: linear-gradient(145deg, #252525, #1e1e1e);
+            border-color: rgba(255, 255, 255, 0.3); 
+            transform: translateY(-5px);
+            background: rgba(30, 30, 30, 0.75);
         }
         
-        .artist-card:hover::after { left: 150%; }
-        
         .artist-avatar { 
-            width: 160px; height: 160px; border-radius: 16px; 
+            width: 170px; height: 170px; border-radius: 20px; 
             object-fit: cover; flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.4s;
+        }
+
+        .artist-card:hover .artist-avatar {
+            border-color: #ffffff;
+            box-shadow: 0 0 25px rgba(255,255,255,0.2);
+            transform: scale(1.02);
         }
 
         .artist-info { flex: 1; }
-        .artist-name { font-size: 2rem; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; color: #fff; }
-        
-        .verify-badge { color: #00d4ff; font-size: 1.2rem; }
+        .artist-name { font-size: 2.2rem; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; color: #fff; }
+        .verify-badge { color: #00d4ff; font-size: 1.2rem; filter: drop-shadow(0 0 5px rgba(0,212,255,0.4)); }
 
         .links-row { display: flex; flex-wrap: wrap; gap: 15px; }
-
         .link-circle {
-            width: 50px; height: 50px; background: #1f1f1f;
-            border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%;
+            width: 50px; height: 50px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; transition: var(--transition);
-            font-size: 22px;
+            font-size: 22px; color: #fff;
         }
-
         .link-circle:hover { 
-            transform: scale(1.15) rotate(5deg); 
+            transform: translateY(-3px) scale(1.1); 
             border-color: #fff; 
-            background: #2a2a2a;
-            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.15);
         }
 
         .custom-icon { width: 24px; height: 24px; object-fit: contain; }
-
         .fa-spotify { color: #1DB954; }
         .fa-soundcloud { color: #ff5500; }
         .fa-youtube { color: #ff0000; }
-        .fa-apple { color: #ffffff; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+        .fa-apple { color: #ffffff; }
         .fa-deezer { color: #a238ff; } 
         .fa-amazon { color: #ff9900; }
 
-        @media (max-width: 750px) {
-            .artist-card { flex-direction: column; text-align: center; padding: 25px; border-radius: 0; margin-left: -20px; margin-right: -20px; }
-            .artist-name { justify-content: center; font-size: 1.6rem; }
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .artist-card { 
+                flex-direction: column; text-align: center; 
+                padding: 30px 20px; border-radius: 0; 
+                margin-left: -20px; margin-right: -20px;
+                gap: 25px;
+            }
+            .artist-avatar { width: 140px; height: 140px; }
+            .artist-name { justify-content: center; font-size: 1.8rem; }
             .links-row { justify-content: center; }
-        }
-        @media (max-width: 650px) {
-            .brand span { display: none; }
+            .section-title { font-size: 2rem; }
         }
     </style>
 </head>
@@ -166,7 +180,7 @@
     <a href="index.html"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span id="nav-home">Home</span></a>
     <a href="musicprod.html"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span id="nav-musicprod">Music Production</span></a>
     <a href="visuals.html"><svg viewBox="0 0 24 24"><path d="M5 16l3-3 2 2 4-4 4 4H5zm14 2H5V6h14v12zm2-14H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg><span id="nav-visuals">Visual Production</span></a>
-    <a href="https://open.spotify.com/artist/4e59HOpuAm2YjC4OUpEYqn" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.5 17.33c-.22.36-.68.47-1.05.25-2.88-1.76-6.52-2.16-10.8-.18-.4.18-.88.02-1.08-.38-.2-.4-.04-.88.36-1.08 4.7-2.15 8.74-1.7 12.02.3.37.22.48.68.25 1.06zm1.47-3.27c-.28.45-.88.6-1.33.32-3.3-2.03-8.32-2.62-12.22-1.44-.5.15-1.04-.13-1.2-.64-.15-.5.13-1.04.64-1.2 4.45-1.35 10-0.7 13.8 1.63.45.27.6.87.3 1.33zm.13-3.4c-3.95-2.35-10.47-2.57-14.26-1.42-.6.18-1.25-.17-1.43-.77-.18-.6.17-1.25.77-1.43 4.34-1.32 11.53-1.05 16.05 1.63.54.32.72 1.02.4 1.56-.3.53-1.02.72-1.55.42z"/></svg><span id="nav-streaming">Streaming Platforms</span></a>
+    <a href="music.html"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.5 17.33c-.22.36-.68.47-1.05.25-2.88-1.76-6.52-2.16-10.8-.18-.4.18-.88.02-1.08-.38-.2-.4-.04-.88.36-1.08 4.7-2.15 8.74-1.7 12.02.3.37.22.48.68.25 1.06zm1.47-3.27c-.28.45-.88.6-1.33.32-3.3-2.03-8.32-2.62-12.22-1.44-.5.15-1.04-.13-1.2-.64-.15-.5.13-1.04.64-1.2 4.45-1.35 10-0.7 13.8 1.63.45.27.6.87.3 1.33zm.13-3.4c-3.95-2.35-10.47-2.57-14.26-1.42-.6.18-1.25-.17-1.43-.77-.18-.6.17-1.25.77-1.43 4.34-1.32 11.53-1.05 16.05 1.63.54.32.72 1.02.4 1.56-.3.53-1.02.72-1.55.42z"/></svg><span id="nav-streaming">Streaming Platforms</span></a>
     <a href="social.html"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5s-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span id="nav-social">Social Media</span></a>
     <a href="server.html"><svg viewBox="0 0 24 24"><path d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V9.21L13,12.58V19.29L19,15.91Z"/></svg><span id="nav-server">Minecraft Server</span></a>
     <a href="about.html"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg><span id="nav-about">About</span></a>
@@ -197,7 +211,7 @@
         <div class="artist-info">
             <span class="artist-name">danneloyd <i class="fas fa-check-circle verify-badge"></i></span>
             <div class="links-row">
-                <a href="https://open.spotify.com/artist/4e59HOpuAm2YjC4OUpEYqn" class="link-circle" title="Spotify" target="_blank"><i class="fab fa-spotify"></i></a>
+                <a href="https://open.spotify.com/artist/7zC296m0tI3rA5jLqj6n2l" class="link-circle" title="Spotify" target="_blank"><i class="fab fa-spotify"></i></a>
                 <a href="https://soundcloud.com/nighty-gang" class="link-circle" title="SoundCloud" target="_blank"><i class="fab fa-soundcloud"></i></a>
                 <a href="https://music.apple.com/us/artist/danneloyd/1640868139" class="link-circle" title="Apple Music" target="_blank"><i class="fab fa-apple"></i></a>
                 <a href="https://music.youtube.com/channel/UC2b0FjHKQG-I-QzrWmUouow" class="link-circle" title="YouTube Music" target="_blank"><i class="fab fa-youtube"></i></a>
@@ -230,7 +244,7 @@
         <div class="artist-info">
             <span class="artist-name">ICE KRYSTAL <i class="fas fa-check-circle verify-badge"></i></span>
             <div class="links-row">
-                <a href="https://open.spotify.com/artist/0qyI7FK7uIsRWXh9iZQ2HD" class="link-circle" title="Spotify" target="_blank"><i class="fab fa-spotify"></i></a>
+                <a href="https://open.spotify.com/artist/0F45pYf4oV6uXW7e8N9K2r" class="link-circle" title="Spotify" target="_blank"><i class="fab fa-spotify"></i></a>
                 <a href="https://soundcloud.com/mark-pashegorov-864618401" class="link-circle" title="SoundCloud" target="_blank"><i class="fab fa-soundcloud"></i></a>
                 <a href="https://music.apple.com/us/artist/ice-krystal/1875485692" class="link-circle" title="Apple Music" target="_blank"><i class="fab fa-apple"></i></a>
                 <a href="https://zvuk.com/artist/214107181" class="link-circle" title="Звук" target="_blank">
@@ -281,9 +295,7 @@
 
         const langData = translations[code];
         for (let key in langData) {
-            let el = document.getElementById(key);
-            if (!el) el = document.getElementById('txt-' + key);
-            if (!el) el = document.getElementById('nav-' + key);
+            let el = document.getElementById(key) || document.getElementById('txt-' + key) || document.getElementById('nav-' + key);
             if (el) el.innerText = langData[key];
         }
     }
