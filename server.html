@@ -69,7 +69,6 @@
             overflow: hidden; 
         }
 
-        /* Вернул нормальные стили для сетки и кнопки IP */
         .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; gap: 25px; padding-bottom: 60px; }
         @media (min-width: 1024px) { .container { display: grid; grid-template-columns: 1.4fr 1fr; align-items: start; } .main-card { grid-row: span 10; } }
         
@@ -89,9 +88,20 @@
         .detail-item h4 { margin: 0 0 10px 0; font-size: 0.85rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px; }
         .detail-item p { margin: 0; font-size: 1.1rem; }
 
-        .code { background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 8px; font-family: monospace; font-size: 0.9rem; display: block; margin-top: 10px; color: #ccc; border: 1px solid rgba(255,255,255,0.1); }
+        .code { 
+            background: rgba(0,0,0,0.4); 
+            padding: 10px 12px; 
+            border-radius: 8px; 
+            font-family: monospace; 
+            font-size: 0.9rem; 
+            display: block; 
+            margin-top: 10px; 
+            color: #ccc; 
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
 
-        /* Остальные вспомогательные стили */
         .header-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
         .menu-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 10px; margin-left: -10px; transition: 0.3s; }
         .brand { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 1.1rem; }
@@ -120,7 +130,28 @@
         .rules-list { list-style: none; padding: 0; margin: 0; }
         .rules-list li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; opacity: 0.9; }
         .rules-list li::before { content: "•"; color: var(--accent-color); margin-right: 12px; font-weight: bold; }
-        @media (max-width: 768px) { .brand span { display: none; } .server-media { height: 200px; } .grid-details { grid-template-columns: 1fr; } .ip-copy-btn { width: 100%; text-align: center; align-items: center; } .skin-layout { flex-direction: column; text-align: center; } }
+
+        /* --- MOBILE FIXES --- */
+        @media (max-width: 768px) { 
+            .brand span { display: none; } 
+            .container { margin: 20px auto; gap: 15px; padding: 0 15px; }
+            .server-media { height: 180px; } 
+            .server-info-padding { padding: 25px 20px; }
+            .grid-details { grid-template-columns: 1fr; gap: 15px; } 
+            
+            .ip-copy-btn { 
+                width: 100%; 
+                text-align: center; 
+                align-items: center; 
+                box-sizing: border-box;
+                word-break: break-all;
+            } 
+            .ip-copy-btn b { font-size: 1rem; }
+            
+            .motd { font-size: 1.1rem; margin-bottom: 15px; }
+            .skin-layout { flex-direction: column; text-align: center; } 
+            .info-section-title { font-size: 1.2rem; }
+        }
     </style>
 </head>
 <body>
@@ -231,7 +262,6 @@
 </div>
 
 <script>
-    /* Тот же скрипт, что и раньше */
     const translations = {
         'EN': { 'home': 'Home', 'musicprod': 'Music Production', 'visuals': 'Visual Production', 'streaming': 'Streaming Platforms', 'social': 'Social Media', 'server': 'Minecraft Server', 'about': 'About', 'copy-hint': 'Click to copy address', 'copied': 'IP Copied!', 'label-version': 'Version', 'label-online': 'Players', 'label-auth': 'How to join', 'players-sub': 'players online', 'status-online': 'Online', 'status-offline': 'Offline', 'server-down': 'Server is currently offline', 'auth-steps': 'Use these commands after connecting:', 'auth-session': 'The server remembers your password for 24 hours.', 'restart-info': 'Daily maintenance: 4:45 — 5:00 (GMT+2)', 'title-about': 'About Server', 'desc-about': 'Just a vanilla survival server for fun and chilling with friends. No extra mods, just pure gameplay.', 'title-skins': 'Skins', 'desc-skins': 'Express yourself! You can change your skin directly in-game:', 'skin-note': '* Use /skins to see the menu.', 'title-rules': 'Rules', 'rule-1': 'No cheats', 'rule-2': 'No lag machines', 'rule-3': 'No massive griefing', 'rules-note': '* Violation of these rules will result in a ban.' },
         'RU': { 'home': 'Главная', 'musicprod': 'Муз. продакшн', 'visuals': 'Визуальный продакшн', 'streaming': 'Стриминг', 'social': 'Соц. сети', 'server': 'Сервер Minecraft', 'about': 'О нас', 'copy-hint': 'Нажми, чтобы скопировать', 'copied': 'IP Скопирован!', 'label-version': 'Версия', 'label-online': 'Игроки', 'label-auth': 'Как зайти', 'players-sub': 'игроков онлайн', 'status-online': 'Онлайн', 'status-offline': 'Выключен', 'server-down': 'Сервер в данный момент офлайн', 'auth-steps': 'Используйте эти команды после входа:', 'auth-session': 'Сервер запоминает пароль на 24 часа, его не нужно вводить каждый раз.', 'restart-info': 'Ежедневное обслуживание: 4:45 — 5:00 (GMT+2)', 'title-about': 'О сервере', 'desc-about': 'Просто ванильное выживание для фана и отдыха с друзьями. Никаких лишних модов, только чистый геймплей.', 'title-skins': 'Скины', 'desc-skins': 'Выделяйся! Ты можешь сменить скин прямо в игре:', 'skin-note': '* Используй /skins для вызова меню.', 'title-rules': 'Правила', 'rule-1': 'Никаких читов', 'rule-2': 'Запрещены лаг-машины', 'rule-3': 'Запрещен массовый гриф', 'rules-note': '* Нарушение правил карается баном.' },
