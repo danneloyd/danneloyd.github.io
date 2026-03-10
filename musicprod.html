@@ -40,7 +40,6 @@
             height: 60px; box-sizing: border-box;
         }
 
-        /* --- ОБНОВЛЕННОЕ МЕНЮ (ABOUT/VISUALS STYLE) --- */
         .sidebar { 
             position: fixed; 
             top: 15px; 
@@ -118,7 +117,6 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 2050; transition: 0.3s; }
         .overlay.active { display: block; backdrop-filter: blur(5px); }
 
-        /* --- ЯЗЫКОВОЙ ПЕРЕКЛЮЧАТЕЛЬ --- */
         .lang-wrapper { position: relative; }
         .lang-current { 
             display: flex; 
@@ -157,7 +155,6 @@
         }
         .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
 
-        /* --- КОНТЕНТ --- */
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
         .block {
             background: var(--secondary-bg);
@@ -204,25 +201,11 @@
 
         .tg-card { background: linear-gradient(135deg, rgba(0, 136, 204, 0.8), rgba(0, 102, 153, 0.8)); border: none; }
         .bc-card { background: linear-gradient(135deg, rgba(0, 74, 148, 0.8), rgba(0, 45, 90, 0.8)); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .lm-card { background: linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(60, 60, 60, 0.8)); border: 1px solid rgba(255, 255, 255, 0.1); }
         .bs-card { background: linear-gradient(135deg, rgba(139, 0, 0, 0.8), rgba(74, 0, 0, 0.8)); border: none; }
         .store-card.disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(1); }
 
-        .info-section { text-align: left; margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .info-box { background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); transition: 0.3s; }
-        .info-box:hover { border-color: rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.05); }
-        .info-box h3 { margin-top: 0; color: #fff; font-size: 1.4rem; }
-        .info-box p { color: #ccc; line-height: 1.6; }
-
-        .cta-btn {
-            display: inline-block; margin-top: 20px; padding: 12px 25px;
-            background: rgba(255, 255, 255, 0.05); color: #fff; text-decoration: none;
-            border-radius: 14px; font-weight: 600; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s;
-        }
-        .cta-btn:hover { background: #fff; color: #000; transform: translateY(-3px); }
-
-        /* --- АДАПТАЦИЯ --- */
         @media (max-width: 850px) {
-            .info-section { grid-template-columns: 1fr; }
             .sidebar.active { left: 10px; right: 10px; width: auto; }
             .block { 
                 padding: 30px 20px; border-radius: 0; 
@@ -286,7 +269,7 @@
 
 <div class="container">
     <section class="block">
-        <h2 class="stores-title" id="txt-prod-title">Beats Stores</h2>
+        <h2 class="stores-title">Beat Stores</h2>
         <div class="stores-grid">
             <a href="https://t.me/nightygangbuy" target="_blank" class="store-card tg-card">
                 <img src="images/tg.png" class="store-img" alt="TG">
@@ -302,24 +285,19 @@
                     <span class="store-tag" id="txt-bc-tag">Beats/Trackout</span>
                 </div>
             </a>
+            <a href="https://www.looperman.com/users/profile/4122065" target="_blank" class="store-card lm-card">
+                <img src="images/logo/looperman.jpg" class="store-img" alt="Looperman">
+                <div class="store-info">
+                    <span class="store-name">Looperman</span>
+                    <span class="store-tag">Free Loops & Samples</span>
+                </div>
+            </a>
             <div class="store-card bs-card disabled">
                 <img src="images/bs.png" class="store-img" alt="BS">
                 <div class="store-info">
                     <span class="store-name">Beat Stars</span>
                     <span class="store-tag" id="txt-bs-tag">Coming Soon</span>
                 </div>
-            </div>
-        </div>
-
-        <div class="info-section">
-            <div class="info-box">
-                <h3 id="txt-prod-sub">Beats & Loops</h3>
-                <p id="txt-prod-desc">We write beats and make loops. Also in telegram you can find completely free-for-profit beats and more.</p>
-            </div>
-            <div class="info-box">
-                <h3 id="txt-about-me-title">Mixing & Recording</h3>
-                <p id="txt-about-me-desc">We often work with local "No-names" in Riga (Latvia) purely for "respect". Open for any proposals, for any questions feel free to write in telegram.</p>
-                <a href="https://t.me/danneloyd" class="cta-btn" id="txt-channel-btn">Telegram DM</a>
             </div>
         </div>
     </section>
@@ -339,27 +317,15 @@
             'nav-server': 'Minecraft Server', 'nav-about': 'About',
             'tg-tag': 'Beats/Loops/Trackout/Free For Profit🎁',
             'bc-tag': 'Beats/TrackOut', 
-            'bs-tag': 'Coming Soon',
-            'prod-title': 'Beats Stores',
-            'prod-sub': 'Beats & Loops',
-            'prod-desc': 'We write beats and make loops. Also in telegram you can find completely free-for-profit beats and more.',
-            'about-me-title': 'Mixing & Recording',
-            'about-me-desc': 'We often work with local "No-names" in Riga (Latvia) purely for "respect". Open for any proposals, for any questions feel free to write in telegram.',
-            'channel-btn': 'Telegram DM'
+            'bs-tag': 'Coming Soon'
         },
         'RU': {
             'nav-home': 'Главная', 'nav-musicprod': 'Музыкальный продакшн', 'nav-visuals': 'Визуальный продакшн',
             'nav-streaming': 'Стриминг', 'nav-social': 'Соц. сети',
             'nav-server': 'Сервер Minecraft', 'nav-about': 'О нас',
-            'tg-tag': 'Beats/Лупы/Trackout/Free For Profit🎁',
+            'tg-tag': 'Beats/Loops/Trackout/Free For Profit🎁',
             'bc-tag': 'Beats/TrackOut', 
-            'bs-tag': 'Скоро открытие',
-            'prod-title': 'Магазины битов',
-            'prod-sub': 'Биты и Лупы',
-            'prod-desc': 'Мы пишем биты и делаем лупы. Также в телеграме можно найти полностью free-for-profit биты и другое.',
-            'about-me-title': 'Сведение и Запись',
-            'about-me-desc': 'Часто работаем с локальными "Ноунеймами" в Риге (Латвия) чисто за "респект". Открыты для любых предложений, по любым вопросам смело пишите в телеграм.',
-            'channel-btn': 'Написать в Telegram'
+            'bs-tag': 'Скоро открытие'
         },
         'LV': {
             'nav-home': 'Sākums', 'nav-musicprod': 'Mūzikas producēšana', 'nav-visuals': 'Vizuālā producēšana',
@@ -367,13 +333,7 @@
             'nav-server': 'Minecraft serveris', 'nav-about': 'Par mums',
             'tg-tag': 'Beats/Loops/Trackout/Free For Profit🎁',
             'bc-tag': 'Beats/TrackOut', 
-            'bs-tag': 'Drīzumā',
-            'prod-title': 'Bītu veikali',
-            'prod-sub': 'Bīti un Loopi',
-            'prod-desc': 'Mēs rakstām bītus un veidojam loopus. Telegrammā var atrast arī pilnīgi bezmaksas free-for-profit bītы un ne tikai.',
-            'about-me-title': 'Skaņas apstrāde un ierakstīšana',
-            'about-me-desc': 'Mēs bieži sadarbojamies ar vietējiem māksliniekiem Rīgā (Latvija) tīri pēc "respekta". Esam atvērti jebkādiem piedāvājumiem, droši rakstiet telegrammā.',
-            'channel-btn': 'Rakstīt Telegram'
+            'bs-tag': 'Drīzumā'
         }
     };
 
