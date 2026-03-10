@@ -24,8 +24,6 @@
         /* Buttons */
         .btn { background: var(--neon-green); color: black; border: none; padding: 18px 45px; font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 0 #28b80e; transition: 0.1s; text-decoration: none; display: inline-block; }
         .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #28b80e; }
-        .btn:disabled { opacity: 0.5; filter: grayscale(1); }
-        
         .btn-secondary { background: linear-gradient(180deg, #444, #222); color: #fff; box-shadow: 0 4px 0 #111; font-size: 16px; padding: 12px 30px; margin-top: 15px; }
         .btn-secondary:active { box-shadow: 0 2px 0 #000; }
     </style>
@@ -100,16 +98,16 @@
         },
 
         spawnTowerGroup() {
-            // Ускоренный расчет количества
             let count = 1;
-            if (this.score > 10) count = Math.random() > 0.5 ? 2 : 1;
-            if (this.score > 25) count = Math.floor(Math.random() * 3) + 1;
-            if (this.score > 60) count = Math.floor(Math.random() * 2) + 2; // Минимум 2 вышки
+            // Медленное нарастание количества вышек
+            if (this.score > 20) count = Math.random() > 0.7 ? 2 : 1; 
+            if (this.score > 50) count = Math.floor(Math.random() * 2) + 1; 
+            if (this.score > 100) count = Math.floor(Math.random() * 2) + 2;
 
             for (let i = 0; i < count; i++) {
                 const margin = 80;
-                // Значительно увеличен множитель скорости роста (0.06 вместо 0.04)
-                const growthBase = 1.2 + Math.min(this.score * 0.06, 7); 
+                // Снижен множитель роста (0.02 вместо 0.06) для плавности
+                const growthBase = 1.1 + Math.min(this.score * 0.02, 4); 
                 this.towers.push({
                     x: margin + Math.random() * (vW - margin * 2),
                     y: 200 + Math.random() * (vH - 350),
@@ -149,15 +147,15 @@
             const delta = Math.min(dt, 50);
 
             this.spawnTimer += delta;
-            // Порог минимального спавна снижен до 250мс
-            const spawnInterval = Math.max(250, 1500 - (this.score * 30));
+            // Темп появления замедлен (коэффициент 10 вместо 30)
+            const spawnInterval = Math.max(400, 1500 - (this.score * 10));
             if (this.spawnTimer > spawnInterval) {
                 this.spawnTowerGroup();
                 this.spawnTimer = 0;
             }
 
             this.bonusTimer += delta;
-            if (this.bonusTimer > 10000) { // Фольга стала еще более редким гостем
+            if (this.bonusTimer > 10000) {
                 this.spawnBonus();
                 this.bonusTimer = 0;
             }
@@ -173,7 +171,7 @@
             for (let i = this.towers.length - 1; i >= 0; i--) {
                 let t = this.towers[i];
                 t.size += t.growth;
-                t.signalPulse += delta * 0.02; // Визуальная паника
+                t.signalPulse += delta * 0.02;
                 if (t.size >= t.maxSize) {
                     if (this.shieldTime <= 0) {
                         this.chipPercent += 15;
@@ -222,7 +220,7 @@
             ctx.restore();
 
             this.towers.forEach(t => {
-                const isDangerous = t.size > t.maxSize * 0.6; // Раньше подсвечиваем опасность
+                const isDangerous = t.size > t.maxSize * 0.6;
                 ctx.save();
                 ctx.translate(t.x, t.y);
                 ctx.strokeStyle = isDangerous ? "#ff0000" : "#39ff14";
@@ -292,7 +290,7 @@
         for (let i = game.bonuses.length - 1; i >= 0; i--) {
             let b = game.bonuses[i];
             if (Math.hypot(x - b.x, y - b.y) < 80) {
-                game.shieldTime = 3000; // Щит теперь всего 3 секунды
+                game.shieldTime = 4000; // Чуть увеличил щит для баланса (4с)
                 game.flashEffect = 1.2;
                 fxHat.play().catch(()=> {});
                 game.bonuses.splice(i, 1);
