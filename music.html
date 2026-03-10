@@ -12,13 +12,12 @@
             --bg-color: #0b0b0b;
             --text-color: #ffffff;
             --accent-color: #ffffff; 
-            --secondary-bg: rgba(22, 22, 22, 0.7); /* Прозрачность как в about.html */
+            --secondary-bg: rgba(22, 22, 22, 0.7); 
             --sidebar-width: 280px;
             --card-border: 1px solid rgba(255, 255, 255, 0.1);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* Анимация мягкого свечения для карточек */
         @keyframes card-glow {
             0% { box-shadow: 0 5px 15px rgba(0,0,0,0.4), 0 0 5px rgba(255,255,255,0.02); }
             50% { box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 15px rgba(255,255,255,0.1); }
@@ -28,7 +27,6 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
-            /* Фон идентичен about.html */
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/bc2.png') no-repeat center center fixed;
             background-size: cover;
             background-color: var(--bg-color);
@@ -36,7 +34,6 @@
             overflow-x: hidden;
         }
 
-        /* --- HEADER --- */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 10px 15px; background: rgba(0, 0, 0, 0.6);
@@ -49,7 +46,6 @@
         .menu-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 10px; transition: 0.3s; }
         .menu-btn:hover { color: var(--accent-color); }
         
-        /* --- SIDEBAR --- */
         .sidebar { 
             position: fixed; top: 0; left: calc(-1 * var(--sidebar-width)); 
             width: var(--sidebar-width); height: 100%; 
@@ -80,7 +76,6 @@
         .brand { display: flex; align-items: center; gap: 10px; font-weight: bold; }
         .brand img { width: 30px; height: 30px; border-radius: 5px; }
 
-        /* --- LANG SELECTOR --- */
         .lang-wrapper { position: relative; z-index: 2001; }
         .lang-current { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 6px 15px; background: rgba(255,255,255,0.08); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         .lang-dropdown { display: none; position: absolute; right: 0; top: 45px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; min-width: 140px; overflow: hidden; }
@@ -88,14 +83,12 @@
         .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
         .show { display: block; }
 
-        /* --- CONTENT --- */
         .container { max-width: 1000px; margin: 40px auto; padding: 20px; }
         .section-title { 
             text-align: center; margin-bottom: 50px; font-size: 2.5rem; letter-spacing: 2px;
             text-shadow: 0 0 20px rgba(255,255,255,0.2);
         }
 
-        /* Artist Card */
         .artist-card { 
             background: var(--secondary-bg); 
             backdrop-filter: blur(12px);
@@ -170,6 +163,7 @@
             .artist-name { justify-content: center; font-size: 1.8rem; }
             .links-row { justify-content: center; }
             .section-title { font-size: 2rem; }
+            .brand span { display: none; } /* Скрываем текст в хеадере */
         }
     </style>
 </head>

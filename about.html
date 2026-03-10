@@ -26,7 +26,6 @@
             overflow-x: hidden; 
         }
 
-        /* Анимация переливания */
         @keyframes logo-glow {
             0% { filter: hue-rotate(0deg) drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
             50% { filter: hue-rotate(180deg) drop-shadow(0 0 20px rgba(255,255,255,0.4)); }
@@ -174,11 +173,10 @@
         .lang-dropdown div { padding: 12px 15px; cursor: pointer; transition: 0.2s; }
         .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
 
-        /* ИСПРАВЛЕННАЯ ОПТИМИЗАЦИЯ ПОД МОБИЛКИ */
         @media (max-width: 768px) {
             .container { 
-                padding: 0 20px; /* Оставляем падинги у контейнера для текста внутри */
-                overflow-x: hidden; /* Чтобы не было горизонтальной прокрутки */
+                padding: 0 20px; 
+                overflow-x: hidden; 
             }
 
             .logo-banner, .block-info, .block-team {
@@ -186,20 +184,13 @@
                 border-left: none;
                 border-right: none;
                 padding: 30px 20px;
-                /* Растягиваем блоки за края контейнера, как в music.html */
                 margin-left: -20px;
                 margin-right: -20px;
                 width: auto;
             }
 
-            .logo-banner {
-                padding: 40px 20px;
-            }
-
-            .logo-banner img {
-                max-height: 80px;
-                padding: 10px;
-            }
+            .logo-banner { padding: 40px 20px; }
+            .logo-banner img { max-height: 80px; padding: 10px; }
 
             .team-card { 
                 flex-direction: column; 
@@ -207,24 +198,14 @@
                 align-items: flex-start;
                 padding: 20px;
                 gap: 20px;
-                /* Карточки команды внутри блока тоже можно чуть расширить */
                 margin-left: -5px;
                 margin-right: -5px;
             }
 
-            .team-avatar {
-                width: 120px;
-                height: 120px;
-            }
-
-            .team-title {
-                font-size: 1.6rem;
-                margin-bottom: 20px;
-            }
-
-            .project-info p {
-                font-size: 1rem;
-            }
+            .team-avatar { width: 120px; height: 120px; }
+            .team-title { font-size: 1.6rem; margin-bottom: 20px; }
+            .project-info p { font-size: 1rem; }
+            .brand span { display: none; } /* Скрываем текст в хеадере */
         }
     </style>
 </head>
@@ -308,7 +289,7 @@
             'nav-home': 'Sākums', 'nav-musicprod': 'Mūzikas producēšana', 'nav-visuals': 'Vizuālā producēšana',
             'nav-streaming': 'Straumēšanas platformas', 'nav-social': 'Sociālie tīkli', 'nav-server': 'Minecraft serveris', 'nav-about': 'Par mums',
             'project-desc': 'Radošā apvienība no Rīgas, Latvijas. Mēs radām mūziku un citus mākslas veidus, kā arī attīstām mūsu kopienu.',
-            'github-btn': 'GitHub pirmkods', 'team-title': 'Mūsu komanda'
+            'github-btn': 'GitHub pirmkods', 'team-title': 'Mūсу komanda'
         }
     };
 

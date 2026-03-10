@@ -13,7 +13,7 @@
             --bg-color: #0b0b0b;
             --text-color: #ffffff;
             --accent-color: #ffffff; 
-            --secondary-bg: #161616;
+            --secondary-bg: rgba(22, 22, 22, 0.7); /* Изменено на полупрозрачный как в about.html */
             --sidebar-width: 280px;
             --card-bg: linear-gradient(145deg, #1e1e1e, #161616);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -22,6 +22,9 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
+            /* Установлен фон из about.html */
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/bc3.png') no-repeat center center fixed;
+            background-size: cover;
             background-color: var(--bg-color);
             color: var(--text-color);
             overflow-x: hidden;
@@ -29,9 +32,11 @@
 
         header {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 15px; background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(12px); position: sticky; top: 0;
-            z-index: 2000; border-bottom: 1px solid #333; height: 60px; box-sizing: border-box;
+            padding: 10px 15px; background: rgba(0, 0, 0, 0.6); /* Прозрачность как в about.html */
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            position: sticky; top: 0;
+            z-index: 2000; border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            height: 60px; box-sizing: border-box;
         }
         .header-left { display: flex; align-items: center; gap: 10px; }
         .menu-btn { background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 10px; transition: 0.3s; }
@@ -39,7 +44,8 @@
         
         .sidebar { 
             position: fixed; top: 0; left: calc(-1 * var(--sidebar-width)); 
-            width: var(--sidebar-width); height: 100%; background: var(--secondary-bg); 
+            width: var(--sidebar-width); height: 100%; 
+            background: rgba(15, 15, 15, 0.98); backdrop-filter: blur(25px); 
             z-index: 2100; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
             padding-top: 80px; box-shadow: 10px 0 30px rgba(0,0,0,0.7); 
             display: flex; flex-direction: column; 
@@ -54,14 +60,14 @@
         .close-menu-btn:hover { color: var(--accent-color); transform: scale(1.1); }
         
         .sidebar a { 
-            padding: 15px 25px; text-decoration: none; color: #fff; opacity: 0.8;
+            padding: 15px 25px; text-decoration: none; color: #aaa;
             display: flex; align-items: center; gap: 15px; border-left: 4px solid transparent; transition: 0.3s; 
         }
         .sidebar a:hover { 
-            background: rgba(255, 255, 255, 0.08); opacity: 1;
+            background: rgba(255, 255, 255, 0.05); color: #fff;
             border-left: 4px solid #fff; padding-left: 35px; 
         }
-        .sidebar a svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+        .sidebar a svg { width: 22px; height: 22px; fill: currentColor; flex-shrink: 0; }
 
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 2050; }
         .overlay.active { display: block; }
@@ -69,18 +75,19 @@
         .brand img { width: 30px; height: 30px; border-radius: 5px; }
 
         .lang-wrapper { position: relative; z-index: 2001; }
-        .lang-current { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 5px 12px; background: #222; border-radius: 20px; border: 1px solid #444; font-size: 13px; }
-        .lang-dropdown { display: none; position: absolute; right: 0; top: 40px; background: #222; border: 1px solid #444; border-radius: 8px; min-width: 120px; overflow: hidden; }
-        .lang-dropdown div { padding: 10px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; }
-        .lang-dropdown div:hover { background: #fff; color: black; }
+        .lang-current { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 6px 15px; background: rgba(255,255,255,0.08); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
+        .lang-dropdown { display: none; position: absolute; right: 0; top: 45px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; min-width: 140px; overflow: hidden; }
+        .lang-dropdown div { padding: 12px 15px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
         .show { display: block; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
         .block {
             background: var(--secondary-bg);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             margin-bottom: 25px; padding: 40px;
-            border-radius: 20px; text-align: center;
-            border: 1px solid #222;
+            border-radius: 24px; text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .section-title { margin-top: 0; margin-bottom: 30px; font-size: 1.8rem; letter-spacing: 1px; color: #fff; }
@@ -132,11 +139,13 @@
         .social-name { font-weight: bold; font-size: 1.1rem; }
         .social-handle { font-size: 0.8rem; opacity: 0.8; margin-top: 2px; }
 
-        @media (max-width: 650px) {
+        @media (max-width: 768px) {
+            .block { 
+                padding: 30px 20px; border-radius: 0; 
+                margin-left: -20px; margin-right: -20px; 
+                border-left: none; border-right: none;
+            }
             .brand span { display: none; }
-        }
-        @media (max-width: 600px) {
-            .block { padding: 30px 15px; border-radius: 0; margin-left: -20px; margin-right: -20px; }
         }
     </style>
 </head>
