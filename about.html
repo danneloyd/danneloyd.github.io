@@ -48,13 +48,76 @@
             box-sizing: border-box; 
         }
 
-        .container { 
-            max-width: 1200px; 
-            margin: 40px auto; 
-            padding: 0 20px; 
+        .sidebar { 
+            position: fixed; 
+            top: 15px; 
+            bottom: 15px; 
+            left: -320px; 
+            width: 280px; 
+            background: rgba(15, 15, 15, 0.75); 
+            backdrop-filter: blur(30px); 
+            -webkit-backdrop-filter: blur(30px);
+            z-index: 2100; 
+            transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+            padding: 20px 10px; 
             display: flex; 
             flex-direction: column; 
+            border-radius: 28px; 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 25px 0 50px rgba(0,0,0,0.6);
         }
+
+        .sidebar.active { left: 15px; }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px 25px 20px;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .sidebar-brand img { width: 32px; height: 32px; border-radius: 8px; }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: 0.3s;
+            line-height: 1;
+        }
+
+        .close-sidebar-btn:hover { opacity: 1; transform: rotate(90deg); }
+
+        .sidebar a { 
+            margin: 4px 10px;
+            padding: 14px 20px; 
+            text-decoration: none; 
+            color: rgba(255,255,255,0.6); 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            transition: 0.4s; 
+            border-radius: 18px; 
+        }
+
+        .sidebar a svg { width: 22px; height: 22px; fill: currentColor; transition: 0.3s; }
+        .sidebar a:hover { background: rgba(255, 255, 255, 0.08); color: #fff; transform: translateX(8px); }
+        .sidebar a.active-link { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
+
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: flex; flex-direction: column; }
 
         .logo-banner {
             background: var(--secondary-bg);
@@ -90,13 +153,7 @@
             text-align: left; 
         }
 
-        .project-info p { 
-            line-height: 1.7; 
-            color: #ddd; 
-            font-size: 1.15rem; 
-            margin: 0; 
-            max-width: 100%;
-        }
+        .project-info p { line-height: 1.7; color: #ddd; font-size: 1.15rem; margin: 0; }
         
         .cta-btn { 
             display: inline-block; 
@@ -110,12 +167,7 @@
             border: 1px solid rgba(255,255,255,0.2);
             transition: 0.3s; 
         }
-        .cta-btn:hover { 
-            background: #fff; 
-            color: #000;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
+        .cta-btn:hover { background: #fff; color: #000; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
         .block-team { 
             background: var(--secondary-bg); 
@@ -127,14 +179,7 @@
             border-top: none;
         }
 
-        .team-title { 
-            text-align: left; 
-            margin-top: 0; 
-            margin-bottom: 35px; 
-            font-size: 2rem; 
-            border-bottom: 1px solid rgba(255,255,255,0.1); 
-            padding-bottom: 15px; 
-        }
+        .team-title { text-align: left; margin-top: 0; margin-bottom: 35px; font-size: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
         
         .team-card { 
             background: rgba(255,255,255,0.03); 
@@ -153,59 +198,73 @@
         .brand { display: flex; align-items: center; gap: 10px; font-weight: bold; }
         .brand img { width: 30px; height: 30px; border-radius: 5px; }
         
-        .sidebar { 
-            position: fixed; top: 0; left: -280px; width: 280px; height: 100%; 
-            background: rgba(15, 15, 15, 0.98); backdrop-filter: blur(25px); z-index: 2100; 
-            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); padding-top: 80px; display: flex; flex-direction: column; 
-        }
-        .sidebar.active { left: 0; }
-        .sidebar a { padding: 15px 25px; text-decoration: none; color: #aaa; display: flex; align-items: center; gap: 15px; transition: 0.3s; border-left: 4px solid transparent; }
-        .sidebar a:hover { background: rgba(255,255,255,0.05); color: #fff; border-left: 4px solid #fff; }
-        .sidebar a svg { width: 22px; height: 22px; fill: currentColor; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 2050; transition: 0.3s; }
+        .overlay.active { display: block; backdrop-filter: blur(5px); }
 
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 2050; }
-        .overlay.active { display: block; }
-
+        /* --- ЯЗЫКОВОЙ ПЕРЕКЛЮЧАТЕЛЬ --- */
         .lang-wrapper { position: relative; }
-        .lang-current { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 6px 15px; background: rgba(255,255,255,0.08); border-radius: 20px; font-size: 13px; border: 1px solid rgba(255,255,255,0.1); }
-        .lang-dropdown { display: none; position: absolute; right: 0; top: 45px; background: #1a1a1a; border-radius: 12px; min-width: 140px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+        .lang-current { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            cursor: pointer; 
+            padding: 6px 15px; 
+            background: rgba(255,255,255,0.08); 
+            border-radius: 20px; 
+            font-size: 13px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
+        .flag-icon { width: 18px; height: 13px; display: block; object-fit: cover; border-radius: 2px; }
+
+        .lang-dropdown { 
+            display: none; 
+            position: absolute; 
+            right: 0; 
+            top: 45px; 
+            background: #1a1a1a; 
+            border-radius: 12px; 
+            min-width: 160px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
         .lang-dropdown.show { display: block; }
-        .lang-dropdown div { padding: 12px 15px; cursor: pointer; transition: 0.2s; }
+        .lang-dropdown div { 
+            padding: 12px 15px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-size: 14px;
+        }
         .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
 
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ (ЦЕНТРИРОВАНИЕ) --- */
         @media (max-width: 768px) {
-            .container { 
-                padding: 0 20px; 
-                overflow-x: hidden; 
-            }
-
-            .logo-banner, .block-info, .block-team {
+            .sidebar.active { left: 10px; right: 10px; width: auto; }
+            .container { padding: 0 10px; }
+            .logo-banner, .block-info, .block-team { 
                 border-radius: 0; 
-                border-left: none;
-                border-right: none;
+                margin-left: -10px; 
+                margin-right: -10px; 
+                width: auto; 
+                text-align: center; 
                 padding: 30px 20px;
-                margin-left: -20px;
-                margin-right: -20px;
-                width: auto;
             }
-
-            .logo-banner { padding: 40px 20px; }
-            .logo-banner img { max-height: 80px; padding: 10px; }
-
+            .team-title { text-align: center; }
             .team-card { 
                 flex-direction: column; 
-                text-align: left; 
-                align-items: flex-start;
-                padding: 20px;
-                gap: 20px;
-                margin-left: -5px;
-                margin-right: -5px;
+                align-items: center; 
+                text-align: center;
+                padding: 25px 15px;
             }
-
-            .team-avatar { width: 120px; height: 120px; }
-            .team-title { font-size: 1.6rem; margin-bottom: 20px; }
-            .project-info p { font-size: 1rem; }
-            .brand span { display: none; } /* Скрываем текст в хеадере */
+            .team-info {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .brand span { display: none; }
         }
     </style>
 </head>
@@ -213,29 +272,43 @@
 <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
 <nav class="sidebar" id="sidebar">
-    <button style="position: absolute; top: 15px; right: 20px; background: none; border: none; color: white; font-size: 36px; cursor: pointer;" onclick="toggleMenu()">&times;</button>
+    <div class="sidebar-header">
+        <div class="sidebar-brand">
+            <img src="images/fav.png" alt="Logo">
+            <span>NIGHTY GANG</span>
+        </div>
+        <button class="close-sidebar-btn" onclick="toggleMenu()">&times;</button>
+    </div>
+    
     <a href="index.html"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span id="nav-home">Home</span></a>
     <a href="musicprod.html"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span id="nav-musicprod">Music Production</span></a>
     <a href="visuals.html"><svg viewBox="0 0 24 24"><path d="M5 16l3-3 2 2 4-4 4 4H5zm14 2H5V6h14v12zm2-14H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg><span id="nav-visuals">Visual Production</span></a>
     <a href="music.html"><svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.5 17.33c-.22.36-.68.47-1.05.25-2.88-1.76-6.52-2.16-10.8-.18-.4.18-.88.02-1.08-.38-.2-.4-.04-.88.36-1.08 4.7-2.15 8.74-1.7 12.02.3.37.22.48.68.25 1.06zm1.47-3.27c-.28.45-.88.6-1.33.32-3.3-2.03-8.32-2.62-12.22-1.44-.5.15-1.04-.13-1.2-.64-.15-.5.13-1.04.64-1.2 4.45-1.35 10-0.7 13.8 1.63.45.27.6.87.3 1.33zm.13-3.4c-3.95-2.35-10.47-2.57-14.26-1.42-.6.18-1.25-.17-1.43-.77-.18-.6.17-1.25.77-1.43 4.34-1.32 11.53-1.05 16.05 1.63.54.32.72 1.02.4 1.56-.3.53-1.02.72-1.55.42z"/></svg><span id="nav-streaming">Streaming Platforms</span></a>
     <a href="social.html"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5s-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg><span id="nav-social">Social Media</span></a>
     <a href="server.html"><svg viewBox="0 0 24 24"><path d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V9.21L13,12.58V19.29L19,15.91Z"/></svg><span id="nav-server">Minecraft Server</span></a>
-    <a href="about.html"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg><span id="nav-about">About</span></a>
+    <a href="about.html" class="active-link"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg><span id="nav-about">About</span></a>
 </nav>
 
 <header>
     <div class="header-left">
         <button class="menu-btn" onclick="toggleMenu()">☰</button>
-        <div class="brand"><img src="images/fav.png" alt="Logo"><span>Nighty Gang Music</span></div>
+        <div class="brand"><img src="images/fav.png" alt="Logo"><span>NIGHTY GANG</span></div>
     </div>
     <div class="lang-wrapper">
         <div class="lang-current" onclick="toggleLang()">
-            <span id="current-flag">🇺🇸</span> <span id="current-code">EN</span>
+            <span id="current-flag"><svg class="flag-icon" viewBox="0 0 640 480"><path fill="#012169" d="M0 0h640v480H0z"/><path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 241l240 178v61h-78L320 301 78 480H0v-61l240-178L0 62V0h75z"/><path fill="#C8102E" d="m424 281 216 159v40L369 281h55zM216 199 0 41v40l196 158h20zm351 0L423 281h74l143-105v-40l-73 63zM0 439l196-158h-55L0 398v41z"/><path fill="#FFF" d="M241 0v480h160V0H241z"/><path fill="#FFF" d="M0 160v160h640V160H0z"/><path fill="#C8102E" d="M0 193v95h640v-95H0zM273 0v480h95V0h-95z"/></svg></span> 
+            <span id="current-code">EN</span>
         </div>
         <div class="lang-dropdown" id="lang-list">
-            <div onclick="selectLang('EN', '🇺🇸')">🇺🇸 English</div>
-            <div onclick="selectLang('RU', '🇷🇺')">🇷🇺 Русский</div>
-            <div onclick="selectLang('LV', '🇱🇻')">🇱🇻 Latviešu</div>
+            <div onclick="selectLang('EN', 'GB')">
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#012169" d="M0 0h640v480H0z"/><path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 241l240 178v61h-78L320 301 78 480H0v-61l240-178L0 62V0h75z"/><path fill="#C8102E" d="m424 281 216 159v40L369 281h55zM216 199 0 41v40l196 158h20zm351 0L423 281h74l143-105v-40l-73 63zM0 439l196-158h-55L0 398v41z"/><path fill="#FFF" d="M241 0v480h160V0H241z"/><path fill="#FFF" d="M0 160v160h640V160H0z"/><path fill="#C8102E" d="M0 193v95h640v-95H0zM273 0v480h95V0h-95z"/></svg> English
+            </div>
+            <div onclick="selectLang('RU', 'RU')">
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#fff" d="M0 0h640v480H0z"/><path fill="#0039a6" d="M0 160h640v320H0z"/><path fill="#d52b1e" d="M0 320h640v160H0z"/></svg> Русский
+            </div>
+            <div onclick="selectLang('LV', 'LV')">
+                <svg class="flag-icon" viewBox="0 0 640 480"><path fill="#9e3039" d="M0 0h640v480H0z"/><path fill="#fff" d="M0 192h640v96H0z"/></svg> Latviešu
+            </div>
         </div>
     </div>
 </header>
@@ -272,6 +345,12 @@
 </div>
 
 <script>
+    const flags = {
+        'EN': '<svg class="flag-icon" viewBox="0 0 640 480"><path fill="#012169" d="M0 0h640v480H0z"/><path fill="#FFF" d="m75 0 244 181L562 0h78v62L400 241l240 178v61h-78L320 301 78 480H0v-61l240-178L0 62V0h75z"/><path fill="#C8102E" d="m424 281 216 159v40L369 281h55zM216 199 0 41v40l196 158h20zm351 0L423 281h74l143-105v-40l-73 63zM0 439l196-158h-55L0 398v41z"/><path fill="#FFF" d="M241 0v480h160V0H241z"/><path fill="#FFF" d="M0 160v160h640V160H0z"/><path fill="#C8102E" d="M0 193v95h640v-95H0zM273 0v480h95V0h-95z"/></svg>',
+        'RU': '<svg class="flag-icon" viewBox="0 0 640 480"><path fill="#fff" d="M0 0h640v480H0z"/><path fill="#0039a6" d="M0 160h640v320H0z"/><path fill="#d52b1e" d="M0 320h640v160H0z"/></svg>',
+        'LV': '<svg class="flag-icon" viewBox="0 0 640 480"><path fill="#9e3039" d="M0 0h640v480H0z"/><path fill="#fff" d="M0 192h640v96H0z"/></svg>'
+    };
+
     const translations = {
         'EN': {
             'nav-home': 'Home', 'nav-musicprod': 'Music Production', 'nav-visuals': 'Visual Production',
@@ -280,7 +359,7 @@
             'github-btn': 'GitHub Source Code', 'team-title': 'Our Team'
         },
         'RU': {
-            'nav-home': 'Главная', 'nav-musicprod': 'Муз. продакшн', 'nav-visuals': 'Визуальный продакшн',
+            'nav-home': 'Главная', 'nav-musicprod': 'Музыкальный продакшн', 'nav-visuals': 'Визуальный продакшн',
             'nav-streaming': 'Стриминг', 'nav-social': 'Соц. сети', 'nav-server': 'Сервер Minecraft', 'nav-about': 'О нас',
             'project-desc': 'Творческое объединение из Риги, Латвия. Мы создаем музыку и другие виды творчества и развиваем сообщество.',
             'github-btn': 'Исходный код GitHub', 'team-title': 'Наша команда'
@@ -300,11 +379,10 @@
     function toggleLang() {
         document.getElementById("lang-list").classList.toggle("show");
     }
-    function selectLang(code, flag) {
+    function selectLang(code) {
         localStorage.setItem('ng_lang_code', code);
-        localStorage.setItem('ng_lang_flag', flag);
         document.getElementById("current-code").innerText = code;
-        document.getElementById("current-flag").innerText = flag;
+        document.getElementById("current-flag").innerHTML = flags[code];
         document.getElementById("lang-list").classList.remove("show");
         const langData = translations[code];
         for (let key in langData) {
@@ -318,9 +396,8 @@
         }
     }
     document.addEventListener('DOMContentLoaded', () => {
-        const savedCode = localStorage.getItem('ng_lang_code');
-        const savedFlag = localStorage.getItem('ng_lang_flag');
-        if (savedCode && savedFlag) selectLang(savedCode, savedFlag);
+        const savedCode = localStorage.getItem('ng_lang_code') || 'EN';
+        selectLang(savedCode);
     });
 </script>
 </body>
