@@ -131,7 +131,6 @@
             border-bottom: none;
         }
 
-        /* ОБНОВЛЕННЫЙ СТИЛЬ ЛОГОТИПА */
         .logo-banner img {
             max-width: 100%;
             width: auto;
@@ -160,14 +159,11 @@
             padding: 10px 40px 40px 40px; 
             border-left: var(--card-border);
             border-right: var(--card-border);
-            text-align: left; 
+            text-align: center; /* Центрирование для ПК */
         }
 
-        .project-info p { line-height: 1.7; color: #ddd; font-size: 1.15rem; margin: 0; }
-        
         .cta-btn { 
             display: inline-block; 
-            margin-top: 30px; 
             padding: 14px 28px; 
             background: rgba(255, 255, 255, 0.05); 
             color: #fff; 
@@ -329,13 +325,12 @@
 
     <section class="block-info">
         <div class="project-info">
-            <p id="txt-project-desc">A creative collective from Riga, Latvia. We create music and other forms of art, and develop our community.</p>
             <a href="https://github.com/danneloyd/danneloyd.github.io" target="_blank" class="cta-btn" id="txt-github-btn">GitHub Source Code</a>
         </div>
     </section>
 
     <section class="block-team">
-        <h2 class="team-title" id="txt-team-title">Our Team</h2>
+        <h2 class="team-title" id="txt-team-title">Credits</h2>
         <div class="team-grid">
             <div class="team-card">
                 <img src="images/danneloyd.png" class="team-avatar" alt="danneloyd">
@@ -364,20 +359,17 @@
         'EN': {
             'nav-home': 'Home', 'nav-musicprod': 'Music Production', 'nav-visuals': 'Visual Production',
             'nav-streaming': 'Streaming Platforms', 'nav-social': 'Social Media', 'nav-server': 'Minecraft Server', 'nav-about': 'About',
-            'project-desc': 'A creative collective from Riga, Latvia. We create music and other forms of art, and develop our community.',
-            'github-btn': 'GitHub Source Code', 'team-title': 'Our Team'
+            'github-btn': 'GitHub Source Code', 'team-title': 'Credits'
         },
         'RU': {
             'nav-home': 'Главная', 'nav-musicprod': 'Музыкальный продакшн', 'nav-visuals': 'Визуальный продакшн',
             'nav-streaming': 'Стриминг', 'nav-social': 'Соц. сети', 'nav-server': 'Сервер Minecraft', 'nav-about': 'О нас',
-            'project-desc': 'Творческое объединение из Риги, Латвия. Мы создаем музыку и другие виды творчества и развиваем сообщество.',
-            'github-btn': 'Исходный код GitHub', 'team-title': 'Наша команда'
+            'github-btn': 'Исходный код GitHub', 'team-title': 'Credits'
         },
         'LV': {
             'nav-home': 'Sākums', 'nav-musicprod': 'Mūzikas producēšana', 'nav-visuals': 'Vizuālā producēšana',
             'nav-streaming': 'Straumēšanas platformas', 'nav-social': 'Sociālie tīkli', 'nav-server': 'Minecraft serveris', 'nav-about': 'Par mums',
-            'project-desc': 'Radošā apvienība no Rīgas, Latvijas. Mēs radām mūziku un citus mākslas veidus, kā arī attīstām mūsu kopienu.',
-            'github-btn': 'GitHub pirmkods', 'team-title': 'Mūсу komanda'
+            'github-btn': 'GitHub pirmkods', 'team-title': 'Credits'
         }
     };
 
@@ -409,7 +401,6 @@
         selectLang(savedCode);
     });
 
-    /* --- ЛОГИКА ПАСХАЛКИ С ЭФФЕКТАМИ --- */
     let clickCount = 0;
     let clickTimer;
     const logo = document.getElementById('easter-egg-logo');
@@ -417,29 +408,18 @@
     if (logo) {
         logo.addEventListener('click', () => {
             clickCount++;
-            
-            // Визуальный отклик при клике
             logo.style.filter = 'brightness(1.5) contrast(1.2)';
             logo.style.boxShadow = '0 0 40px rgba(255,255,255,0.5)';
-            
             setTimeout(() => {
                 logo.style.filter = '';
                 logo.style.boxShadow = '';
             }, 100);
-
-            // Сброс счетчика, если клики слишком медленные
             clearTimeout(clickTimer);
-            clickTimer = setTimeout(() => {
-                clickCount = 0;
-            }, 2000);
-
+            clickTimer = setTimeout(() => { clickCount = 0; }, 2000);
             if (clickCount === 5) {
-                // Эффект перехода
                 logo.style.transform = 'scale(1.2) rotate(5deg)';
                 logo.style.opacity = '0.5';
-                setTimeout(() => {
-                    window.location.href = 'eg.html';
-                }, 200);
+                setTimeout(() => { window.location.href = 'eg.html'; }, 200);
             }
         });
     }
