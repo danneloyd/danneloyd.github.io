@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bixes Buyer: Закуп на Флексе</title>
+    <style>
+        :root { --gold: #ffd700; --neon-blue: #00f2ff; --bad-red: #ff2a2a; }
+        * { box-sizing: border-box; touch-action: none; user-select: none; }
+        body { margin: 0; background: #000; color: white; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        
+        #game-wrapper { 
+            position: relative; width: 100%; max-width: 500px; height: 100%; max-height: 900px; 
+            background: #0a0a0f; overflow: hidden; border: 2px solid #333; 
+        }
+
+        canvas { width: 100%; height: 100%; display: block; }
+
+        .ui-layer { 
+            position: absolute; inset: 0; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; background: rgba(0,0,0,0.9); 
+            backdrop-filter: blur(10px); z-index: 100; text-align: center; padding: 20px; transition: 0.4s;
+        }
+
+        .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        .hud { 
+            position: absolute; top: 40px; width: 100%; padding: 0 25px; 
+            display: flex; justify-content: space-between; z-index: 50; font-weight: 900; font-size: 22px; pointer-events: none; 
+        }
+
+        .combo-meter {
+            position: absolute; top: 80px; width: 100%; text-align: center;
+            font-size: 18px; color: var(--gold); text-shadow: 0 0 10px var(--gold);
+        }
+
+        h1 { color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); font-size: 36px; text-transform: uppercase; }
+        
+        .btn { 
+            background: linear-gradient(180deg, #00f2ff, #0080ff); 
+            color: black; border: none; padding: 18px 50px; 
+            font-size: 22px; font-weight: bold; border-radius: 12px; 
+            cursor: pointer; margin-top: 20px; box-shadow: 0 5px 0 #004080;
+            text-decoration: none; display: inline-block;
+        }
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #004080; }
+        
+        .instructions { font-size: 14px; color: #aaa; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div id="game-wrapper">
+        <div class="hud">
+            <div>БИКСЫ: <span id="score-val">0</span></div>
+            <div id="best-val">РЕКОРД: 0</div>
+        </div>
+        <div class="combo-meter" id="combo-ui">COMBO: 0</div>
+
+        <div id="menu" class="ui-layer">
+            <h1 id="msg">BIXES BUYER</h1>
+            <div id="menu-best">Лучший результат: 0</div>
+            <button class="btn" id="start-btn">ЗАКУПИТЬСЯ</button>
+            <div class="instructions">Свайпай КРУТОЙ ШМОТ вправо, <br>ЗАШКВАР — влево!</div>
+            <a href="../eg.html" class="btn" style="background: #444; color: white; font-size: 16px; box-shadow: 0 5px 0 #111;">НАЗАД</a>
+        </div>
+        <canvas id="canvas"></canvas>
+    </div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const vW = 600; const vH = 1000;
+    canvas.width = vW; canvas.height = vH;
+
+    // Звуки
+    const music = new Audio('music/bixes.mp3'); music.loop = true;
+    const fxGood = new Audio('fx/swipe_good.mp3');
+    const fxBad = new Audio('fx/swipe_bad.mp3');
+    const fxError = new Audio('fx/error.mp3');
+    const fxFlex = new Audio('fx/fleck_mode.mp3');
+
+    const game = {
+        active: false,
+        score: 0,
+        combo: 0,
+        bestScore: localStorage.getItem('bixesBest') || 0,
+        currentItem: null,
+        flexMode: false,
+        
+        items: [
+            { id: 'bixes1', type: 'good', src: 'bixes_1.png' },
+            { id: 'bixes2', type: 'good', src: 'bixes_2.png' },
+            { id: 'trash1', type: 'bad', src: 'trash_1.png' },
+            { id: 'trash2', type: 'bad', src: 'trash_2.png' }
+        ],
+
+        start() {
+            this.active = true;
+            this.score = 0;
+            this.combo = 0;
+            this.flexMode = false;
+            this.updateUI();
+            document.getElementById('menu').classList.add('hidden');
+            music.play().catch(() => {});
+            this.spawnItem();
+            this.loop();
+        },
+
+        spawnItem() {
+            const proto = this.items[Math.floor(Math.random() * this.items.length)];
+            this.currentItem = {
+                ...proto,
+                x: vW / 2,
+                y: vH / 2,
+                offsetX: 0,
+                offsetY: 0,
+                rotation: 0,
+                alpha: 0,
+                img: new Image()
+            };
+            this.currentItem.img.src = proto.src;
+        },
+
+        handleDecision(dir) {
+            const isRight = dir === 'right';
+            const isCorrect = (isRight && this.currentItem.type === 'good') || (!isRight && this.currentItem.type === 'bad');
+
+            if (isCorrect) {
+                this.score++;
+                this.combo++;
+                isRight ? fxGood.play() : fxBad.play();
+                if (this.combo % 10 === 0) {
+                    this.flexMode = true;
+                    fxFlex.play();
+                    setTimeout(() => this.flexMode = false, 3000);
+                }
+            } else {
+                fxError.play();
+                this.gameOver();
+            }
+            this.updateUI();
+            this.spawnItem();
+        },
+
+        gameOver() {
+            this.active = false;
+            if (this.score > this.bestScore) {
+                this.bestScore = this.score;
+                localStorage.setItem('bixesBest', this.bestScore);
+            }
+            document.getElementById('msg').innerText = "НЕ ТОТ ШМОТ!";
+            document.getElementById('menu').classList.remove('hidden');
+            this.updateUI();
+        },
+
+        updateUI() {
+            document.getElementById('score-val').innerText = this.score;
+            document.getElementById('best-val').innerText = "РЕКОРД: " + this.bestScore;
+            document.getElementById('menu-best').innerText = "Лучший результат: " + this.bestScore;
+            document.getElementById('combo-ui').innerText = "COMBO: " + this.combo;
+        },
+
+        loop() {
+            if (!this.active) return;
+            ctx.clearRect(0, 0, vW, vH);
+
+            // Флекс-эффект фона
+            if (this.flexMode) {
+                ctx.fillStyle = `hsla(${Date.now() % 360}, 70%, 10%, 0.5)`;
+                ctx.fillRect(0, 0, vW, vH);
+            }
+
+            if (this.currentItem) {
+                ctx.save();
+                ctx.translate(this.currentItem.x + this.currentItem.offsetX, this.currentItem.y);
+                ctx.rotate(this.currentItem.offsetX * 0.001);
+                
+                // Подсветка при свайпе
+                if (this.currentItem.offsetX > 50) ctx.shadowColor = "#00ff00";
+                else if (this.currentItem.offsetX < -50) ctx.shadowColor = "#ff0000";
+                ctx.shadowBlur = Math.abs(this.currentItem.offsetX) / 5;
+
+                // Отрисовка предмета
+                if (this.currentItem.img.complete) {
+                    ctx.drawImage(this.currentItem.img, -150, -150, 300, 300);
+                } else {
+                    ctx.fillStyle = "#333";
+                    ctx.fillRect(-100, -100, 200, 200);
+                }
+                ctx.restore();
+            }
+
+            requestAnimationFrame(() => this.loop());
+        }
+    };
+
+    // Свайп-механика
+    let startX = 0;
+    canvas.addEventListener('touchstart', (e) => startX = e.touches[0].clientX);
+    canvas.addEventListener('touchmove', (e) => {
+        if (!game.active || !game.currentItem) return;
+        game.currentItem.offsetX = (e.touches[0].clientX - startX) * 1.5;
+    });
+    canvas.addEventListener('touchend', (e) => {
+        if (!game.active || !game.currentItem) return;
+        if (game.currentItem.offsetX > 150) game.handleDecision('right');
+        else if (game.currentItem.offsetX < -150) game.handleDecision('left');
+        else game.currentItem.offsetX = 0;
+    });
+
+    // Для ПК (мышка)
+    let isDown = false;
+    canvas.addEventListener('mousedown', (e) => { isDown = true; startX = e.clientX; });
+    window.addEventListener('mousemove', (e) => {
+        if (isDown && game.active && game.currentItem) game.currentItem.offsetX = (e.clientX - startX);
+    });
+    window.addEventListener('mouseup', () => {
+        if (!isDown) return;
+        isDown = false;
+        if (game.currentItem.offsetX > 150) game.handleDecision('right');
+        else if (game.currentItem.offsetX < -150) game.handleDecision('left');
+        else game.currentItem.offsetX = 0;
+    });
+
+    document.getElementById('start-btn').onclick = () => game.start();
+    game.updateUI();
+</script>
+</body>
+</html>
