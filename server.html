@@ -77,7 +77,6 @@
         
         .server-info-padding { padding: 35px; }
 
-        /* Центрирование кнопки IP */
         .ip-container {
             display: flex;
             justify-content: center;
@@ -150,6 +149,7 @@
         .rules-list li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; opacity: 0.9; }
         .rules-list li::before { content: "•"; color: var(--accent-color); margin-right: 12px; font-weight: bold; }
 
+        /* ИСПРАВЛЕННЫЙ МОБИЛЬНЫЙ БЛОК */
         @media (max-width: 768px) { 
             .brand span { display: none; } 
             .container { margin: 20px auto; gap: 15px; padding: 0 15px; }
@@ -159,10 +159,20 @@
             
             .ip-copy-btn { 
                 width: 100%; 
+                padding: 12px 15px;
                 box-sizing: border-box;
-                word-break: break-all;
+                /* Разрешаем перенос только если совсем не влезает */
+                overflow-wrap: anywhere; 
+                word-break: normal;
             } 
-            .ip-copy-btn b { font-size: 0.9rem; }
+            .ip-copy-btn b { 
+                font-size: 0.85rem; /* Уменьшаем размер, чтобы IP влезал в строку */
+                line-height: 1.3;
+                display: block;
+            }
+            .ip-copy-btn small {
+                font-size: 9px;
+            }
             
             .skin-layout { flex-direction: column; text-align: center; } 
             .info-section-title { font-size: 1.2rem; }
@@ -302,7 +312,6 @@
 
     function copyIP() {
         const fullText = document.getElementById("ip-val").innerText;
-        // Копируем только сам адрес, без префикса "IP: "
         const ip = fullText.replace('IP: ', '');
         const hint = document.getElementById("txt-copy-hint");
         const lang = document.getElementById("current-code").innerText;
