@@ -106,7 +106,7 @@
             width: 200px;
             accent-color: var(--red);
             cursor: pointer;
-            touch-action: auto; /* Позволяет двигать ползунок */
+            touch-action: auto; 
         }
 
         .btn {
@@ -121,11 +121,25 @@
             box-shadow: 0 6px 0 #5e0000;
             transition: 0.1s;
             touch-action: auto;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(180deg, #444, #222);
+            box-shadow: 0 6px 0 #111;
+            font-size: 18px;
+            padding: 12px 40px;
         }
 
         .btn:active { 
             transform: translateY(4px);
             box-shadow: 0 2px 0 #5e0000;
+        }
+        
+        .btn-secondary:active {
+            box-shadow: 0 2px 0 #111;
         }
     </style>
 </head>
@@ -148,6 +162,7 @@
             </div>
 
             <button class="btn" id="start-btn">ИГРАТЬ</button>
+            <a href="../index.html" class="btn btn-secondary">НАЗАД</a>
         </div>
 
         <canvas id="canvas"></canvas>
@@ -376,10 +391,8 @@
         }
     };
 
-    // Исправленное управление
     const handleAction = (e) => {
-        // Если нажата кнопка или слайдер, не прыгаем
-        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'A') return;
         
         if (e.type === 'touchstart') e.preventDefault();
         player.jump();
