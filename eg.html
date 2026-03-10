@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - Nighty Gang</title>
+    <link rel="icon" type="image/png" href="images/fav.png">
+    <style>
+        :root {
+            --bg-color: #0b0b0b;
+            --text-color: #ffffff;
+            --accent-color: #ffffff;
+            --secondary-bg: rgba(22, 22, 22, 0.7); 
+            --card-border: 1px solid rgba(255, 255, 255, 0.1);
+            --card-radius: 24px;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/bc2.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        @keyframes logo-glow {
+            0% { filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.4)); }
+            100% { filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+        }
+
+        .game-selection-container {
+            background: var(--secondary-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 50px;
+            border-radius: var(--card-radius);
+            border: var(--card-border);
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .logo-small {
+            width: 80px;
+            margin-bottom: 20px;
+            animation: logo-glow 4s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 1.4rem; /* Уменьшенный размер шрифта */
+            margin-bottom: 25px; /* Немного уменьшенный отступ */
+            letter-spacing: 1px;
+            font-weight: 300;
+            line-height: 1.4;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .game-btn {
+            padding: 18px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .game-btn:hover {
+            background: #fff;
+            color: #000;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        .back-link {
+            margin-top: 30px;
+            display: inline-block;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            color: #fff;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-selection-container">
+    <img src="images/fav.png" alt="NG" class="logo-small">
+    <h1>???</h1>
+    
+    <div class="btn-group">
+        <a href="images/images.html" class="game-btn">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            ПОБЕГ ОТ ДЕМОНКИДА
+        </a>
+        
+        <a href="images/images2.html" class="game-btn">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            ГОНКИ ЗА ЯГЕРЕМ
+        </a>
+    </div>
+
+    <a href="about.html" class="back-link">← Return to About</a>
+</div>
+
+</body>
+</html>

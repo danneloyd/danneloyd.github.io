@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Гонки с Владосиком: Turbo Jager Edition</title>
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-pink: #ff00ff;
+            --neon-yellow: #ffff00;
+            --dark-bg: #05050a;
+        }
+        * { box-sizing: border-box; touch-action: none; user-select: none; }
+        
+        body {
+            margin: 0;
+            background-color: #000;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #game-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 100%;
+            max-height: 900px;
+            background: var(--dark-bg);
+            overflow: hidden;
+            border: 2px solid #222;
+        }
+
+        canvas { width: 100%; height: 100%; display: block; transition: filter 0.3s; }
+
+        .ui-layer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            transition: opacity 0.4s, visibility 0.4s;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .ui-layer.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .hud {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            padding: 0 25px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 50;
+            font-weight: 900;
+            font-size: 22px;
+            text-shadow: 2px 2px 0 #000;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 38px;
+            margin: 0 0 10px;
+            color: #2e7d32;
+            text-shadow: 0 0 20px #4caf50;
+            text-transform: uppercase;
+        }
+
+        #game-over-msg {
+            color: #ff2a2a;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .best-score {
+            color: #ffd700;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .volume-container {
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type=range] {
+            width: 200px;
+            accent-color: var(--neon-blue);
+            cursor: pointer;
+            touch-action: auto; 
+        }
+
+        .btn {
+            background: linear-gradient(180deg, #2e7d32, #1b5e20);
+            color: #fff;
+            border: none;
+            padding: 20px 60px;
+            font-size: 26px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #0a300c;
+            transition: 0.1s;
+            touch-action: auto;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(180deg, #444, #222);
+            color: #fff;
+            box-shadow: 0 6px 0 #111;
+            font-size: 18px;
+            padding: 12px 40px;
+        }
+
+        .btn:active { 
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0a300c;
+        }
+        
+        #controls-hint {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 14px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-wrapper">
+        <div class="hud">
+            <div>СЧЕТ: <span id="score-val">0</span></div>
+            <div id="best-val">РЕКОРД: 0</div>
+        </div>
+
+        <div id="menu" class="ui-layer">
+            <div id="game-over-msg">ВЛАДОСИК УЛЕТЕЛ В КЮВЕТ!</div>
+            <h1>Гонки за ягеремindex.html</h1>
+            <div class="best-score" id="menu-best">Лучший результат: 0</div>
+            
+            <div class="volume-container">
+                <label>Громкость</label>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+            </div>
+
+            <button class="btn" id="start-btn">ГНАТЬ НА МАШИНЕ</button>
+            <a href="../eg.html" class="btn btn-secondary">НАЗАД</a>
+        </div>
+        
+        <div id="controls-hint" class="hidden">Нажимай влево/вправо. Собери Ягер!</div>
+
+        <canvas id="canvas"></canvas>
+    </div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const scoreVal = document.getElementById('score-val');
+    const menu = document.getElementById('menu');
+    const bestValHud = document.getElementById('best-val');
+    const menuBest = document.getElementById('menu-best');
+    const gameOverMsg = document.getElementById('game-over-msg');
+    const volumeSlider = document.getElementById('volume-slider');
+    const startBtn = document.getElementById('start-btn');
+    const controlsHint = document.getElementById('controls-hint');
+
+    const vW = 600;
+    const vH = 1000;
+    canvas.width = vW;
+    canvas.height = vH;
+
+    const vladosImg = new Image();
+    vladosImg.src = 'vlados.png';
+    
+    const jagerImg = new Image();
+    jagerImg.src = 'jager.png'; // Убедись, что файл jager.png лежит рядом
+
+    const audioManager = {
+        bgMusic: new Audio('images2.mp3'),
+        isInitialized: false,
+        init() {
+            if (this.isInitialized) return;
+            this.bgMusic.loop = true;
+            this.bgMusic.volume = volumeSlider.value;
+            this.isInitialized = true;
+        },
+        playMusic() {
+            this.init();
+            this.bgMusic.currentTime = 0;
+            this.bgMusic.play().catch(e => console.log("Звук заблокирован"));
+        },
+        stopMusic() { this.bgMusic.pause(); },
+        setVolume(val) { this.bgMusic.volume = val; }
+    };
+
+    class Particle {
+        constructor(x, y, color, speedY = 5) {
+            this.x = x; this.y = y;
+            this.size = Math.random() * 5 + 2;
+            this.speedY = speedY + Math.random() * 2;
+            this.speedX = (Math.random() - 0.5) * 4;
+            this.alpha = 1;
+            this.color = color;
+        }
+        update() { this.y += this.speedY; this.x += this.speedX; this.alpha -= 0.02; }
+        draw() {
+            ctx.globalAlpha = this.alpha;
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        }
+    }
+
+    const game = {
+        active: false,
+        score: 0,
+        bestScore: localStorage.getItem('vladosRaceBest') || 0,
+        speed: 9,
+        maxSpeed: 25,
+        lanes: [100, 300, 500],
+        obstacles: [],
+        items: [],
+        particles: [],
+        shake: 0,
+        drunkEffect: 0, // Время действия эффекта
+        roadOffset: 0,
+
+        start() {
+            this.active = true;
+            this.score = 0;
+            this.speed = 9;
+            this.drunkEffect = 0;
+            this.obstacles = [];
+            this.items = [];
+            this.particles = [];
+            scoreVal.innerText = "0";
+            car.reset();
+            menu.classList.add('hidden');
+            gameOverMsg.style.display = 'none';
+            controlsHint.classList.remove('hidden');
+            audioManager.playMusic();
+            canvas.style.filter = "none";
+            this.loop();
+        },
+
+        gameOver() {
+            this.active = false;
+            this.shake = 40;
+            audioManager.stopMusic();
+            if (this.score > this.bestScore) {
+                this.bestScore = this.score;
+                localStorage.setItem('vladosRaceBest', this.bestScore);
+            }
+            this.updateScores();
+            gameOverMsg.style.display = 'block';
+            canvas.style.filter = "grayscale(1) contrast(1.2)";
+            setTimeout(() => menu.classList.remove('hidden'), 600);
+        },
+
+        updateScores() {
+            bestValHud.innerText = `РЕКОРД: ${this.bestScore}`;
+            menuBest.innerText = `Лучший результат: ${this.bestScore}`;
+        },
+
+        drawRoad() {
+            ctx.fillStyle = "#050510";
+            ctx.fillRect(0, 0, vW, vH);
+            
+            // Эффект блюра при высокой скорости
+            if(this.speed > 15) {
+                ctx.fillStyle = "rgba(0, 242, 255, 0.05)";
+                ctx.fillRect(0, 0, vW, vH);
+            }
+
+            // Обочина
+            ctx.fillStyle = "#1a1a2e";
+            ctx.fillRect(0, 0, 40, vH);
+            ctx.fillRect(vW - 40, 0, 40, vH);
+
+            // Неоновые полосы
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = (this.drunkEffect > 0) ? "orange" : "var(--neon-pink)";
+            ctx.fillStyle = ctx.shadowColor;
+            ctx.fillRect(35, 0, 5, vH);
+            ctx.fillRect(vW - 40, 0, 5, vH);
+            ctx.shadowBlur = 0;
+            
+            this.roadOffset += this.speed;
+            if (this.roadOffset > 100) this.roadOffset = 0;
+            
+            ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+            for (let y = this.roadOffset - 100; y < vH; y += 100) {
+                ctx.fillRect(vW / 3 - 2, y, 4, 60);
+                ctx.fillRect(2 * vW / 3 - 2, y, 4, 60);
+            }
+        },
+
+        loop() {
+            if (!this.active) return;
+            ctx.clearRect(0,0,vW,vH);
+            
+            ctx.save();
+            
+            // Тряска и эффект "опьянения"
+            let drift = 0;
+            if (this.drunkEffect > 0) {
+                this.drunkEffect--;
+                drift = Math.sin(Date.now() / 200) * 15;
+                canvas.style.filter = `hue-rotate(${Math.sin(Date.now()/500)*30}deg) blur(${this.drunkEffect/50}px)`;
+            } else {
+                canvas.style.filter = "none";
+            }
+
+            if (this.shake > 0) {
+                ctx.translate(Math.random()*this.shake - this.shake/2 + drift, Math.random()*this.shake - this.shake/2);
+                this.shake *= 0.9;
+            } else if (drift !== 0) {
+                ctx.translate(drift, 0);
+            }
+            
+            this.drawRoad();
+            
+            // Частицы скорости
+            if (Math.random() > 0.3) {
+                this.particles.push(new Particle(Math.random() * vW, 0, "rgba(255, 255, 255, 0.2)", this.speed));
+            }
+
+            this.particles.forEach((p, i) => {
+                p.update(); p.draw();
+                if (p.alpha <= 0 || p.y > vH) this.particles.splice(i, 1);
+            });
+
+            this.handleItems();
+            car.update();
+            this.handleObstacles();
+            
+            ctx.restore();
+            requestAnimationFrame(() => this.loop());
+        },
+
+        handleItems() {
+            // Спавн Ягера (реже монеток)
+            if (Math.random() < 0.015) {
+                const laneIdx = Math.floor(Math.random() * 3);
+                this.items.push({ x: this.lanes[laneIdx], y: -80, w: 40, h: 70 });
+            }
+
+            this.items.forEach((item, i) => {
+                item.y += this.speed * 0.8;
+                
+                // Рисуем Jager
+                ctx.save();
+                if (jagerImg.complete) {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = "green";
+                    ctx.drawImage(jagerImg, item.x - item.w/2, item.y, item.w, item.h);
+                } else {
+                    ctx.fillStyle = "green";
+                    ctx.fillRect(item.x - 15, item.y, 30, 50);
+                }
+                ctx.restore();
+
+                // Сбор
+                if (Math.abs(car.x - item.x) < 50 && car.y < item.y + item.h && car.y + car.h > item.y) {
+                    this.items.splice(i, 1);
+                    this.score += 10;
+                    this.drunkEffect = 180; // Эффект на 3 секунды (60fps * 3)
+                    this.speed = Math.min(this.speed + 1.5, this.maxSpeed);
+                    scoreVal.innerText = this.score;
+                }
+                if (item.y > vH) this.items.splice(i, 1);
+            });
+        },
+
+        handleObstacles() {
+            // Сложность: чем больше счет, тем меньше пауза между машинами
+            const spawnRate = 0.03 + (this.score * 0.0005);
+            if (Math.random() < spawnRate && (this.obstacles.length === 0 || this.obstacles[this.obstacles.length-1].y > 300)) {
+                const laneIdx = Math.floor(Math.random() * 3);
+                this.obstacles.push({ 
+                    x: this.lanes[laneIdx] - 40, 
+                    y: -150, 
+                    w: 80, 
+                    h: 125,
+                    color: Math.random() > 0.5 ? "#ff2a2a" : "#444"
+                });
+            }
+            
+            this.obstacles.forEach((obs, i) => {
+                obs.y += this.speed * 0.7;
+                
+                ctx.fillStyle = obs.color;
+                ctx.shadowBlur = 15; ctx.shadowColor = obs.color;
+                this.drawEnemyCar(obs.x, obs.y, obs.w, obs.h);
+                ctx.shadowBlur = 0;
+
+                if (car.x - car.w/2 < obs.x + obs.w &&
+                    car.x + car.w/2 > obs.x &&
+                    car.y < obs.y + obs.h &&
+                    car.y + car.h > obs.y) {
+                    this.gameOver();
+                }
+
+                if (obs.y > vH) {
+                    this.obstacles.splice(i, 1);
+                    this.score++;
+                    scoreVal.innerText = this.score;
+                    this.speed += 0.12; // Быстрее обычного
+                }
+            });
+        },
+        
+        drawEnemyCar(x, y, w, h) {
+            ctx.fillRect(x + 10, y, w - 20, h);
+            ctx.fillStyle = "#111";
+            ctx.fillRect(x, y + 20, 10, 30);
+            ctx.fillRect(x + w - 10, y + 20, 10, 30);
+            ctx.fillStyle = "#ff0000"; // Стоп-сигналы
+            ctx.fillRect(x + 15, y + h - 5, 15, 5);
+            ctx.fillRect(x + w - 30, y + h - 5, 15, 5);
+        }
+    };
+
+    const car = {
+        targetLane: 1,
+        x: game.lanes[1],
+        y: 800,
+        w: 85, h: 140,
+        ease: 0.18,
+
+        reset() { 
+            this.targetLane = 1; 
+            this.x = game.lanes[1]; 
+        },
+        
+        update() {
+            let targetX = game.lanes[this.targetLane];
+            this.x += (targetX - this.x) * this.ease;
+            this.draw();
+        },
+        
+        draw() {
+            ctx.save();
+            ctx.translate(this.x - this.w/2, this.y);
+            
+            // Фары
+            const beam = ctx.createLinearGradient(0, 0, 0, -250);
+            beam.addColorStop(0, 'rgba(255, 255, 200, 0.5)');
+            beam.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = beam;
+            ctx.beginPath();
+            ctx.moveTo(10, 0); ctx.lineTo(-40, -250); ctx.lineTo(60, -250); ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(this.w - 10, 0); ctx.lineTo(this.w - 60, -250); ctx.lineTo(this.w + 40, -250); ctx.fill();
+
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = (game.drunkEffect > 0) ? "#4caf50" : "var(--neon-blue)";
+            
+            if (vladosImg.complete) {
+                ctx.drawImage(vladosImg, 0, 0, this.w, this.h);
+            } else {
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(0, 0, this.w, this.h);
+            }
+            
+            ctx.strokeStyle = ctx.shadowColor;
+            ctx.lineWidth = 3;
+            ctx.strokeRect(0, 0, this.w, this.h);
+            ctx.restore();
+        },
+        
+        move(dir) {
+            if (!game.active) return;
+            if (dir === 'left' && this.targetLane > 0) this.targetLane--;
+            else if (dir === 'right' && this.targetLane < 2) this.targetLane++;
+        }
+    };
+
+    const handleAction = (e) => {
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'A') return;
+        if (!game.active) return;
+        const clickX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        const windowW = window.innerWidth;
+        if (clickX < windowW / 2) car.move('left');
+        else car.move('right');
+    };
+
+    startBtn.addEventListener('click', () => game.start());
+    window.addEventListener('touchstart', (e) => { if(game.active) e.preventDefault(); handleAction(e); }, { passive: false });
+    window.addEventListener('mousedown', handleAction);
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'a') car.move('left');
+        if (e.key === 'ArrowRight' || e.key === 'd') car.move('right');
+    });
+
+    game.updateScores();
+</script>
+</body>
+</html>
