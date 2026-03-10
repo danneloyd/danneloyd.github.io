@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Спастись от 5G</title>
+    <style>
+        :root { --neon-green: #39ff14; --danger-red: #ff0000; --radio-blue: #00f2ff; }
+        * { box-sizing: border-box; touch-action: none; user-select: none; }
+        body { margin: 0; background: #000; color: white; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #game-wrapper { position: relative; width: 100%; max-width: 500px; height: 100%; max-height: 900px; background: #05050a; overflow: hidden; border: 2px solid #333; }
+        canvas { width: 100%; height: 100%; display: block; }
+        
+        /* HUD */
+        .hud { position: absolute; top: 30px; width: 100%; padding: 0 20px; z-index: 50; pointer-events: none; }
+        .chip-bar-container { width: 100%; height: 15px; background: rgba(255,255,255,0.1); border: 1px solid #fff; margin: 5px 0; }
+        #chip-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #ff0000, #ff7b00); box-shadow: 0 0 15px #ff0000; transition: width 0.2s; }
+        #shield-timer { font-weight: bold; color: var(--radio-blue); font-size: 18px; text-shadow: 0 0 10px var(--radio-blue); display: none; }
+        
+        /* UI Layers */
+        .ui-layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.92); z-index: 100; text-align: center; padding: 20px; backdrop-filter: blur(8px); }
+        .hidden { display: none !important; }
+        
+        /* Buttons */
+        .btn { background: var(--neon-green); color: black; border: none; padding: 18px 45px; font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 0 #28b80e; transition: 0.1s; text-decoration: none; display: inline-block; }
+        .btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #28b80e; }
+        .btn:disabled { opacity: 0.5; filter: grayscale(1); }
+        
+        .btn-secondary { background: linear-gradient(180deg, #444, #222); color: #fff; box-shadow: 0 4px 0 #111; font-size: 16px; padding: 12px 30px; margin-top: 15px; }
+        .btn-secondary:active { box-shadow: 0 2px 0 #000; }
+    </style>
+</head>
+<body>
+    <div id="game-wrapper">
+        <div class="hud">
+            <div id="shield-timer">ИММУНИТЕТ: 5s</div>
+            <div style="font-weight: 900; font-size: 14px;">ОБЛУЧЕНИЕ ДЕНДИ:</div>
+            <div class="chip-bar-container"><div id="chip-bar"></div></div>
+            <div id="score-display" style="color: var(--neon-green); font-weight: bold;">СНЕСЕНО: 0</div>
+        </div>
+        
+        <div id="menu" class="ui-layer">
+            <h1 id="menu-title" style="color: var(--neon-green); font-size: 40px; margin-bottom: 10px;">Спастись от 5G</h1>
+            <p id="menu-text">Сноси вышки тапом!<br>Лови фольгу для защиты.</p>
+            <button class="btn" id="start-btn">СПАСТИ ДЕНДИ</button>
+            <a href="../eg.html" class="btn btn-secondary">НАЗАД</a>
+        </div>
+        
+        <canvas id="canvas"></canvas>
+    </div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const vW = 600; const vH = 1000;
+    canvas.width = vW; canvas.height = vH;
+
+    // Ресурсы
+    const fxDestroy = new Audio('fx/destroy.mp3');
+    const fxAlert = new Audio('fx/chip_alert.mp3');
+    const fxHat = new Audio('fx/foil_hat.mp3');
+    const music = new Audio('music/paranoia.mp3'); music.loop = true;
+    
+    const dendyImg = new Image(); dendyImg.src = 'dendy.png';
+    const folgaImg = new Image(); folgaImg.src = 'folga.jpg'; // Заменено на folga.jpg
+
+    let lastTime = 0;
+    let requestID;
+
+    const game = {
+        active: false,
+        score: 0,
+        chipPercent: 0,
+        towers: [],
+        particles: [],
+        bonuses: [],
+        spawnTimer: 0,
+        bonusTimer: 0,
+        shieldTime: 0,
+        shakeTime: 0,
+        glitchMode: 0,
+        flashEffect: 0,
+
+        start() {
+            if(requestID) cancelAnimationFrame(requestID);
+            this.active = true;
+            this.score = 0;
+            this.chipPercent = 0;
+            this.towers = [];
+            this.particles = [];
+            this.bonuses = [];
+            this.shieldTime = 0;
+            this.spawnTimer = 0;
+            this.bonusTimer = 0;
+            this.flashEffect = 0;
+            document.getElementById('menu').classList.add('hidden');
+            document.getElementById('chip-bar').style.width = '0%';
+            music.play().catch(() => {});
+            lastTime = performance.now();
+            this.loop(lastTime);
+        },
+
+        spawnTower() {
+            const margin = 80;
+            const growthBase = 0.8 + Math.min(this.score * 0.02, 3);
+            this.towers.push({
+                x: margin + Math.random() * (vW - margin * 2),
+                y: 250 + Math.random() * (vH - 400),
+                size: 0,
+                maxSize: 150, // Немного увеличим максимальный размер
+                growth: growthBase,
+                signalPulse: 0 // Для анимации "излучения"
+            });
+        },
+
+        spawnBonus() {
+            this.bonuses.push({ x: -60, y: 150 + Math.random() * 250, spdX: 5, size: 80, rot: 0 });
+        },
+
+        gameOver() {
+            this.active = false;
+            const btn = document.getElementById('start-btn');
+            document.getElementById('menu-title').innerText = "ОБЛУЧЕН!";
+            document.getElementById('menu-title').style.color = "red";
+            document.getElementById('menu-text').innerHTML = `Счёт: ${this.score}<br>Мозги Денди больше не способны мыслить.`;
+            document.getElementById('menu').classList.remove('hidden');
+
+            btn.disabled = true;
+            let timeLeft = 2;
+            btn.innerText = `ПОДОЖДИТЕ (${timeLeft}с)`;
+            const timer = setInterval(() => {
+                timeLeft--;
+                if(timeLeft <= 0) {
+                    clearInterval(timer);
+                    btn.disabled = false;
+                    btn.innerText = "ЕЩЕ РАЗ";
+                } else btn.innerText = `ПОДОЖДИТЕ (${timeLeft}с)`;
+            }, 1000);
+        },
+
+        update(dt) {
+            if (!this.active) return;
+            const delta = Math.min(dt, 50);
+
+            this.spawnTimer += delta;
+            const spawnInterval = Math.max(400, 1600 - (this.score * 15));
+            if (this.spawnTimer > spawnInterval) {
+                this.spawnTower();
+                this.spawnTimer = 0;
+            }
+
+            this.bonusTimer += delta;
+            if (this.bonusTimer > 8000) { // Чуть чаще бонусы
+                this.spawnBonus();
+                this.bonusTimer = 0;
+            }
+
+            if (this.shieldTime > 0) {
+                this.shieldTime -= delta;
+                document.getElementById('shield-timer').style.display = 'block';
+                document.getElementById('shield-timer').innerText = `ИММУНИТЕТ: ${Math.ceil(this.shieldTime/1000)}с`;
+            } else {
+                document.getElementById('shield-timer').style.display = 'none';
+            }
+
+            for (let i = this.towers.length - 1; i >= 0; i--) {
+                let t = this.towers[i];
+                t.size += t.growth;
+                t.signalPulse += delta * 0.01; // Скорость пульсации
+                if (t.size >= t.maxSize) {
+                    if (this.shieldTime <= 0) {
+                        this.chipPercent += 12;
+                        this.shakeTime = 15;
+                        this.glitchMode = 12;
+                        fxAlert.currentTime = 0;
+                        fxAlert.play().catch(() => {});
+                    }
+                    this.towers.splice(i, 1);
+                }
+            }
+
+            this.bonuses.forEach((b, i) => {
+                b.x += b.spdX;
+                b.rot += 0.05;
+                if (b.x > vW + 100) this.bonuses.splice(i, 1);
+            });
+
+            this.particles.forEach((p, i) => {
+                p.x += p.spdX; p.y += p.spdY; p.life -= 0.02;
+                if (p.life <= 0) this.particles.splice(i, 1);
+            });
+
+            if (this.chipPercent >= 100) {
+                this.chipPercent = 100;
+                this.gameOver();
+            }
+            if (this.shakeTime > 0) this.shakeTime--;
+            if (this.glitchMode > 0) this.glitchMode--;
+            if (this.flashEffect > 0) this.flashEffect -= 0.1;
+        },
+
+        draw() {
+            ctx.save();
+            if (this.shakeTime > 0) ctx.translate((Math.random()-0.5)*20, (Math.random()-0.5)*20);
+            ctx.clearRect(0, 0, vW, vH);
+
+            // Денди
+            ctx.save();
+            if (this.shieldTime > 0) {
+                ctx.shadowBlur = 30;
+                ctx.shadowColor = "#00f2ff";
+                ctx.filter = 'brightness(1.2)';
+            }
+            if (this.glitchMode > 0) ctx.filter = 'hue-rotate(90deg) contrast(2) invert(0.2)';
+            const dS = 140;
+            if (dendyImg.complete && dendyImg.naturalWidth !== 0) {
+                ctx.drawImage(dendyImg, vW/2 - dS/2, vH/2 - dS/2, dS, dS);
+            } else {
+                ctx.fillStyle = "#555"; ctx.fillRect(vW/2 - 50, vH/2 - 50, 100, 100);
+            }
+            ctx.restore();
+
+            // Вышки
+            this.towers.forEach(t => {
+                const isDangerous = t.size > t.maxSize * 0.7;
+                ctx.save();
+                ctx.translate(t.x, t.y);
+                
+                // Стиль линий и свечения
+                ctx.strokeStyle = isDangerous ? "red" : "#39ff14";
+                ctx.shadowBlur = isDangerous ? 20 : 5;
+                ctx.shadowColor = isDangerous ? "red" : "#39ff14";
+                ctx.lineWidth = 4;
+                ctx.lineCap = 'round';
+
+                const h = t.size;
+                const baseW = 30; // Ширина основания
+                const platformY = -h * 0.75;
+
+                // 1. Опора (ферма)
+                ctx.beginPath();
+                // Левая нога
+                ctx.moveTo(-baseW, 0); ctx.lineTo(-10, platformY);
+                // Правая нога
+                ctx.moveTo(baseW, 0); ctx.lineTo(10, platformY);
+                // Поперечины
+                for(let j=1; j<4; j++) {
+                    let y = platformY * (j/4);
+                    let w = baseW * (1 - j/5);
+                    ctx.moveTo(-w, y); ctx.lineTo(w, y);
+                    // Диагонали
+                    if(j<3) {
+                       let nextY = platformY * ((j+1)/4);
+                       let nextW = baseW * (1 - (j+1)/5);
+                       ctx.moveTo(-w, y); ctx.lineTo(nextW, nextY);
+                    }
+                }
+                ctx.stroke();
+
+                // 2. Верхняя платформа и мачта
+                ctx.lineWidth = 6;
+                ctx.beginPath();
+                ctx.moveTo(-15, platformY); ctx.lineTo(15, platformY); // Платформа
+                ctx.moveTo(0, platformY); ctx.lineTo(0, -h); // Мачта аннтены
+                ctx.stroke();
+
+                // 3. Панельные антенны (сектора)
+                ctx.fillStyle = ctx.strokeStyle;
+                ctx.fillRect(-12, platformY - 25, 8, 20);
+                ctx.fillRect(4, platformY - 25, 8, 20);
+                ctx.fillRect(-4, platformY - 30, 8, 20); // Центральная чуть выше
+
+
+                // 4. Эффект излучения (анимированные круги)
+                if (isDangerous) {
+                   ctx.save();
+                   ctx.lineWidth = 2;
+                   ctx.globalAlpha = 1 - (t.signalPulse % 1);
+                   const pulseR = 20 + (t.signalPulse % 1) * 60;
+                   ctx.beginPath();
+                   ctx.arc(0, -h, pulseR, 0, Math.PI * 2);
+                   ctx.stroke();
+                   
+                   ctx.globalAlpha = 1 - ((t.signalPulse + 0.5) % 1);
+                   const pulseR2 = 20 + ((t.signalPulse + 0.5) % 1) * 60;
+                   ctx.beginPath();
+                   ctx.arc(0, -h, pulseR2, 0, Math.PI * 2);
+                   ctx.stroke();
+                   ctx.restore();
+                   
+                   // Красная точка наверху
+                   ctx.fillStyle = "red";
+                   ctx.beginPath(); ctx.arc(0, -h, 5, 0, Math.PI*2); ctx.fill();
+                } else {
+                   // Зеленый огонек
+                   ctx.fillStyle = "#39ff14";
+                   ctx.beginPath(); ctx.arc(0, -h, 4, 0, Math.PI*2); ctx.fill();
+                }
+
+                ctx.restore();
+            });
+
+            // Бонусы (Фольга)
+            this.bonuses.forEach(b => {
+                ctx.save();
+                ctx.translate(b.x, b.y);
+                ctx.rotate(b.rot);
+                if (folgaImg.complete && folgaImg.naturalWidth !== 0) {
+                    ctx.drawImage(folgaImg, -40, -40, 80, 80);
+                    // Блик на фольге
+                    ctx.fillStyle = "rgba(255,255,255,0.3)";
+                    ctx.fillRect(-40, -10, 80, 5);
+                } else {
+                    ctx.fillStyle = "#aaa"; ctx.fillRect(-30, -30, 60, 60);
+                }
+                ctx.restore();
+            });
+
+            // Частицы
+            this.particles.forEach(p => {
+                ctx.globalAlpha = p.life; ctx.fillStyle = p.color;
+                ctx.shadowBlur = 5; ctx.shadowColor = p.color;
+                ctx.fillRect(p.x, p.y, 6, 6);
+            });
+
+            // Эффект вспышки при взятии бонуса
+            if (this.flashEffect > 0) {
+                ctx.fillStyle = `rgba(0, 242, 255, ${this.flashEffect * 0.3})`;
+                ctx.fillRect(0, 0, vW, vH);
+            }
+
+            ctx.restore();
+
+            document.getElementById('chip-bar').style.width = this.chipPercent + '%';
+            document.getElementById('score-display').innerText = `СНЕСЕНО: ${this.score}`;
+        },
+
+        loop(now) {
+            if (!game.active) return;
+            const dt = now - lastTime;
+            lastTime = now;
+            game.update(dt);
+            game.draw();
+            requestID = requestAnimationFrame((t) => game.loop(t));
+        }
+    };
+
+    const handleInput = (clientX, clientY) => {
+        if (!game.active) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = (clientX - rect.left) * (vW / rect.width);
+        const y = (clientY - rect.top) * (vH / rect.height);
+
+        // Клик по бонусам
+        for (let i = game.bonuses.length - 1; i >= 0; i--) {
+            let b = game.bonuses[i];
+            if (Math.hypot(x - b.x, y - b.y) < 80) {
+                game.shieldTime = 5000;
+                game.flashEffect = 1;
+                fxHat.play().catch(()=> {});
+                game.bonuses.splice(i, 1);
+                return;
+            }
+        }
+
+        // Клик по вышкам
+        for (let i = game.towers.length - 1; i >= 0; i--) {
+            let t = game.towers[i];
+            // Область попадания адаптирована под новую форму
+            if (Math.abs(x - t.x) < 60 && y > t.y - t.size - 40 && y < t.y + 20) {
+                // Больше частиц для сочности
+                for(let j=0; j<15; j++) {
+                    game.particles.push({
+                        x: t.x + (Math.random()-0.5)*30, 
+                        y: t.y - t.size/2 + (Math.random()-0.5)*t.size/2, 
+                        spdX: (Math.random()-0.5)*18, 
+                        spdY: (Math.random()-0.5)*18, 
+                        life: 1, 
+                        color: Math.random() > 0.4 ? (t.size > t.maxSize * 0.7 ? "red" : "#39ff14") : "#ffffff"
+                    });
+                }
+                game.towers.splice(i, 1);
+                game.score++;
+                fxDestroy.currentTime = 0; fxDestroy.play().catch(() => {});
+                break;
+            }
+        }
+    };
+
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleInput(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+    canvas.addEventListener('mousedown', (e) => handleInput(e.clientX, e.clientY));
+    document.getElementById('start-btn').onclick = () => game.start();
+</script>
+</body>
+</html>
