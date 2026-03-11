@@ -29,7 +29,7 @@
             overflow-x: hidden;
         }
 
-        /* --- Стили для шапки и бокового меню (из about.html) --- */
+        /* --- Стили для шапки и бокового меню --- */
         header { 
             display: flex; 
             justify-content: space-between; 
@@ -162,18 +162,7 @@
         }
         .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
 
-        @media (max-width: 768px) {
-            .sidebar.active { left: 10px; right: 10px; width: auto; }
-            .brand span { display: none; }
-        }
-
         /* --- Стили для eg.html --- */
-        @keyframes logo-glow {
-            0% { filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-            50% { filter: drop-shadow(0 0 20px rgba(255,255,255,0.4)); }
-            100% { filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-        }
-
         .main-wrapper {
             display: flex;
             flex-direction: column;
@@ -225,12 +214,6 @@
         }
 
         .dot { height: 8px; width: 8px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
-
-        .logo-small {
-            width: 80px;
-            margin-bottom: 20px;
-            animation: logo-glow 4s ease-in-out infinite;
-        }
 
         h1 {
             font-size: 1.4rem; 
@@ -296,6 +279,29 @@
             margin-top: -15px;
             margin-bottom: 20px;
         }
+
+        /* --- Адаптивность для мобилок --- */
+        @media (max-width: 768px) {
+            .sidebar.active { left: 10px; right: 10px; width: auto; }
+            .brand span { display: none; }
+            
+            /* Блоки выходят за края на мобильных устройствах */
+            .game-selection-container {
+                padding: 30px 20px;
+                border-radius: 0;
+                margin-left: -20px;
+                margin-right: -20px;
+                width: calc(100% + 40px);
+                border-left: none;
+                border-right: none;
+                max-width: none;
+            }
+            
+            /* Корректируем отрицательные отступы картинки под новые паддинги контейнера */
+            .server-preview {
+                margin: -30px -20px 30px -20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -347,7 +353,6 @@
 
 <div class="main-wrapper">
     <div class="game-selection-container">
-        <img src="images/fav.png" alt="NG" class="logo-small">
         <h1 id="txt-choose-game">Выберите игру</h1>
         <div class="btn-group">
             <a href="games/demonkid.html" class="game-btn">
