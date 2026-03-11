@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GAS ATTACK: INSANE MODE</title>
+    <style>
+        :root {
+            --neon-green: #39ff14;
+            --danger-red: #ff2a2a;
+            --warning-orange: #ffae00;
+        }
+        * { box-sizing: border-box; touch-action: none; user-select: none; }
+        body { margin: 0; background: #000; color: white; font-family: 'Arial Black', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        
+        #game-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 100%;
+            max-height: 900px;
+            background: radial-gradient(circle, #1a1a2e 0%, #000 100%);
+            overflow: hidden;
+            border: 3px solid #333;
+        }
+
+        canvas { width: 100%; height: 100%; display: block; }
+
+        #menu, #game-over {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hidden { display: none !important; }
+
+        .volume-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        input[type=range] {
+            width: 200px;
+            accent-color: var(--neon-green);
+            cursor: pointer;
+            touch-action: auto; 
+        }
+
+        .btn {
+            background: var(--neon-green);
+            border: none;
+            color: black;
+            padding: 20px 50px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            box-shadow: 0 0 20px var(--neon-green);
+            margin-top: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(180deg, #444, #222);
+            color: #fff;
+            box-shadow: 0 6px 0 #111;
+            font-size: 18px;
+            padding: 12px 40px;
+        }
+
+        #alert-indicator {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 110px;
+            font-weight: bold;
+            opacity: 0;
+            text-shadow: 0 0 30px currentColor;
+        }
+
+        .progress-container {
+            position: absolute;
+            bottom: 30px;
+            left: 5%;
+            width: 90%;
+            height: 35px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #444;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #39ff14);
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-wrapper">
+    <canvas id="gameCanvas"></canvas>
+    <div id="alert-indicator">!</div>
+
+    <div id="menu">
+        <h1 style="color: var(--neon-green); font-size: 40px;">ФАРТ МАЙК</h1>
+        <p>Зажимай, чтобы пердеть.<br><b></b>Перди в майк пока Даннелойд не смотрит<br><b></b></p>
+        
+        <div class="volume-container">
+            <label>Громкость музыки</label>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+        </div>
+
+        <button class="btn" onclick="startGame()">ГАЗЗЗ</button>
+        <a href="../eg.html" class="btn btn-secondary">НАЗАД</a>
+    </div>
+
+    <div id="game-over" class="hidden">
+        <h1 id="status-title">ЛОХ!</h1>
+        <button class="btn" onclick="startGame()">НАПЕРДЕТЬ СНОВА?</button>
+        <br>
+        <a href="../eg.html" class="btn btn-secondary">НАЗАД</a>
+    </div>
+
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const alertInd = document.getElementById('alert-indicator');
+    const progressBar = document.getElementById('progress-bar');
+    const volumeSlider = document.getElementById('volume-slider');
+    
+    const imgEnemyBack = new Image(); imgEnemyBack.src = 'images/enemy_back.png';
+    const imgEnemyFront = new Image(); imgEnemyFront.src = 'images/enemy_front.png';
+    const imgMic = new Image(); imgMic.src = 'images/microphone.png';
+
+    const sndFart = new Audio('fx/fart.mp3'); sndFart.loop = true;
+    const sndFail = new Audio('fx/fail.mp3');
+    const sndAlert = new Audio('fx/alert.mp3');
+    const bgMusic = new Audio('music/fartmic.mp3'); bgMusic.loop = true;
+
+    bgMusic.volume = volumeSlider.value;
+    volumeSlider.addEventListener('input', (e) => {
+        bgMusic.volume = e.target.value;
+    });
+
+    const vW = 500; const vH = 900;
+    canvas.width = vW; canvas.height = vH;
+
+    let gameActive = false;
+    let canRestart = true; // ФЛАГ ЗАДЕРЖКИ
+    let score = 0;
+    let isPressing = false;
+    let enemyState = 'back';
+    let enemyTimer = 100;
+    let particles = [];
+    let shake = 0;
+
+    class Particle {
+        constructor() {
+            this.x = vW/2 + (Math.random()-0.5)*60;
+            this.y = vH - 240;
+            this.size = Math.random()*20 + 10;
+            this.speedX = (Math.random()-0.5)*12;
+            this.speedY = -Math.random()*7 - 4;
+            this.alpha = 1;
+            this.color = `hsla(${Math.random()*40 + 50}, 100%, 40%, `;
+        }
+        update() {
+            this.x += this.speedX; this.y += this.speedY;
+            this.alpha -= 0.025; this.size += 1;
+        }
+        draw() {
+            ctx.fillStyle = this.color + this.alpha + ')';
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+        }
+    }
+
+    function startGame() {
+        if (!canRestart) return; // ПРОВЕРКА ЗАДЕРЖКИ
+
+        score = 0;
+        gameActive = true;
+        enemyState = 'back';
+        enemyTimer = 80;
+        particles = [];
+        document.getElementById('menu').classList.add('hidden');
+        document.getElementById('game-over').classList.add('hidden');
+        
+        bgMusic.currentTime = 0;
+        bgMusic.play().catch(()=>{});
+
+        loop();
+    }
+
+    function update() {
+        if (!gameActive) return;
+        let madness = 1 + (score / 40);
+        enemyTimer--;
+        if (enemyTimer <= 0) {
+            if (enemyState === 'back') {
+                if (Math.random() > 0.85) {
+                    enemyState = 'warning';
+                    enemyTimer = 10;
+                    sndAlert.currentTime = 0; sndAlert.play().catch(()=>{});
+                } else {
+                    enemyState = 'warning';
+                    enemyTimer = (40 + Math.random()*30) / madness;
+                    sndAlert.currentTime = 0; sndAlert.play().catch(()=>{});
+                }
+            } else if (enemyState === 'warning') {
+                if (Math.random() > 0.7 && score < 80) {
+                    enemyState = 'back';
+                    enemyTimer = 30;
+                } else {
+                    enemyState = 'watching';
+                    enemyTimer = 40 + Math.random()*60;
+                }
+            } else {
+                enemyState = 'back';
+                enemyTimer = (70 + Math.random()*90) / madness;
+            }
+        }
+
+        if (enemyState === 'warning') {
+            alertInd.style.opacity = '1';
+            alertInd.style.color = 'var(--warning-orange)';
+            alertInd.innerText = '!';
+            alertInd.style.transform = `translateX(-50%) scale(${1.2 + Math.sin(Date.now()/40)*0.3})`;
+        } else if (enemyState === 'watching') {
+            alertInd.style.opacity = '1';
+            alertInd.style.color = 'var(--danger-red)';
+            alertInd.innerText = '!!!';
+            alertInd.style.transform = 'translateX(-50%) scale(1.6)';
+        } else {
+            alertInd.style.opacity = '0';
+        }
+
+        if (isPressing) {
+            shake = 12;
+            if (sndFart.paused) sndFart.play().catch(()=>{});
+            for(let i=0; i<6; i++) particles.push(new Particle());
+            if (enemyState === 'watching') {
+                gameOver(false);
+            } else if (enemyState === 'warning') {
+                score -= 0.6;
+                if (score < 0) score = 0;
+                shake = 20;
+            } else {
+                score += 0.35;
+            }
+        } else {
+            shake = 0;
+            sndFart.pause();
+        }
+
+        particles.forEach((p, i) => {
+            p.update();
+            if (p.alpha <= 0) particles.splice(i, 1);
+        });
+
+        progressBar.style.width = score + "%";
+        if (score >= 100) gameOver(true);
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, vW, vH);
+        ctx.save();
+        if (shake > 0) ctx.translate((Math.random()-0.5)*shake, (Math.random()-0.5)*shake);
+        const enemyImg = (enemyState === 'watching') ? imgEnemyFront : imgEnemyBack;
+        if (enemyImg.complete && enemyImg.naturalWidth !== 0) {
+            ctx.drawImage(enemyImg, vW/2 - 130, 110, 260, 320);
+        } else {
+            ctx.fillStyle = (enemyState === 'watching') ? 'red' : (enemyState === 'warning' ? 'orange' : '#444');
+            ctx.fillRect(vW/2 - 60, 150, 120, 200);
+        }
+        particles.forEach(p => p.draw());
+        if (imgMic.complete && imgMic.naturalWidth !== 0) {
+            ctx.drawImage(imgMic, vW/2 - 90, vH - 390, 180, 300);
+        } else {
+            ctx.fillStyle = '#333';
+            ctx.beginPath(); ctx.arc(vW/2, vH-250, 50, 0, Math.PI*2); ctx.fill();
+        }
+        ctx.restore();
+    }
+
+    function loop() {
+        if (!gameActive) return;
+        update(); draw();
+        requestAnimationFrame(loop);
+    }
+
+    function gameOver(win) {
+        gameActive = false;
+        canRestart = false; // БЛОКИРУЕМ КНОПКУ
+        
+        sndFart.pause();
+        bgMusic.pause();
+        
+        const screen = document.getElementById('game-over');
+        const title = document.getElementById('status-title');
+        const restartBtn = screen.querySelector('.btn');
+        
+        // Визуальный фидбек блокировки
+        restartBtn.style.opacity = "0.5";
+        restartBtn.style.cursor = "not-allowed";
+
+        screen.classList.remove('hidden');
+        if (win) {
+            title.innerText = "ПОБЕДА!";
+            title.style.color = "var(--neon-green)";
+        } else {
+            title.innerText = "ПРОФУКАЛИ";
+            title.style.color = "var(--danger-red)";
+            sndFail.play().catch(()=>{});
+        }
+
+        // РОВНО 2 СЕКУНДЫ ДЕЛЕЯ
+        setTimeout(() => {
+            canRestart = true;
+            restartBtn.style.opacity = "1";
+            restartBtn.style.cursor = "pointer";
+        }, 2000);
+    }
+
+    const down = (e) => { 
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'A' || e.target.tagName === 'BUTTON') return;
+        e.preventDefault(); 
+        isPressing = true; 
+    };
+    const up = () => { isPressing = false; };
+    window.addEventListener('mousedown', down);
+    window.addEventListener('mouseup', up);
+    window.addEventListener('touchstart', down, {passive: false});
+    window.addEventListener('touchend', up);
+</script>
+</body>
+</html>
