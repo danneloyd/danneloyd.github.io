@@ -197,13 +197,13 @@
     canvas.height = vH;
 
     const vladosImg = new Image();
-    vladosImg.src = 'vlados.png';
+    vladosImg.src = 'images/vlados.png';
     
     const jagerImg = new Image();
-    jagerImg.src = 'jager.png'; // Убедись, что файл jager.png лежит рядом
+    jagerImg.src = 'images/jager.png'; // Убедись, что файл jager.png лежит рядом
 
     const audioManager = {
-        bgMusic: new Audio('images2.mp3'),
+        bgMusic: new Audio('music/vladosik.mp3'),
         isInitialized: false,
         init() {
             if (this.isInitialized) return;

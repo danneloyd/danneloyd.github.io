@@ -128,12 +128,12 @@
     const vW = 600; const vH = 1000;
     canvas.width = vW; canvas.height = vH;
 
-    const alenchikImg = new Image(); alenchikImg.src = 'alenchik.png';
-    const girlImg = new Image(); girlImg.src = 'pivo.png';
+    const alenchikImg = new Image(); alenchikImg.src = 'images/alenchik.png';
+    const girlImg = new Image(); girlImg.src = 'images/pivo.png';
     
     // АУДИО
-    const audio = new Audio('images3.mp3'); audio.loop = true;
-    const hitSound = new Audio('images3fx.mp3');
+    const audio = new Audio('music/alenchik.mp3'); audio.loop = true;
+    const hitSound = new Audio('fx/gunshot.mp3');
     const damageSound = new Audio('fx/elbow-to-jaw.mp3'); // Звук при получении урона
     const gameOverSound = new Audio('fx/option-1.mp3');    // Звук при проигрыше
 
