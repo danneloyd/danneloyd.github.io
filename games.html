@@ -285,18 +285,23 @@
             .sidebar.active { left: 10px; right: 10px; width: auto; }
             .brand span { display: none; }
             
-            /* Блоки выходят за края на мобильных устройствах */
-            .game-selection-container {
-                padding: 30px 20px;
-                border-radius: 0;
-                margin-left: -20px;
-                margin-right: -20px;
-                width: calc(100% + 40px);
+            .main-wrapper { 
+                padding: 0; 
+                margin: 0; 
+                max-width: 100%;
+            }
+
+            .game-selection-container { 
+                border-radius: 0; 
+                margin: 0; 
+                width: 100%; 
                 border-left: none;
                 border-right: none;
+                box-sizing: border-box;
+                padding: 30px 20px;
                 max-width: none;
             }
-            
+
             /* Корректируем отрицательные отступы картинки под новые паддинги контейнера */
             .server-preview {
                 margin: -30px -20px 30px -20px;

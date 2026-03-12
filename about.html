@@ -159,7 +159,7 @@
             padding: 10px 40px 40px 40px; 
             border-left: var(--card-border);
             border-right: var(--card-border);
-            text-align: center; /* Центрирование для ПК */
+            text-align: center; 
         }
 
         .cta-btn { 
@@ -245,19 +245,30 @@
         }
         .lang-dropdown div:hover { background: rgba(255,255,255,0.1); }
 
+        /* Обновленная секция для мобильных устройств */
         @media (max-width: 768px) {
             .sidebar.active { left: 10px; right: 10px; width: auto; }
-            .container { padding: 0 10px; }
+            
+            .container { 
+                padding: 0; 
+                margin: 0; 
+                max-width: 100%;
+            }
+
             .logo-banner, .block-info, .block-team { 
                 border-radius: 0; 
-                margin-left: -10px; 
-                margin-right: -10px; 
-                width: auto; 
-                text-align: center; 
+                margin: 0; 
+                width: 100%; 
+                border-left: none;
+                border-right: none;
+                box-sizing: border-box;
                 padding: 30px 20px;
             }
+
+            .logo-banner { margin-top: 0; }
             .logo-banner img { max-height: 120px; padding: 15px; }
             .team-title { text-align: center; }
+
             .team-card { 
                 flex-direction: column; 
                 align-items: center; 
