@@ -221,6 +221,8 @@
             background: linear-gradient(135deg, rgba(0, 136, 204, 0.8), rgba(0, 102, 153, 0.8)); 
             border: none; 
             min-width: 320px; 
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .store-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.5); filter: brightness(1.2); }
@@ -231,7 +233,7 @@
             .brand span { display: none; } 
             .block { padding: 30px 15px; border-radius: 0; margin-left: -20px; margin-right: -20px; } 
             .nav-grid { grid-template-columns: 1fr; } 
-            .tg-card { min-width: 100%; }
+            .tg-card { min-width: 100%; box-sizing: border-box; }
         }
     </style>
 </head>
