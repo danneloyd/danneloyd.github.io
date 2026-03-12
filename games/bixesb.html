@@ -34,6 +34,16 @@
             font-size: 18px; color: var(--gold); text-shadow: 0 0 10px var(--gold);
         }
 
+        /* Кнопка музыки */
+        #music-toggle {
+            position: absolute; top: 15px; right: 15px; z-index: 151;
+            background: rgba(255,255,255,0.1); border: 1px solid var(--neon-blue);
+            color: white; border-radius: 50%; width: 40px; height: 40px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; transition: 0.3s;
+        }
+        #music-toggle:active { transform: scale(0.9); }
+
         h1 { color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); font-size: 36px; text-transform: uppercase; }
         
         .btn { 
@@ -50,6 +60,8 @@
 </head>
 <body>
     <div id="game-wrapper">
+        <button id="music-toggle">🔊</button>
+        
         <div class="hud">
             <div>БИКСЫ: <span id="score-val">0</span></div>
             <div id="best-val">РЕКОРД: 0</div>
@@ -88,10 +100,28 @@
         flexMode: false,
         
         items: [
-            { id: 'bixes1', type: 'good', src: 'images/bixes/good/bixes_1.png' },
-            { id: 'bixes2', type: 'good', src: 'images/bixes/good/bixes_2.png' },
-            { id: 'trash1', type: 'bad', src: 'images/bixes/bad/trash_1.png' },
-            { id: 'trash2', type: 'bad', src: 'images/bixes/bad/trash_2.png' }
+            // ХОРОШИЙ ШМОТ
+            { id: 'b1', type: 'good', src: 'images/bixes/good/bixes_1.png' },
+            { id: 'b2', type: 'good', src: 'images/bixes/good/bixes_2.png' },
+            { id: 'b3', type: 'good', src: 'images/bixes/good/bixes_3.png' },
+            { id: 'b4', type: 'good', src: 'images/bixes/good/bixes_4.png' },
+            { id: 'b5', type: 'good', src: 'images/bixes/good/bixes_5.png' },
+            { id: 'b6', type: 'good', src: 'images/bixes/good/bixes_6.png' },
+            { id: 'b7', type: 'good', src: 'images/bixes/good/bixes_7.png' },
+            { id: 'b8', type: 'good', src: 'images/bixes/good/bixes_8.png' },
+            { id: 'b9', type: 'good', src: 'images/bixes/good/bixes_9.png' },
+            { id: 'b10', type: 'good', src: 'images/bixes/good/bixes_10.png' },
+            // ЗАШКВАР
+            { id: 't1', type: 'bad', src: 'images/bixes/bad/trash_1.png' },
+            { id: 't2', type: 'bad', src: 'images/bixes/bad/trash_2.png' },
+            { id: 't3', type: 'bad', src: 'images/bixes/bad/trash_3.png' },
+            { id: 't4', type: 'bad', src: 'images/bixes/bad/trash_4.png' },
+            { id: 't5', type: 'bad', src: 'images/bixes/bad/trash_5.png' },
+            { id: 't6', type: 'bad', src: 'images/bixes/bad/trash_6.png' },
+            { id: 't7', type: 'bad', src: 'images/bixes/bad/trash_7.png' },
+            { id: 't8', type: 'bad', src: 'images/bixes/bad/trash_8.png' },
+            { id: 't9', type: 'bad', src: 'images/bixes/bad/trash_9.png' },
+            { id: 't10', type: 'bad', src: 'images/bixes/bad/trash_10.png' }
         ],
 
         start() {
@@ -164,7 +194,6 @@
             if (!this.active) return;
             ctx.clearRect(0, 0, vW, vH);
 
-            // Флекс-эффект фона
             if (this.flexMode) {
                 ctx.fillStyle = `hsla(${Date.now() % 360}, 70%, 10%, 0.5)`;
                 ctx.fillRect(0, 0, vW, vH);
@@ -175,12 +204,10 @@
                 ctx.translate(this.currentItem.x + this.currentItem.offsetX, this.currentItem.y);
                 ctx.rotate(this.currentItem.offsetX * 0.001);
                 
-                // Подсветка при свайпе
                 if (this.currentItem.offsetX > 50) ctx.shadowColor = "#00ff00";
                 else if (this.currentItem.offsetX < -50) ctx.shadowColor = "#ff0000";
                 ctx.shadowBlur = Math.abs(this.currentItem.offsetX) / 5;
 
-                // Отрисовка предмета
                 if (this.currentItem.img.complete) {
                     ctx.drawImage(this.currentItem.img, -150, -150, 300, 300);
                 } else {
@@ -189,9 +216,15 @@
                 }
                 ctx.restore();
             }
-
             requestAnimationFrame(() => this.loop());
         }
+    };
+
+    // Музыкальный контроллер
+    const musicBtn = document.getElementById('music-toggle');
+    musicBtn.onclick = () => {
+        music.muted = !music.muted;
+        musicBtn.innerText = music.muted ? '🔇' : '🔊';
     };
 
     // Свайп-механика
@@ -208,7 +241,7 @@
         else game.currentItem.offsetX = 0;
     });
 
-    // Для ПК (мышка)
+    // Для ПК
     let isDown = false;
     canvas.addEventListener('mousedown', (e) => { isDown = true; startX = e.clientX; });
     window.addEventListener('mousemove', (e) => {

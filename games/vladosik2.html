@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Владосик 3D: Turbo Jager</title>
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --dark-bg: #05050a;
+        }
+        body {
+            margin: 0; overflow: hidden; background-color: #000;
+            font-family: 'Segoe UI', sans-serif; color: white;
+            user-select: none; touch-action: none;
+        }
+        #game-container { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; }
+        
+        .ui-layer {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 100; transition: 0.3s; text-align: center;
+        }
+        .ui-layer.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+        
+        h1 { font-size: 40px; color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); text-transform: uppercase; }
+        #game-over-msg { color: #ff2a2a; font-size: 28px; font-weight: bold; margin-bottom: 10px; display: none; text-shadow: 0 0 10px red;}
+        
+        .hud {
+            position: absolute; top: 20px; left: 0; width: 100%; padding: 0 30px;
+            display: flex; justify-content: space-between; z-index: 50;
+            font-weight: 900; font-size: 24px; text-shadow: 2px 2px 0 #000; pointer-events: none; box-sizing: border-box;
+        }
+
+        .btn {
+            background: linear-gradient(180deg, #0077ff, #0044aa); color: #fff;
+            border: 2px solid var(--neon-blue); padding: 15px 50px; font-size: 24px;
+            font-weight: bold; border-radius: 8px; cursor: pointer;
+            box-shadow: 0 0 15px var(--neon-blue); transition: 0.1s; pointer-events: auto;
+        }
+        .btn:active { transform: scale(0.95); }
+        #controls-hint { position: absolute; bottom: 30px; width: 100%; text-align: center; color: rgba(255,255,255,0.5); pointer-events: none; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <div class="hud">
+        <div>СЧЕТ: <span id="score-val">0</span></div>
+        <div id="speed-val">СКОРОСТЬ: 100 км/ч</div>
+    </div>
+
+    <div id="menu" class="ui-layer">
+        <div id="game-over-msg">ВЛАДОСИК РАЗБИЛСЯ!</div>
+        <h1>Гонки за ягерем 3D</h1>
+        <button class="btn" id="start-btn">ПОГНАЛИ</button>
+    </div>
+    
+    <div id="controls-hint" class="hidden">Свайп или A/D (Влево/Вправо) для перестроения</div>
+
+    <div id="game-container"></div>
+
+<script>
+    // Настройки UI
+    const menu = document.getElementById('menu');
+    const startBtn = document.getElementById('start-btn');
+    const gameOverMsg = document.getElementById('game-over-msg');
+    const scoreVal = document.getElementById('score-val');
+    const speedVal = document.getElementById('speed-val');
+    const controlsHint = document.getElementById('controls-hint');
+
+    // Настройки Three.js
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x05050a, 0.015);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('game-container').appendChild(renderer.domElement);
+
+    // Освещение
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(0, 20, 10);
+    scene.add(dirLight);
+
+    // Дорога (сетка)
+    const gridHelper = new THREE.GridHelper(200, 100, 0x00f2ff, 0x002244);
+    gridHelper.position.y = -1;
+    scene.add(gridHelper);
+
+    // Игрок (Машина Владосика)
+    const playerGeo = new THREE.BoxGeometry(2, 1, 4);
+    const playerMat = new THREE.MeshLambertMaterial({ color: 0x00f2ff, emissive: 0x004488 });
+    const player = new THREE.Mesh(playerGeo, playerMat);
+    scene.add(player);
+
+    // Игровые переменные
+    const lanes = [-4, 0, 4]; // 3 полосы: левая, центр, правая
+    let currentLane = 1;
+    let targetX = lanes[currentLane];
+    
+    let isPlaying = false;
+    let score = 0;
+    let speed = 1.0;
+    let drunkTimer = 0;
+    let obstacles = [];
+    let items = [];
+
+    // Позиция камеры
+    camera.position.set(0, 5, 10);
+    camera.lookAt(0, 0, -20);
+
+    // Генерация врагов
+    function spawnObstacle() {
+        if (!isPlaying) return;
+        const geo = new THREE.BoxGeometry(2.5, 1.5, 5);
+        const mat = new THREE.MeshLambertMaterial({ color: 0xff0000, emissive: 0x550000 });
+        const obs = new THREE.Mesh(geo, mat);
+        obs.position.set(lanes[Math.floor(Math.random() * 3)], 0, -100);
+        scene.add(obs);
+        obstacles.push(obs);
+
+        // Усложнение со временем
+        let nextSpawn = Math.max(500, 1500 - score * 20);
+        setTimeout(spawnObstacle, nextSpawn + Math.random() * 500);
+    }
+
+    // Генерация Ягера
+    function spawnItem() {
+        if (!isPlaying) return;
+        const geo = new THREE.CylinderGeometry(0.5, 0.5, 2, 16);
+        const mat = new THREE.MeshLambertMaterial({ color: 0x00ff00, emissive: 0x00aa00 });
+        const item = new THREE.Mesh(geo, mat);
+        item.position.set(lanes[Math.floor(Math.random() * 3)], 0.5, -100);
+        item.rotation.x = Math.PI / 8;
+        scene.add(item);
+        items.push(item);
+
+        setTimeout(spawnItem, 3000 + Math.random() * 3000);
+    }
+
+    function startGame() {
+        isPlaying = true;
+        score = 0;
+        speed = 1.0;
+        drunkTimer = 0;
+        currentLane = 1;
+        targetX = lanes[currentLane];
+        player.position.x = targetX;
+        
+        scoreVal.innerText = score;
+        menu.classList.add('hidden');
+        controlsHint.classList.remove('hidden');
+        gameOverMsg.style.display = 'none';
+
+        // Очистка старых объектов
+        obstacles.forEach(o => scene.remove(o));
+        items.forEach(i => scene.remove(i));
+        obstacles = [];
+        items = [];
+
+        spawnObstacle();
+        spawnItem();
+    }
+
+    function gameOver() {
+        isPlaying = false;
+        menu.classList.remove('hidden');
+        gameOverMsg.style.display = 'block';
+        controlsHint.classList.add('hidden');
+    }
+
+    // Управление
+    function move(dir) {
+        if (!isPlaying) return;
+        if (dir === 'left' && currentLane > 0) currentLane--;
+        if (dir === 'right' && currentLane < 2) currentLane++;
+        targetX = lanes[currentLane];
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'ф') move('left');
+        if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'в') move('right');
+    });
+
+    // Управление тапами/кликами
+    window.addEventListener('pointerdown', (e) => {
+        if (!isPlaying || e.target.tagName === 'BUTTON') return;
+        if (e.clientX < window.innerWidth / 2) move('left');
+        else move('right');
+    });
+
+    startBtn.addEventListener('click', startGame);
+
+    // Главный цикл игры
+    function animate() {
+        requestAnimationFrame(animate);
+
+        if (isPlaying) {
+            // Плавное перемещение машины по полосам
+            player.position.x += (targetX - player.position.x) * 0.15;
+
+            // Анимация дороги (движение сетки)
+            gridHelper.position.z += speed;
+            if (gridHelper.position.z > 10) gridHelper.position.z = 0;
+
+            // Движение врагов
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.position.z += speed * 1.5; // Враги едут навстречу
+
+                // Столкновение (простая проверка дистанции)
+                if (Math.abs(obs.position.z - player.position.z) < 4 && Math.abs(obs.position.x - player.position.x) < 1.5) {
+                    gameOver();
+                }
+
+                // Удаление улетевших врагов
+                if (obs.position.z > 15) {
+                    scene.remove(obs);
+                    obstacles.splice(i, 1);
+                    score += 1;
+                    speed = Math.min(speed + 0.01, 3.0);
+                    scoreVal.innerText = score;
+                    speedVal.innerText = `СКОРОСТЬ: ${Math.floor(speed * 100)} км/ч`;
+                }
+            }
+
+            // Движение Ягера
+            for (let i = items.length - 1; i >= 0; i--) {
+                let item = items[i];
+                item.position.z += speed;
+                item.rotation.y += 0.05;
+
+                // Сбор предмета
+                if (Math.abs(item.position.z - player.position.z) < 3 && Math.abs(item.position.x - player.position.x) < 2) {
+                    scene.remove(item);
+                    items.splice(i, 1);
+                    score += 5;
+                    scoreVal.innerText = score;
+                    drunkTimer = 180; // Эффект опьянения на 3 секунды (при 60fps)
+                }
+
+                if (item.position.z > 15) {
+                    scene.remove(item);
+                    items.splice(i, 1);
+                }
+            }
+
+            // Эффект опьянения (покачивание камеры)
+            if (drunkTimer > 0) {
+                drunkTimer--;
+                camera.rotation.z = Math.sin(Date.now() * 0.005) * 0.2;
+                playerMat.emissive.setHex(0x00ff00); // Машина зеленеет
+            } else {
+                camera.rotation.z = 0;
+                playerMat.emissive.setHex(0x004488); // Обычный цвет
+            }
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    // Ресайз окна
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    animate();
+</script>
+</body>
+</html>
